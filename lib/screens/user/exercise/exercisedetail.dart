@@ -1,7 +1,7 @@
 // import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shapeup/models/exercise_model.dart';
-import 'package:shapeup/screens/exercisedaylist.dart';
+import 'package:shapeup/screens/user/exercise/exercisedaylist.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 

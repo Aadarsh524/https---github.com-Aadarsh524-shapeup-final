@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shapeup/models/exercise_model.dart';
-import 'package:shapeup/screens/exercisedaydetail.dart';
-import 'package:shapeup/services/exercisedb.dart';
+import 'package:shapeup/screens/user/exercise/exercisedaydetail.dart';
+
+import '../../../services/exerciseService.dart';
 
 class ExerciseDayList extends StatelessWidget {
   final ExerciseModel exercisemodel;
@@ -13,25 +14,48 @@ class ExerciseDayList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 28, 28, 30),
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          toolbarHeight: 65,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          title: Padding(
-            padding: const EdgeInsets.only(left: 12, top: 10),
-            child: Text(
-              "Your Exercises",
-              style: GoogleFonts.montserrat(
-                textStyle: const TextStyle(color: Colors.black, fontSize: 20),
+          toolbarHeight: 60,
+          centerTitle: true,
+          leading: Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 10),
+                height: 28,
+                width: 28,
+                decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 114, 97, 89),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Center(
+                  child: IconButton(
+                    color: Colors.black,
+                    iconSize: 12,
+                    icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
+          title: Text("Your Exercises",
+              style: GoogleFonts.montserrat(
+                  letterSpacing: .5,
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600)),
+          backgroundColor: Color.fromARGB(255, 28, 28, 30),
+          elevation: 0.0,
         ),
         body: SafeArea(
-          child: StreamBuilder<DocumentSnapshot<Object?>>(
-            stream: ExerciseDatabase(docID: exercisemodel.id).list,
+          child: FutureBuilder<DocumentSnapshot<Object?>>(
+            future: ExerciseService(docID: exercisemodel.id).list,
             builder: ((context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -49,7 +73,8 @@ class ExerciseDayList extends StatelessWidget {
                                       ))),
                         },
                         child: Card(
-                          margin: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10, bottom: 10),
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
@@ -62,7 +87,7 @@ class ExerciseDayList extends StatelessWidget {
                                   "Day ${listindex + 1} ",
                                   textAlign: TextAlign.left,
                                   style: GoogleFonts.montserrat(
-                                      color: Colors.black,
+                                      color: Color.fromARGB(255, 226, 226, 226),
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600),
                                 ),
