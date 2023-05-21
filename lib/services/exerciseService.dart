@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shapeup/models/exercise_detail_model.dart';
 import 'package:shapeup/models/exercise_model.dart';
 
-class ExerciseDatabase {
+class ExerciseService {
   final String? docID;
   final int? dayindex;
 
-  ExerciseDatabase({this.docID, this.dayindex});
+  ExerciseService({this.docID, this.dayindex});
   final CollectionReference exercisecollection =
       FirebaseFirestore.instance.collection('exercise');
 
@@ -22,8 +22,9 @@ class ExerciseDatabase {
   }
 
   //get dietInfo stream
-  Stream<List<ExerciseModel>> get exerciseInfo {
-    return exercisecollection.snapshots().map(_exerciseTypeFromSnapshot);
+  Future<List<ExerciseModel>> get exerciseInfo async {
+    final snapshot = await exercisecollection.get();
+    return _exerciseTypeFromSnapshot(snapshot);
   }
 
   List<ExerciseDetailModel> _dayExericsePlan(QuerySnapshot snapshot) {
@@ -38,18 +39,17 @@ class ExerciseDatabase {
         .toList();
   }
 
-  Stream<List<ExerciseDetailModel>> get listExerciseInfo {
-    return exercisecollection
-        .doc(docID)
-        .collection("day$dayindex")
-        .snapshots()
-        .map(_dayExericsePlan);
+  Future<List<ExerciseDetailModel>> get listExerciseInfo async {
+    final querySnapshot =
+        await exercisecollection.doc(docID).collection("day$dayindex").get();
+    return _dayExericsePlan(querySnapshot);
   }
 
   final CollectionReference doc =
       FirebaseFirestore.instance.collection('exercise');
 
-  Stream<DocumentSnapshot<Object?>> get list {
-    return doc.doc(docID).snapshots();
+  Future<DocumentSnapshot<Object?>> get list async {
+    final documentSnapshot = await doc.doc(docID).get();
+    return documentSnapshot;
   }
 }

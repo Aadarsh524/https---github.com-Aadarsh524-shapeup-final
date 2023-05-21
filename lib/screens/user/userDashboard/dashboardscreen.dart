@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shapeup/screens/dietscreen.dart';
-import 'package:shapeup/screens/exercisescreen.dart';
+import 'package:shapeup/screens/user/exercise/exercisescreen.dart';
 import 'package:shapeup/screens/user/userDashboard/homescreen.dart';
 import 'package:shapeup/screens/notificationscreen.dart';
 import 'package:shapeup/screens/premiumscreen.dart';

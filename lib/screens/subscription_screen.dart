@@ -87,6 +87,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         backgroundColor: Color.fromARGB(255, 28, 28, 30),
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          toolbarHeight: 60,
           centerTitle: true,
           title: Text("Premium",
               style: GoogleFonts.montserrat(
