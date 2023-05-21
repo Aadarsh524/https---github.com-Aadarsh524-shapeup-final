@@ -297,14 +297,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.25.1"
-  fixnum:
-    dependency: transitive
-    description:
-      name: fixnum
-      sha256: "3b298dacb1898a8f5fddec19388b899b0f13195066b89fa66391e5e92f6c2052"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.11"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -592,14 +584,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
-  models:
-    dependency: "direct main"
-    description:
-      name: models
-      sha256: "8159acbf44c912160f1938e35f8e408dd6a58c9da14120830e9f51725ec05f7b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
   nested:
     dependency: transitive
     description:
@@ -768,14 +752,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.4"
-  protobuf:
-    dependency: transitive
-    description:
-      name: protobuf
-      sha256: "1f818f8f5de28e551cfc2a993c5a31a7f534618345654c904e203c0112abed55"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.4"
   provider:
     dependency: transitive
     description:

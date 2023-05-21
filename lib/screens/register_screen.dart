@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shapeup/bloc/cubit/register_cubit.dart';
-import 'package:shapeup/screens/trainer/trainerRegister/trainerAgeScreen.dart';
+import 'package:shapeup/screens/trainer/trainerRegister/agescreen.dart';
+
 import 'package:shapeup/screens/user/userRegister/agescreen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
@@ -84,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               PageTransition(
                   type: PageTransitionType.fade,
                   duration: const Duration(milliseconds: 250),
-                  child: const TrainerAgeScreen()));
+                  child: const AgePicker()));
         }
       } else {
         SnackBar snackBar = SnackBar(

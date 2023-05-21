@@ -22,8 +22,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   File? fileToDisplay;
 
   final _newAgeController = TextEditingController();
-  final _newHeightController = TextEditingController();
-  final _newWeightController = TextEditingController();
+  final _newDescController = TextEditingController();
+  final _newExpController = TextEditingController();
 
   var authName = '';
   @override
@@ -73,21 +73,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              margin: const EdgeInsets.only(left: 10),
-              height: 28,
-              width: 28,
+              margin: const EdgeInsets.only(left: 15),
+              height: 35,
+              width: 35,
               decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 114, 97, 89),
                   borderRadius: BorderRadius.circular(10)),
-              child: Center(
-                child: IconButton(
-                  color: Colors.black,
-                  iconSize: 12,
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
+              child: IconButton(
+                color: Colors.black,
+                iconSize: 18,
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
           ],
@@ -216,7 +214,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
-                              hintText: "Height",
+                              hintText: "Experience",
                               border: OutlineInputBorder(
                                 borderSide: const BorderSide(
                                   color: Color.fromARGB(255, 39, 48, 81),
@@ -236,7 +234,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               bottom: 12, left: 5, right: 5),
                           child: TextFormField(
                             onChanged: (val) {},
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.name,
                             style: GoogleFonts.montserrat(
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
@@ -252,7 +250,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
-                              hintText: "Weight",
+                              hintText: "Description",
                               border: OutlineInputBorder(
                                 borderSide: const BorderSide(
                                   color: Color.fromARGB(255, 39, 48, 81),
@@ -315,8 +313,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 .doc(user?.uid)
                 .update({
               'age': _newAgeController.text,
-              'height': _newHeightController.text,
-              'weight': _newWeightController.text,
+              'descrip': _newDescController.text,
+              'exp': _newExpController.text,
             }).then((value) => Navigator.pushReplacement(
                     context,
                     PageTransition(

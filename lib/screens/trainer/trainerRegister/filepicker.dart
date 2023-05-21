@@ -3,31 +3,24 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:shapeup/screens/user/userRegister/settingScreen.dart';
 
-class ImagePickerScreen extends StatefulWidget {
-  const ImagePickerScreen({Key? key}) : super(key: key);
+
+
+import '../trainerscreen/trainerscreen.dart';
+
+class Validation extends StatefulWidget {
+  const Validation({Key? key}) : super(key: key);
 
   @override
-  State<ImagePickerScreen> createState() => _ImagePickerScreenState();
+  State<Validation> createState() => _ValidationState();
 }
 
-class _ImagePickerScreenState extends State<ImagePickerScreen> {
+class _ValidationState extends State<Validation> {
   FilePickerResult? result;
   String? _filename;
   PlatformFile? pickedfile;
   bool isLoading = false;
-  File? imagePath;
-
-  late final Box dataBox;
-
-  @override
-  void initState() {
-    super.initState();
-    dataBox = Hive.box('storage');
-  }
+  File? fileToDisplay;
 
   void pickfile() async {
     try {
@@ -37,13 +30,16 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
       if (result != null) {
         _filename = result!.files.first.name;
         pickedfile = result!.files.first;
-        imagePath = File(pickedfile!.path.toString());
+        fileToDisplay = File(pickedfile!.path.toString());
 
+        print(_filename);
         setState(() {
           isLoading = false;
         });
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -52,64 +48,87 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
         backgroundColor: const Color.fromARGB(255, 28, 28, 30),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(40),
+            padding: EdgeInsets.all(40),
             child: Column(children: [
               Center(
                 child: Column(children: [
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
                   Text(
-                    'Add your photo',
+                    'ADD RESUME',
                     style: GoogleFonts.montserrat(
                         letterSpacing: .5,
                         color: Colors.white,
                         fontSize: 24,
                         fontWeight: FontWeight.w600),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
                   Text(
-                    'This will be added to your profile',
+                    'We need to make sure that you are a proper trainer.Please provide any valid cerfication!',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.montserrat(
                         letterSpacing: .5,
-                        color: const Color.fromARGB(255, 174, 155, 141),
+                        color: Color.fromARGB(255, 174, 155, 141),
                         fontSize: 12,
                         fontWeight: FontWeight.w600),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
+                  // Text(
+                  //   'Note: The file should be in pdf format only!',
+                  //   style: GoogleFonts.montserrat(
+                  //     fontSize: 15,
+                  //     fontWeight: FontWeight.normal,
+                  //     color: const Color.fromARGB(
+                  //       255,
+                  //       208,
+                  //       253,
+                  //       62,
+                  //     ),
+                  //   ),
+                  // ),
                 ]),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 20,
               ),
               SizedBox(
-                  height: 360,
+                  height: 40,
+                  width: 300,
                   child: isLoading
-                      ? const CircularProgressIndicator()
+                      ? CircularProgressIndicator()
                       : pickedfile != null
                           ? Container(
-                              padding: const EdgeInsets.all(5),
+                              padding: EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(color: Colors.white)),
-                              child: Image.file(
-                                imagePath!,
-                                fit: BoxFit.fill,
+                              child: Text(
+                                _filename!,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.notoSansMono(
+                                    fontSize: 16,
+                                    color: const Color.fromARGB(
+                                      255,
+                                      208,
+                                      253,
+                                      62,
+                                    ),
+                                    fontWeight: FontWeight.w600),
                               ),
                             )
-                          : const Text('')),
-              const SizedBox(
+                          : Text('')),
+              SizedBox(
                 height: 20,
               ),
               Center(
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 214, 243, 155),
+                      primary: const Color.fromARGB(255, 214, 243, 155),
                     ),
                     onPressed: () {
                       setState(() {
@@ -124,6 +143,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                           color: Colors.black,
                           fontWeight: FontWeight.w600),
                     )),
+                //Image.file(fileToDisplay!)
               ),
             ]),
           ),
@@ -132,15 +152,24 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: FloatingActionButton.extended(
-              onPressed: () async {
-                await dataBox.put('userImage', imagePath);
-                // ignore: use_build_context_synchronously
-                Navigator.pushReplacement(
+              onPressed: () {
+                // print(_ageController.text),
+                //         await FirebaseFirestore.instance
+                //             .collection('profile')
+                //             .doc(user?.uid)
+                //             .set({
+                //           'age': _ageController.text,
+                //         }).then((value) => Navigator.pushReplacement(
+                //                 context,
+                //                 PageTransition(
+                //                     type: PageTransitionType.fade,
+                //                     duration:
+                //                         const Duration(milliseconds: 250),
+                //                     child: const GenderScreen())));
+                Navigator.push(
                     context,
-                    PageTransition(
-                        type: PageTransitionType.fade,
-                        duration: const Duration(milliseconds: 250),
-                        child: const SettingUpScreen()));
+                    MaterialPageRoute(
+                        builder: (context) => const TrainerPage()));
               },
               backgroundColor: const Color.fromARGB(
                 255,
@@ -159,7 +188,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                           color: Colors.black,
                           fontWeight: FontWeight.w600),
                     ),
-                    const Icon(
+                    Icon(
                       size: 24,
                       Icons.arrow_right,
                       color: Colors.black,

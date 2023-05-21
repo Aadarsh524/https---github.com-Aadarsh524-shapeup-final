@@ -1,43 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:numberpicker/numberpicker.dart';
-import 'package:shapeup/models/profile.dart';
-import 'package:shapeup/screens/user/userRegister/heightscreen.dart';
 
-class TrainerAgeScreen extends StatefulWidget {
-  const TrainerAgeScreen({Key? key}) : super(key: key);
+import 'package:numberpicker/numberpicker.dart';
+import 'package:shapeup/screens/trainer/trainerRegister/experiencescreen.dart';
+
+class AgePicker extends StatefulWidget {
+  const AgePicker({Key? key}) : super(key: key);
 
   @override
-  State<TrainerAgeScreen> createState() => _TrainerAgeScreenState();
+  State<AgePicker> createState() => _AgePickerState();
 }
 
-class _TrainerAgeScreenState extends State<TrainerAgeScreen> {
-  late final Box dataBox;
-  late String firstName;
-
-  void display() async {
-    SnackBar snackBar = SnackBar(
-      padding: const EdgeInsets.all(20),
-      backgroundColor: Colors.white,
-      duration: const Duration(seconds: 2),
-      content: Text(
-        firstName,
-        style: GoogleFonts.montserrat(
-          height: .5,
-          letterSpacing: 0.5,
-          fontSize: 12,
-          color: Colors.red,
-        ),
-      ),
-    );
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
+class _AgePickerState extends State<AgePicker> {
+  User? user = FirebaseAuth.instance.currentUser;
   int _currentIntValue = 20;
 
   final _ageController = TextEditingController();
@@ -45,9 +21,16 @@ class _TrainerAgeScreenState extends State<TrainerAgeScreen> {
   var authName = '';
   @override
   void initState() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      for (final providerProfile in user.providerData) {
+        final name = providerProfile.displayName;
+        setState(() {
+          authName = name!;
+        });
+      }
+    }
     super.initState();
-    dataBox = Hive.box('storage');
-    firstName = dataBox.get("firstName");
   }
 
   @override
@@ -84,7 +67,7 @@ class _TrainerAgeScreenState extends State<TrainerAgeScreen> {
                             const SizedBox(
                               height: 5,
                             ),
-                            Text("Trainer",
+                            Text("Bibash",
                                 style: GoogleFonts.montserrat(
                                     letterSpacing: .5,
                                     color: Color.fromARGB(255, 190, 227, 57),
@@ -93,12 +76,11 @@ class _TrainerAgeScreenState extends State<TrainerAgeScreen> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Text(
-                                "To create a suitable fitness plan we need to know more about you",
+                            Text("Tell us more about you.",
                                 style: GoogleFonts.montserrat(
                                     letterSpacing: .5,
                                     color: Color.fromARGB(255, 226, 226, 226),
-                                    fontSize: 12,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w400)),
                           ]),
                     ),
@@ -164,27 +146,7 @@ class _TrainerAgeScreenState extends State<TrainerAgeScreen> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: FloatingActionButton.extended(
-              onPressed: () async {
-                display();
-                // var box = await Hive.openBox('myBox');
-                // Profile profile = await box.get('profile');
-
-                // SnackBar snackBar = SnackBar(
-                //   padding: const EdgeInsets.all(20),
-                //   backgroundColor: Colors.white,
-                //   duration: const Duration(seconds: 2),
-                //   content: Text(
-                //     name,
-                //     style: GoogleFonts.montserrat(
-                //       height: .5,
-                //       letterSpacing: 0.5,
-                //       fontSize: 12,
-                //       color: Colors.red,
-                //     ),
-                //   ),
-                // );
-                // // ignore: use_build_context_synchronously
-                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              onPressed: () {
                 // print(_ageController.text),
                 //         await FirebaseFirestore.instance
                 //             .collection('profile')
@@ -198,10 +160,8 @@ class _TrainerAgeScreenState extends State<TrainerAgeScreen> {
                 //                     duration:
                 //                         const Duration(milliseconds: 250),
                 //                     child: const GenderScreen())));
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => const HeightScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const ExpAge()));
               },
               backgroundColor: const Color.fromARGB(
                 255,
@@ -220,7 +180,7 @@ class _TrainerAgeScreenState extends State<TrainerAgeScreen> {
                           color: Colors.black,
                           fontWeight: FontWeight.w600),
                     ),
-                    const Icon(
+                    Icon(
                       size: 24,
                       Icons.arrow_right,
                       color: Colors.black,
