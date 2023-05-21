@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shapeup/screens/settingScreen.dart';
+import 'package:shapeup/screens/user/userRegister/settingScreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);

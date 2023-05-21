@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shapeup/models/daily_diet_model.dart';
 import 'package:shapeup/models/diet_model.dart';
 
-class DatabaseService {
+class DietService {
   final String? docID;
-  DatabaseService({this.docID});
+  DietService({this.docID});
 
   final CollectionReference dietCollection =
       FirebaseFirestore.instance.collection('Diet');
@@ -27,12 +27,13 @@ class DatabaseService {
         .toList();
   }
 
-  Stream<List<DailyDietModel>> get dailyDietInfo {
-    return dietCollection
+  Future<List<DailyDietModel>> getDailyDietInfo() async {
+    final snapshot = await dietCollection
         .doc(docID)
         .collection('DietLowCarb101')
-        .snapshots()
-        .map(_dailyDietPlan);
+        .get(); // Assuming `dietCollection` is a Firestore collection reference and `docID` is the ID of the document
+
+    return _dailyDietPlan(snapshot);
   }
 
   List<DietModel> _dietListFromSnapshot(QuerySnapshot snapshot) {
@@ -51,11 +52,9 @@ class DatabaseService {
     }).toList();
   }
 
-  //get dietInfo stream
-  Stream<List<DietModel>> get dietInfo {
-    return dietCollection.snapshots().map(_dietListFromSnapshot);
+  Future<List<DietModel>> getDietInfo() async {
+    final snapshot = await dietCollection
+        .get(); // Assuming `dietCollection` is a Firestore collection reference
+    return _dietListFromSnapshot(snapshot);
   }
-  // Stream<List<DietModel>> get notificationlist {
-  //   return dietCollection.snapshots().map(_dietListFromSnapshot);
-  // }
 }
