@@ -5,7 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
-import 'package:shapeup/screens/trainer/trainerRegister/trainerAgeScreen.dart';
+import 'package:shapeup/screens/trainer/trainerRegister/agescreen.dart';
+
 import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/register_screen.dart';
@@ -148,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   PageTransition(
                       type: PageTransitionType.fade,
                       duration: const Duration(milliseconds: 250),
-                      child: const TrainerAgeScreen()));
+                      child: const AgePicker()));
             }
           } else {
             print("Registration process was not completed.");
