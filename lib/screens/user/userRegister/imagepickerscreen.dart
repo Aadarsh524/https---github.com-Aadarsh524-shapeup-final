@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shapeup/screens/settingScreen.dart';
-import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
-import 'package:shapeup/screens/user/userRegister/agescreen.dart';
+import 'package:shapeup/screens/user/userRegister/settingScreen.dart';
 
 class ImagePickerScreen extends StatefulWidget {
   const ImagePickerScreen({Key? key}) : super(key: key);

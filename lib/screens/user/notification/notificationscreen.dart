@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shapeup/services/notification_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../components/notificationcard.dart';
-import '../models/notification_model.dart';
+import '../../../components/notificationcard.dart';
+import '../../../models/notification_model.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);

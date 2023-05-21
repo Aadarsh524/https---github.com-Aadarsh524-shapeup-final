@@ -1,8 +1,9 @@
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shapeup/screens/subscription_screen.dart';
-import 'package:shapeup/screens/unlockedscreen.dart';
+import 'package:shapeup/screens/user/premium/subscription_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../chatScreen.dart';
 
 class PremiumScreen extends StatefulWidget {
   const PremiumScreen({Key? key}) : super(key: key);
@@ -55,8 +56,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 28, 28, 30),
-        body: premium == true
-            ? const UnlockedScreen()
-            : const SubscriptionPage());
+        body: premium == true ? ChatScreen() : const SubscriptionPage());
   }
 }

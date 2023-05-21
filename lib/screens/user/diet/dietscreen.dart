@@ -5,9 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:styled_widget/styled_widget.dart';
 
-import '../components/diet_card.dart';
-import '../models/diet_model.dart';
-import '../services/database_service.dart';
+import '../../../components/diet_card.dart';
+import '../../../models/diet_model.dart';
+import '../../../services/dietService.dart';
 
 class DietScreen extends StatefulWidget {
   const DietScreen({Key? key}) : super(key: key);
@@ -39,21 +39,22 @@ class _DietScreenState extends State<DietScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 28, 28, 30),
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        toolbarHeight: 65,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Padding(
-            padding: const EdgeInsets.only(left: 12, top: 10),
-            child: Text("Your Diet",
-                style: GoogleFonts.montserrat(
-                    textStyle:
-                        const TextStyle(color: Colors.black, fontSize: 20)))),
+        toolbarHeight: 60,
+        centerTitle: true,
+        title: Text("Your Diet",
+            style: GoogleFonts.montserrat(
+                letterSpacing: .5,
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w600)),
+        backgroundColor: Color.fromARGB(255, 28, 28, 30),
+        elevation: 0.0,
       ),
-      body: StreamBuilder<List<DietModel>>(
-        stream: DatabaseService().dietInfo,
+      body: FutureBuilder<List<DietModel>>(
+        future: DietService().getDietInfo(),
         builder: ((context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
