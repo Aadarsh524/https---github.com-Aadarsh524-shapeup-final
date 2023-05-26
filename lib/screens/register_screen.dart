@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shapeup/bloc/cubit/register_cubit.dart';
 import 'package:shapeup/screens/trainer/trainerRegister/agescreen.dart';
+import 'package:shapeup/screens/trainer/trainerRegister/genderscreen.dart';
 
 import 'package:shapeup/screens/user/userRegister/agescreen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -85,9 +86,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               PageTransition(
                   type: PageTransitionType.fade,
                   duration: const Duration(milliseconds: 250),
-                  child: const AgePicker()));
+                  child: const GenderPage()));
         }
       } else {
+        GoogleSignIn googleSignIn = GoogleSignIn();
+        await googleSignIn.signOut();
         SnackBar snackBar = SnackBar(
           padding: const EdgeInsets.all(20),
           backgroundColor: Colors.white,
@@ -102,7 +105,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
         );
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
+            context,
+            PageTransition(
+                type: PageTransitionType.fade,
+                duration: const Duration(milliseconds: 250),
+                child: const LoginScreen()));
       }
     }
   }
@@ -437,30 +449,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 lastNameController.text,
                                 phoneController.text,
                                 selectedType.name);
-
-                            // Navigator.push(
-                            //     context,
-                            //     PageTransition(
-                            //         type: PageTransitionType.fade,
-                            //         duration: const Duration(milliseconds: 250),
-                            //         child: const AgeScreen()));
-
-                            // SnackBar snackBar = SnackBar(
-                            //   padding: const EdgeInsets.all(20),
-                            //   backgroundColor: Colors.white,
-                            //   duration: const Duration(seconds: 2),
-                            //   content: Text(
-                            //     "Yay you can register",
-                            //     style: GoogleFonts.montserrat(
-                            //       height: .5,
-                            //       letterSpacing: 0.5,
-                            //       fontSize: 12,
-                            //       color: Colors.black,
-                            //     ),
-                            //   ),
-                            // );
-                            // ScaffoldMessenger.of(context)
-                            //     .showSnackBar(snackBar);
                           }
                         }, builder: (context, state) {
                           return SizedBox(
@@ -529,7 +517,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         type: PageTransitionType.fade,
                                         duration:
                                             const Duration(milliseconds: 300),
-                                        child: LoginScreen()));
+                                        child: const LoginScreen()));
                               },
                             )
                           ],

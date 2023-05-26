@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 
 import 'package:numberpicker/numberpicker.dart';
 import 'package:shapeup/screens/trainer/trainerRegister/descriptionbox.dart';
-
 
 class ExpAge extends StatefulWidget {
   const ExpAge({Key? key}) : super(key: key);
@@ -14,14 +14,17 @@ class ExpAge extends StatefulWidget {
 }
 
 class _ExpAgeState extends State<ExpAge> {
+  late final Box dataBox;
+  late String firstName;
   User? user = FirebaseAuth.instance.currentUser;
   int _currentIntValue = 5;
 
-  final _expageController = TextEditingController();
+ 
 
   var authName = '';
   @override
   void initState() {
+    dataBox = Hive.box('storage');
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       for (final providerProfile in user.providerData) {
@@ -132,7 +135,9 @@ class _ExpAgeState extends State<ExpAge> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: FloatingActionButton.extended(
-              onPressed: () {
+              onPressed: () async {
+                await dataBox.put('expage', _currentIntValue.toString());
+
                 // print(_ageController.text),
                 //         await FirebaseFirestore.instance
                 //             .collection('profile')
@@ -146,10 +151,8 @@ class _ExpAgeState extends State<ExpAge> {
                 //                     duration:
                 //                         const Duration(milliseconds: 250),
                 //                     child: const GenderScreen())));
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const DescBox()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const DescBox()));
               },
               backgroundColor: const Color.fromARGB(
                 255,

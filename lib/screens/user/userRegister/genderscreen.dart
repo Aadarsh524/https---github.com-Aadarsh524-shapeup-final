@@ -54,15 +54,6 @@ class _GenderScreenState extends State<GenderScreen> {
           const SizedBox(
             height: 10,
           ),
-          Text("This helps us to know your BMI",
-              style: GoogleFonts.montserrat(
-                  letterSpacing: .5,
-                  color: Color.fromARGB(255, 174, 155, 141),
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600)),
-          const SizedBox(
-            height: 60,
-          ),
           Row(
             children: [
               Expanded(

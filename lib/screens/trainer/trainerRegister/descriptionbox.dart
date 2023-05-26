@@ -1,6 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shapeup/screens/trainer/trainerRegister/filepicker.dart';
+import 'package:hive/hive.dart';
+// import 'package:shapeup/screens/settingScreen.dart';
+// import 'package:shapeup/screens/trainer/trainerRegister/filepicker.dart';
+import 'package:shapeup/screens/trainer/trainerRegister/setting_screen.dart';
 
 class DescBox extends StatefulWidget {
   const DescBox({Key? key}) : super(key: key);
@@ -10,7 +15,16 @@ class DescBox extends StatefulWidget {
 }
 
 class _DescBoxState extends State<DescBox> {
+  late String descrp;
+  late Box dataBox;
   final _newDescController = TextEditingController();
+  @override
+  void initState() {
+    dataBox = Hive.box('storage');
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,11 +89,31 @@ class _DescBoxState extends State<DescBox> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Validation()));
+              onPressed: () async {
+                if (_newDescController.text != '') {
+                  await dataBox.put('descrp', _newDescController.text);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SettingUpScreenT()));
+                } else {
+                  SnackBar snackBar = SnackBar(
+                    padding: const EdgeInsets.all(20),
+                    backgroundColor: Colors.white,
+                    duration: const Duration(seconds: 2),
+                    content: Text(
+                      "Description can't be empty.",
+                      style: GoogleFonts.montserrat(
+                        height: .5,
+                        letterSpacing: 0.5,
+                        fontSize: 12,
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
               },
               backgroundColor: const Color.fromARGB(
                 255,
