@@ -57,10 +57,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
   @override
   void initState() {
-    // month = DateFormat('MMMM').format(subsDate);
     newDate = DateTime(subsDate.year, subsDate.month + 1, subsDate.day);
     date = DateFormat('MMMd').format(newDate);
-
+    subscriptionPlans[0].isSelected = true;
     super.initState();
   }
 

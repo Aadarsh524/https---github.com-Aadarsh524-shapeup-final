@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shapeup/screens/settingScreen.dart';
+import 'package:shapeup/screens/user/userRegister/settingScreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -17,6 +19,7 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   User? user = FirebaseAuth.instance.currentUser;
+  late final Box dataBox;
   FilePickerResult? result;
   PlatformFile? pickedfile;
   File? fileToDisplay;
@@ -24,6 +27,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _newAgeController = TextEditingController();
   final _newHeightController = TextEditingController();
   final _newWeightController = TextEditingController();
+  final _newPhoneController = TextEditingController();
+
+  late String weight;
+  late String phone;
+  late String height;
+  late String age;
+
+  var expression = RegExp('[0-9]');
 
   var authName = '';
   @override
@@ -37,6 +48,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         });
       }
     }
+    dataBox = Hive.box('storage');
+    height = dataBox.get("height");
+    weight = dataBox.get("weight");
+    phone = dataBox.get("phone");
+    age = dataBox.get("age");
+
     super.initState();
   }
 
@@ -163,14 +180,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: const EdgeInsets.only(
                               bottom: 12, left: 5, right: 5),
                           child: TextFormField(
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(10),
+                              FilteringTextInputFormatter.allow(expression),
+                            ],
                             onChanged: (val) {},
                             keyboardType: TextInputType.number,
                             style: GoogleFonts.montserrat(
                               fontSize: 14,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black.withOpacity(.75),
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
                             ),
-                            controller: null,
+                            controller: _newPhoneController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
@@ -199,14 +220,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: const EdgeInsets.only(
                               bottom: 12, left: 5, right: 5),
                           child: TextFormField(
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(3),
+                              FilteringTextInputFormatter.allow(expression),
+                            ],
                             onChanged: (val) {},
                             keyboardType: TextInputType.number,
                             style: GoogleFonts.montserrat(
                               fontSize: 14,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black.withOpacity(.75),
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
                             ),
-                            controller: null,
+                            controller: _newHeightController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
@@ -235,14 +260,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: const EdgeInsets.only(
                               bottom: 12, left: 5, right: 5),
                           child: TextFormField(
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(3),
+                              FilteringTextInputFormatter.allow(expression),
+                            ],
                             onChanged: (val) {},
                             keyboardType: TextInputType.number,
                             style: GoogleFonts.montserrat(
                               fontSize: 14,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black.withOpacity(.75),
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
                             ),
-                            controller: null,
+                            controller: _newWeightController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
@@ -271,14 +300,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: const EdgeInsets.only(
                               bottom: 12, left: 5, right: 5),
                           child: TextFormField(
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(2),
+                              FilteringTextInputFormatter.allow(expression),
+                            ],
                             onChanged: (val) {},
                             keyboardType: TextInputType.number,
                             style: GoogleFonts.montserrat(
                               fontSize: 14,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black.withOpacity(.75),
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
                             ),
-                            controller: null,
+                            controller: _newAgeController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
@@ -303,43 +336,96 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (_newAgeController.text != "") {
+                                print(
+                                    "before change ${_newAgeController.text}");
+                                await dataBox.put(
+                                    'age', _newAgeController.text);
+                                print("After change ${age}");
+                              }
+                              if (_newPhoneController.text != "") {
+                                if (int.tryParse(_newPhoneController.text)! <
+                                    10) {
+                                  SnackBar snackBar = SnackBar(
+                                    padding: const EdgeInsets.all(20),
+                                    backgroundColor: Colors.white,
+                                    duration: const Duration(seconds: 2),
+                                    content: Text(
+                                      "Phone value is invalid",
+                                      style: GoogleFonts.montserrat(
+                                        height: .5,
+                                        letterSpacing: 0.5,
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  );
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                                await dataBox.put(
+                                    'phone', _newPhoneController.text);
+                              }
+                              if (_newWeightController.text != "") {
+                                await dataBox.put(
+                                    'weight', _newWeightController.text);
+                              }
+                              if (_newHeightController.text != "") {
+                                await dataBox.put(
+                                    'height', _newHeightController.text);
+                              }
+
+                              print(height);
+                              print(weight);
+                              print(phone);
+                              print(age);
+                              // await FirebaseFirestore.instance
+                              //     .collection('users')
+                              //     .doc(user?.uid)
+                              //     .update({
+                              //   'age': age.toString(),
+                              //   'phone': phone.toString(),
+                              //   'height': height.toString(),
+                              //   'weight': weight.toString(),
+                              // }).then((value) => Navigator.pushReplacement(
+                              //         context,
+                              //         PageTransition(
+                              //             type: PageTransitionType.fade,
+                              //             duration:
+                              //                 const Duration(milliseconds: 250),
+                              //             child: const SettingUpScreen())));
+                            },
+                            style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor:
+                                    const Color.fromARGB(255, 125, 128, 122),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
+                                textStyle: const TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold)),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, top: 1, bottom: 1),
+                              child: Text(
+                                "Update",
+                                style: GoogleFonts.notoSansMono(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     )),
               ))),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            print(_newAgeController.text);
-            await FirebaseFirestore.instance
-                .collection('profile')
-                .doc(user?.uid)
-                .update({
-              'age': _newAgeController.text,
-              'height': _newHeightController.text,
-              'weight': _newWeightController.text,
-            }).then((value) => Navigator.pushReplacement(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.fade,
-                        duration: const Duration(milliseconds: 250),
-                        child: const SettingUpScreen())));
-          },
-          backgroundColor: const Color.fromARGB(
-            255,
-            208,
-            253,
-            62,
-          ),
-          label: Padding(
-            padding: const EdgeInsets.all(5),
-            child: Text(
-              'Update',
-              style: GoogleFonts.notoSansMono(
-                  fontSize: 14,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600),
-            ),
-          )),
     );
   }
 }
