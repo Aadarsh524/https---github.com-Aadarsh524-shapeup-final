@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,6 +27,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _newDescController = TextEditingController();
   final _newExpController = TextEditingController();
   final _newPhoneController = TextEditingController();
+  var phoneExpression = RegExp('[^0-9]');
 
   var authName = '';
   @override
@@ -163,6 +165,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: const EdgeInsets.only(
                               bottom: 12, left: 5, right: 5),
                           child: TextFormField(
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(10),
+                              FilteringTextInputFormatter.deny(phoneExpression),
+                            ],
                             onChanged: (val) {},
                             keyboardType: TextInputType.number,
                             style: GoogleFonts.montserrat(
@@ -170,7 +176,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               fontWeight: FontWeight.w300,
                               color: Colors.black.withOpacity(.75),
                             ),
-                            controller: null,
+                            controller: _newPhoneController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
@@ -206,7 +212,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               fontWeight: FontWeight.w300,
                               color: Colors.black.withOpacity(.75),
                             ),
-                            controller: null,
+                            controller: _newExpController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
@@ -242,7 +248,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               fontWeight: FontWeight.w300,
                               color: Colors.black.withOpacity(.75),
                             ),
-                            controller: null,
+                            controller: _newDescController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
@@ -278,7 +284,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               fontWeight: FontWeight.w300,
                               color: Colors.black.withOpacity(.75),
                             ),
-                            controller: null,
+                            controller: _newAgeController,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
@@ -310,20 +316,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
             print(_newAgeController.text);
-            await FirebaseFirestore.instance
-                .collection('profile')
-                .doc(user?.uid)
-                .update({
-              'age': _newAgeController.text,
-              'descrip': _newDescController.text,
-              'expage': _newExpController.text,
-              'phone': _newPhoneController,
-            }).then((value) => Navigator.pushReplacement(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.fade,
-                        duration: const Duration(milliseconds: 250),
-                        child: const SettingUpScreenT())));
+            print(_newExpController.text);
+            print(_newDescController.text);
+            print(_newPhoneController.text);
+            // await FirebaseFirestore.instance
+            //     .collection('profile')
+            //     .doc(user?.uid)
+            //     .update({
+            //   'age': _newAgeController.text,
+            //   'descrip': _newDescController.text,
+            //   'expage': _newExpController.text,
+            //   'phone': _newPhoneController,
+            // }).then((value) => Navigator.pushReplacement(
+            //         context,
+            //         PageTransition(
+            //             type: PageTransitionType.fade,
+            //             duration: const Duration(milliseconds: 250),
+            //             child: const SettingUpScreenT())));
           },
           backgroundColor: const Color.fromARGB(
             255,
