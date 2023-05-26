@@ -14,7 +14,6 @@ void main() async {
   await Firebase.initializeApp();
   final appDocDir = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocDir.path);
-  //  Hive.registerAdapter(ImageFileAdapter());
   await Hive.openBox('storage');
 
   runApp(const MyApp());
