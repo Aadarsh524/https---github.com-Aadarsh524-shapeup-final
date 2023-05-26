@@ -1,71 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shapeup/components/gendercard.dart';
 import 'package:shapeup/screens/trainer/trainerRegister/agescreen.dart';
-
-
-class Gender {
-  String name;
-  IconData icon;
-  bool isSelected;
-
-  Gender(this.name, this.icon, this.isSelected);
-}
-
-// ignore: must_be_immutable
-class CustomRadio extends StatelessWidget {
-  Gender _gender;
-
-  CustomRadio(this._gender);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        height: 152,
-        width: 152,
-        decoration: const BoxDecoration(shape: BoxShape.circle),
-        child: Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(80)),
-            color: _gender.isSelected
-                ? const Color.fromARGB(
-                    255,
-                    208,
-                    253,
-                    62,
-                  )
-                : const Color.fromARGB(255, 44, 44, 46),
-            child: Container(
-              height: 152,
-              width: 152,
-              alignment: Alignment.center,
-              margin: const EdgeInsets.all(5.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    _gender.icon,
-                    color: _gender.isSelected ? Colors.black : Colors.white,
-                    size: 80,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    _gender.name,
-                    style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w600,
-                        color:
-                            _gender.isSelected ? Colors.black : Colors.white),
-                  )
-                ],
-              ),
-            )),
-      ),
-    );
-  }
-}
+import 'package:shapeup/screens/user/userRegister/heightscreen.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class GenderPage extends StatefulWidget {
   const GenderPage({Key? key}) : super(key: key);
@@ -74,63 +15,113 @@ class GenderPage extends StatefulWidget {
   State<GenderPage> createState() => _GenderPageState();
 }
 
+enum Gender {
+  male,
+  female,
+}
+
 class _GenderPageState extends State<GenderPage> {
-  List<Gender> genders = [
-    Gender("Male", MdiIcons.genderMale, false),
-    Gender("Female", MdiIcons.genderFemale, false)
-  ];
+  User? user = FirebaseAuth.instance.currentUser;
+  late final Box dataBox;
+
   @override
   void initState() {
     super.initState();
-    // genders.add(new Gender("Male", MdiIcons.genderMale, false));
-    // genders.add(new Gender("Female", MdiIcons.genderFemale, false));
+    dataBox = Hive.box('storage');
   }
 
+  late Gender selectedGender = Gender.male;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 28, 28, 30),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Color.fromARGB(255, 28, 28, 30),
+      // ignore: sized_box_for_whitespace
       body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 50,
-            ),
-            Text(
-              'TELL US ABOUT YOURSELF!',
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const SizedBox(
+            height: 75,
+          ),
+          Text("What are you?",
               style: GoogleFonts.montserrat(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white),
-            ),
-            const SizedBox(
-              height: 80,
-            ),
-            ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: genders.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        genders.forEach((gender) => gender.isSelected = false);
-                        genders[index].isSelected = true;
-                      });
-                    },
-                    child: CustomRadio(genders[index]),
-                  );
-                }),
-          ],
-        ),
-      ),
+                  letterSpacing: .5,
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600)),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedGender = Gender.male;
+                    });
+                  },
+                  child: GenderCard(
+                      iconColor: selectedGender == Gender.male
+                          ? Colors.black
+                          : Colors.white,
+                      cardTitle: "Male",
+                      cardColor: selectedGender == Gender.male
+                          ? const Color.fromARGB(
+                              255,
+                              208,
+                              253,
+                              62,
+                            )
+                          : const Color.fromARGB(255, 44, 44, 46),
+                      cardIcon: MdiIcons.genderMale),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedGender = Gender.female;
+                    });
+                  },
+                  child: GenderCard(
+                      iconColor: selectedGender == Gender.female
+                          ? Colors.black
+                          : Colors.white,
+                      cardTitle: "Female",
+                      cardColor: selectedGender == Gender.female
+                          ? const Color.fromARGB(
+                              255,
+                              208,
+                              253,
+                              62,
+                            )
+                          : const Color.fromARGB(255, 44, 44, 46),
+                      cardIcon: MdiIcons.genderFemale),
+                ),
+              ),
+            ],
+          ),
+        ],
+      )),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 20),
         child: FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const AgePicker()));
+            onPressed: () async {
+              print(selectedGender.name);
+              await dataBox.put('gender', selectedGender.name);
+
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade,
+                      duration: const Duration(milliseconds: 250),
+                      child: const AgePicker()));
             },
             backgroundColor: const Color.fromARGB(
               255,
@@ -139,22 +130,24 @@ class _GenderPageState extends State<GenderPage> {
               62,
             ),
             label: SizedBox(
-                child: Padding(
-              padding: const EdgeInsets.all(5),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Next',
-                    style: GoogleFonts.montserrat(
-                        color: Colors.black, fontWeight: FontWeight.w600),
+                    style: GoogleFonts.notoSansMono(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
                   ),
                   const Icon(
-                    Icons.arrow_forward_ios_rounded,
+                    size: 24,
+                    Icons.arrow_right,
                     color: Colors.black,
                   )
                 ],
               ),
-            ))),
+            )),
       ),
     );
   }

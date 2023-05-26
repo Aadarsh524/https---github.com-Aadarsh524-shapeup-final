@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:shapeup/screens/trainer/trainerRegister/agescreen.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
 
 import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 import 'package:page_transition/page_transition.dart';
@@ -40,6 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late String fat;
   late String fiber;
   late String bmi;
+  late String expage;
+  late String descrp;
 
   Future<void> loginWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -144,12 +147,41 @@ class _LoginScreenState extends State<LoginScreen> {
                       duration: const Duration(milliseconds: 250),
                       child: const DashBoardScreen()));
             } else {
+              userType = data['userType'];
+              firstName = data['firstName'];
+              lastName = data['lastName'];
+              phone = data['phone'];
+              age = data['age'];
+              gender = data['gender'];
+              expage = data['expage'];
+              userImage = data['userImage'];
+              descrp = data['descrp'];
+              uid = data['uid'];
+              email = data['email'];
+
+              await dataBox.put('firstName', firstName);
+              await dataBox.put('lastName', lastName);
+              await dataBox.put('phone', phone);
+              await dataBox.put(
+                'userType',
+                userType,
+              );
+              await dataBox.put('uid', uid);
+              await dataBox.put('age', age);
+              await dataBox.put('expage', expage);
+              await dataBox.put('descrp', descrp);
+              await dataBox.put('gender', gender);
+              await dataBox.put('userImage', userImage);
+               await dataBox.put('email', email);
+
+              print(firstName);
+              // ignore: use_build_context_synchronously
               Navigator.pushReplacement(
                   context,
                   PageTransition(
                       type: PageTransitionType.fade,
                       duration: const Duration(milliseconds: 250),
-                      child: const AgePicker()));
+                      child: const TrainerPage()));
             }
           } else {
             print("Registration process was not completed.");
