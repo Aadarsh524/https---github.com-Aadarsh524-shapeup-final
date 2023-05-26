@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/traineesprofile.dart';
-import 'package:shapeup/screens/trainer/trainerscreen/trainerprof.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/trainerprofile.dart';
 
 class HomePageT extends StatefulWidget {
   const HomePageT({Key? key}) : super(key: key);

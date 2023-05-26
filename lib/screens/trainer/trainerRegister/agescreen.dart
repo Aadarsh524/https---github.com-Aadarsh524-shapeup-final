@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 
 import 'package:numberpicker/numberpicker.dart';
 import 'package:shapeup/screens/trainer/trainerRegister/experiencescreen.dart';
@@ -13,6 +14,9 @@ class AgePicker extends StatefulWidget {
 }
 
 class _AgePickerState extends State<AgePicker> {
+  late final Box dataBox;
+  late String firstName;
+
   User? user = FirebaseAuth.instance.currentUser;
   int _currentIntValue = 20;
 
@@ -21,6 +25,8 @@ class _AgePickerState extends State<AgePicker> {
   var authName = '';
   @override
   void initState() {
+    dataBox = Hive.box('storage');
+
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       for (final providerProfile in user.providerData) {
@@ -146,7 +152,9 @@ class _AgePickerState extends State<AgePicker> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: FloatingActionButton.extended(
-              onPressed: () {
+              onPressed: () async {
+                await dataBox.put('age', _currentIntValue.toString());
+                print(_currentIntValue);
                 // print(_ageController.text),
                 //         await FirebaseFirestore.instance
                 //             .collection('profile')

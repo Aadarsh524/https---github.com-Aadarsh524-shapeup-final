@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shapeup/bloc/cubit/register_cubit.dart';
 import 'package:shapeup/screens/trainer/trainerRegister/agescreen.dart';
+import 'package:shapeup/screens/trainer/trainerRegister/genderscreen.dart';
 
 import 'package:shapeup/screens/user/userRegister/agescreen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -85,7 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               PageTransition(
                   type: PageTransitionType.fade,
                   duration: const Duration(milliseconds: 250),
-                  child: const AgePicker()));
+                  child: const GenderPage()));
         }
       } else {
         SnackBar snackBar = SnackBar(
@@ -529,7 +530,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         type: PageTransitionType.fade,
                                         duration:
                                             const Duration(milliseconds: 300),
-                                        child: LoginScreen()));
+                                        child: const LoginScreen()));
                               },
                             )
                           ],

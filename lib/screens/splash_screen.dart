@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:shapeup/screens/login_screen.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
 import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,22 +16,52 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String? userType;
   bool pData = false;
+  late User user;
+
   @override
   void initState() {
     User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
+        if (documentSnapshot.exists) {
+          print("User Data");
 
-    Timer(
-      const Duration(seconds: 3),
-      () => Navigator.pushReplacement(
-        context,
-        PageTransition(
-          type: PageTransitionType.fade,
-          duration: const Duration(milliseconds: 300),
-          child: user != null ? const DashBoardScreen() : const LoginScreen(),
+          Map<String, dynamic> data =
+              documentSnapshot.data() as Map<String, dynamic>;
+          userType = data['userType'];
+          print(userType);
+        }
+      }).then((value) => Timer(
+                const Duration(seconds: 3),
+                () => Navigator.pushReplacement(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade,
+                      duration: const Duration(milliseconds: 300),
+                      child: (userType == 'trainer'
+                          ? const TrainerPage()
+                          : const DashBoardScreen())),
+                ),
+              ));
+    } else {
+      Timer(
+        const Duration(seconds: 3),
+        () => Navigator.pushReplacement(
+          context,
+          PageTransition(
+            type: PageTransitionType.fade,
+            duration: const Duration(milliseconds: 300),
+            child: const LoginScreen(),
+          ),
         ),
-      ),
-    );
+      );
+    }
 
     super.initState();
   }

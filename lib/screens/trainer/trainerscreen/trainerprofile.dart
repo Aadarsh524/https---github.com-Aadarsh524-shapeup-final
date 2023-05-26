@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/editprofile.dart';
 
 // import '../../../../services/firebaseservices.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../login_screen.dart';
 
 class TrainerProfile extends StatefulWidget {
   const TrainerProfile({Key? key}) : super(key: key);
@@ -15,31 +18,29 @@ class TrainerProfile extends StatefulWidget {
 }
 
 class _TrainerProfileState extends State<TrainerProfile> {
-  String? authName;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  late final Box dataBox;
+  late String firstName;
+  late String lastName;
+  late String age;
+  late String gender;
+  late String expage;
+  late String descrp;
 
-  String? descrip;
-  String? age;
-  String? exp;
-  asyncFunc() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      age = prefs.getString("AGE");
-      prefs.getString("gender");
-      descrip = prefs.getString("descrip");
-      exp = prefs.getString("expage");
-
-      authName = prefs.getString("authName");
-    });
-  }
-
-  clear() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-  }
+  late String email;
+  late String phone;
 
   @override
   void initState() {
-    asyncFunc();
+    dataBox = Hive.box('storage');
+    firstName = dataBox.get("firstName").toString();
+    lastName = dataBox.get("lastName").toString();
+    age = dataBox.get("age").toString();
+    gender = dataBox.get("gender").toString();
+    email = dataBox.get("email").toString();
+    phone = dataBox.get("phone").toString();
+    descrp = dataBox.get("descrp").toString();
+    expage = dataBox.get("expage").toString();
 
     super.initState();
   }
@@ -212,7 +213,7 @@ class _TrainerProfileState extends State<TrainerProfile> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text("Bibash Nepali",
+                            Text("$firstName $lastName",
                                 style: GoogleFonts.montserrat(
                                     letterSpacing: .5,
                                     color: Color.fromARGB(255, 166, 181, 106),
@@ -233,7 +234,7 @@ class _TrainerProfileState extends State<TrainerProfile> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text("inojinku12@gmail.com",
+                            Text("$email",
                                 style: GoogleFonts.montserrat(
                                     letterSpacing: 0,
                                     color: Color.fromRGBO(142, 153, 183, 0.5),
@@ -254,7 +255,7 @@ class _TrainerProfileState extends State<TrainerProfile> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text("+977 9814142124",
+                            Text("+977 $phone",
                                 style: GoogleFonts.montserrat(
                                     letterSpacing: 0,
                                     color: Color.fromRGBO(142, 153, 183, 0.5),
@@ -299,7 +300,7 @@ class _TrainerProfileState extends State<TrainerProfile> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    '22',
+                                    age,
                                     textAlign: TextAlign.left,
                                     style: GoogleFonts.montserrat(
                                         letterSpacing: .5,
@@ -338,7 +339,7 @@ class _TrainerProfileState extends State<TrainerProfile> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    '6 yrs',
+                                    expage,
                                     textAlign: TextAlign.left,
                                     style: GoogleFonts.montserrat(
                                         letterSpacing: .5,
@@ -354,38 +355,43 @@ class _TrainerProfileState extends State<TrainerProfile> {
                         const SizedBox(
                           height: 8,
                         ),
-                        Card(
-                          elevation: 1,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          color: Color.fromARGB(255, 114, 97, 89),
-                          child: SizedBox(
-                            child: Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Description:",
-                                    textAlign: TextAlign.left,
-                                    style: GoogleFonts.montserrat(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Text(
-                                    'Looking forward to teaching\n you guys',
-                                    textAlign: TextAlign.left,
-                                    style: GoogleFonts.montserrat(
-                                        letterSpacing: .5,
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ],
+                        SizedBox(
+                          width: double.infinity,
+                          child: Card(
+                            elevation: 1,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            color: Color.fromARGB(255, 114, 97, 89),
+                            child: SizedBox(
+                              child: Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Description:",
+                                      textAlign: TextAlign.left,
+                                      style: GoogleFonts.montserrat(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    const SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      descrp,
+                                      textAlign: TextAlign.left,
+                                      style: GoogleFonts.montserrat(
+                                          letterSpacing: .5,
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -486,7 +492,14 @@ class _TrainerProfileState extends State<TrainerProfile> {
               ))),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
+          onPressed: () async {
+            GoogleSignIn googleSignIn = GoogleSignIn();
+            await googleSignIn.signOut();
+            await dataBox.clear();
+            await _firebaseAuth.signOut().then((value) => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen())));
+
             // print(_ageController.text),
             //         await FirebaseFirestore.instance
             //             .collection('profile')

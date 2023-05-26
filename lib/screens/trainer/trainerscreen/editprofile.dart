@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shapeup/screens/settingScreen.dart';
+
+import 'package:shapeup/screens/trainer/trainerRegister/setting_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _newAgeController = TextEditingController();
   final _newDescController = TextEditingController();
   final _newExpController = TextEditingController();
+  final _newPhoneController = TextEditingController();
 
   var authName = '';
   @override
@@ -314,13 +316,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 .update({
               'age': _newAgeController.text,
               'descrip': _newDescController.text,
-              'exp': _newExpController.text,
+              'expage': _newExpController.text,
+              'phone': _newPhoneController,
             }).then((value) => Navigator.pushReplacement(
                     context,
                     PageTransition(
                         type: PageTransitionType.fade,
                         duration: const Duration(milliseconds: 250),
-                        child: const SettingUpScreen())));
+                        child: const SettingUpScreenT())));
           },
           backgroundColor: const Color.fromARGB(
             255,
