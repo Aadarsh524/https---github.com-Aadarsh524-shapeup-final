@@ -167,6 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   margin: const EdgeInsets.only(
                                       top: 30, bottom: 12, left: 5, right: 5),
                                   child: TextFormField(
+                                    cursorColor: Colors.white,
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(10),
                                       FilteringTextInputFormatter.deny(
@@ -217,6 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   margin: const EdgeInsets.only(
                                       bottom: 12, left: 5, right: 5),
                                   child: TextFormField(
+                                    cursorColor: Colors.white,
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(10),
                                       FilteringTextInputFormatter.deny(
@@ -271,6 +273,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   margin: const EdgeInsets.only(
                                       bottom: 12, left: 5, right: 5),
                                   child: TextFormField(
+                                      cursorColor: Colors.white,
                                       inputFormatters: [
                                         LengthLimitingTextInputFormatter(10),
                                         FilteringTextInputFormatter.deny(

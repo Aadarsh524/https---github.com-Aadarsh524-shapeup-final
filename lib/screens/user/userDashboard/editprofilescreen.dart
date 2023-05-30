@@ -180,6 +180,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: const EdgeInsets.only(
                               bottom: 12, left: 5, right: 5),
                           child: TextFormField(
+                            cursorColor: Colors.white,
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(10),
                               FilteringTextInputFormatter.allow(expression),
@@ -220,6 +221,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: const EdgeInsets.only(
                               bottom: 12, left: 5, right: 5),
                           child: TextFormField(
+                            cursorColor: Colors.white,
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(3),
                               FilteringTextInputFormatter.allow(expression),
@@ -260,6 +262,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: const EdgeInsets.only(
                               bottom: 12, left: 5, right: 5),
                           child: TextFormField(
+                            cursorColor: Colors.white,
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(3),
                               FilteringTextInputFormatter.allow(expression),
@@ -300,6 +303,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: const EdgeInsets.only(
                               bottom: 12, left: 5, right: 5),
                           child: TextFormField(
+                            cursorColor: Colors.white,
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(2),
                               FilteringTextInputFormatter.allow(expression),
@@ -343,11 +347,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_newAgeController.text != "") {
-                                print(
-                                    "before change ${_newAgeController.text}");
                                 await dataBox.put(
                                     'age', _newAgeController.text);
-                                print("After change ${age}");
                               }
                               if (_newPhoneController.text != "") {
                                 if (int.tryParse(_newPhoneController.text)! <
@@ -382,25 +383,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     'height', _newHeightController.text);
                               }
 
-                              print(height);
-                              print(weight);
-                              print(phone);
-                              print(age);
-                              // await FirebaseFirestore.instance
-                              //     .collection('users')
-                              //     .doc(user?.uid)
-                              //     .update({
-                              //   'age': age.toString(),
-                              //   'phone': phone.toString(),
-                              //   'height': height.toString(),
-                              //   'weight': weight.toString(),
-                              // }).then((value) => Navigator.pushReplacement(
-                              //         context,
-                              //         PageTransition(
-                              //             type: PageTransitionType.fade,
-                              //             duration:
-                              //                 const Duration(milliseconds: 250),
-                              //             child: const SettingUpScreen())));
+                              await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(user?.uid)
+                                  .update({
+                                'age': (_newAgeController.text == ''
+                                    ? age
+                                    : _newAgeController.text),
+                                'phone': _newPhoneController.text == ''
+                                    ? phone
+                                    : _newPhoneController.text,
+                                'height': _newHeightController.text == ''
+                                    ? age
+                                    : _newHeightController.text,
+                                'weight': _newWeightController.text == ''
+                                    ? weight
+                                    : _newWeightController.text,
+                              }).then((value) => Navigator.pushReplacement(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.fade,
+                                          duration:
+                                              const Duration(milliseconds: 250),
+                                          child: const SettingUpScreen())));
                             },
                             style: ElevatedButton.styleFrom(
                                 elevation: 0,
