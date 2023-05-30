@@ -28,20 +28,21 @@ class ExerciseService {
   }
 
   List<ExerciseDetailModel> _dayExericsePlan(QuerySnapshot snapshot) {
-    return snapshot.docs
-        .map((doc) => ExerciseDetailModel(
-              name: doc['name'] ?? '',
-              counter: doc['counter'].toString(),
-              description: doc['description'] ?? '',
-              duration: doc['duration'].toString(),
-              gif: doc['gif'] ?? '',
-            ))
-        .toList();
+    return snapshot.docs.map((doc) {
+      return ExerciseDetailModel(
+        name: doc.get('name') ?? '',
+        counter: doc.get('counter').toString(),
+        description: doc.get('description') ?? '',
+        duration: doc.get('duration').toString(),
+        gif: doc.get('gif') ?? '',
+      );
+    }).toList();
   }
 
   Future<List<ExerciseDetailModel>> get listExerciseInfo async {
     final querySnapshot =
         await exercisecollection.doc(docID).collection("day$dayindex").get();
+    print(querySnapshot);
     return _dayExericsePlan(querySnapshot);
   }
 
