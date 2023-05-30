@@ -2,13 +2,22 @@ import 'dart:async';
 
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/models/exercise_detail_model.dart';
+import 'package:shapeup/screens/user/exercise/exerciserunscreen.dart';
 
 class RestScreen extends StatefulWidget {
-  final VoidCallback onNext;
   final ExerciseDetailModel nextExercise;
-  const RestScreen({Key? key, required this.onNext, required this.nextExercise})
-      : super(key: key);
+  final int nextExerciseIndex;
+
+  final List<ExerciseDetailModel> nextExerciseList;
+
+  const RestScreen({
+    Key? key,
+    required this.nextExercise,
+    required this.nextExerciseIndex,
+    required this.nextExerciseList,
+  }) : super(key: key);
 
   @override
   State<RestScreen> createState() => _RestScreenState();
@@ -32,96 +41,103 @@ class _RestScreenState extends State<RestScreen> {
       });
 
       if (timeLeft == 0) {
-        Navigator.pop(context);
-        widget.onNext();
-        setAgain();
+        Navigator.pushReplacement(
+          context,
+          PageTransition(
+              type: PageTransitionType.fade,
+              duration: const Duration(milliseconds: 250),
+              child: ExerciseRunScreen(
+                  currentIndex: widget.nextExerciseIndex,
+                  exercisedetailmodel: widget.nextExerciseList)),
+        );
       }
     });
   }
 
   @override
   void initState() {
-    startTimer();
     super.initState();
+    startTimer();
+    setAgain();
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
     super.dispose();
+    _timer?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 28, 28, 30),
         body: SafeArea(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
                     padding: const EdgeInsets.only(
-                        left: 10, right: 10, top: 20, bottom: 20),
+                        left: 0, right: 0, top: 10, bottom: 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Next",
-                          textAlign: TextAlign.start,
-                          style: GoogleFonts.notoSansMono(
-                              color: Colors.black.withOpacity(.80),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              widget.nextExercise.name,
-                              style: GoogleFonts.notoSansMono(
-                                  color: Colors.black.withOpacity(.80),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Text(
-                              "X${widget.nextExercise.counter}",
-                              style: GoogleFonts.notoSansMono(
-                                  color: Colors.black.withOpacity(.80),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                  color: Color.fromARGB(255, 153, 152, 152)),
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 5, bottom: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Next Exercise",
+                                textAlign: TextAlign.start,
+                                style: GoogleFonts.notoSansMono(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    widget.nextExercise.name,
+                                    style: GoogleFonts.notoSansMono(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Text(
+                                    "X${widget.nextExercise.counter}",
+                                    style: GoogleFonts.notoSansMono(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(
                           height: 25,
                         ),
                         SizedBox(
-                          height: 240,
                           width: double.infinity,
-                          child: Image.asset("assets/splash.png"),
+                          child: Image.network(
+                            widget.nextExercise.gif,
+                            colorBlendMode: BlendMode.colorBurn,
+                            height: 275,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ],
                     )),
-                const SizedBox(
-                  height: 10,
-                ),
                 Expanded(
                   child: Container(
-                    color: const Color.fromARGB(255, 125, 117, 6),
+                    color: Color.fromARGB(255, 214, 243, 155),
                     height: 250,
                     width: double.infinity,
                     child: Column(
@@ -167,8 +183,17 @@ class _RestScreenState extends State<RestScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context);
-                                widget.onNext();
+                                Navigator.pushReplacement(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        duration:
+                                            const Duration(milliseconds: 250),
+                                        child: ExerciseRunScreen(
+                                            currentIndex:
+                                                widget.nextExerciseIndex,
+                                            exercisedetailmodel:
+                                                widget.nextExerciseList)));
                               },
                               child: Text(
                                 "Skip",

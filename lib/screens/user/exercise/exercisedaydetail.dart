@@ -69,6 +69,7 @@ class _ExerciseDayDetailState extends State<ExerciseDayDetail> {
                     .listExerciseInfo,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    print("have data");
                     return Expanded(
                         flex: 1,
                         child: Column(children: [
@@ -95,136 +96,192 @@ class _ExerciseDayDetailState extends State<ExerciseDayDetail> {
                                               fontWeight: FontWeight.w400),
                                         ),
                                       )
-                                    : Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '${index + 1}',
-                                            style: GoogleFonts.notoSansMono(
-                                                color: const Color.fromARGB(
-                                                    255, 226, 226, 226),
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          DietDetailWidget(
-                                            title: 'Name',
-                                            data: snapshot.data![index].name,
-                                          ),
-                                          DietDetailWidget(
-                                            title: 'Description',
-                                            data: snapshot
-                                                .data![index].description,
-                                          ),
-                                          DietDetailWidget(
-                                            title: 'Counter',
-                                            data: snapshot.data![index].counter
-                                                .toString(),
-                                          ),
-                                          Image.network(
-                                            colorBlendMode: BlendMode.colorBurn,
-                                            height: 280,
-                                            fit: BoxFit.fill,
-                                            snapshot.data![index].gif,
-                                          ).center().expanded(),
-                                        ],
-                                      ).padding(top: 20, horizontal: 20);
+                                    : Container(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, left: 20, right: 20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '${index + 1}',
+                                              style: GoogleFonts.notoSansMono(
+                                                  color: const Color.fromARGB(
+                                                      255, 226, 226, 226),
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            ExerciseDetailWidget(
+                                              title: 'Name',
+                                              data: snapshot.data![index].name,
+                                            ),
+                                            ExerciseDetailWidget(
+                                              title: 'Description',
+                                              data: snapshot
+                                                  .data![index].description,
+                                            ),
+                                            ExerciseDetailWidget(
+                                              title: 'Counter',
+                                              data: snapshot
+                                                  .data![index].counter
+                                                  .toString(),
+                                            ),
+                                            Image.network(
+                                              colorBlendMode:
+                                                  BlendMode.colorBurn,
+                                              height: 275,
+                                              fit: BoxFit.fill,
+                                              snapshot.data![index].gif,
+                                            ).center().expanded(),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            SizedBox(
+                                                width: double.infinity,
+                                                child: Center(
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.pushReplacement(
+                                                        context,
+                                                        PageTransition(
+                                                          type:
+                                                              PageTransitionType
+                                                                  .fade,
+                                                          duration:
+                                                              const Duration(
+                                                                  milliseconds:
+                                                                      250),
+                                                          child:
+                                                              ExerciseRunScreen(
+                                                            exercisedetailmodel:
+                                                                snapshot.data!,
+                                                            currentIndex: 0,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    style: ElevatedButton.styleFrom(
+                                                        elevation: 0,
+                                                        backgroundColor:
+                                                            const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                166,
+                                                                181,
+                                                                106),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                vertical: 14,
+                                                                horizontal: 20),
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                    child: Text(
+                                                      "Start",
+                                                      style: GoogleFonts
+                                                          .notoSansMono(
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      .75),
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700),
+                                                    ),
+                                                  ),
+                                                )),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 15, bottom: 8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      controller.previousPage(
+                                                          duration:
+                                                              const Duration(
+                                                                  milliseconds:
+                                                                      300),
+                                                          curve: Curves.easeIn);
+                                                    },
+                                                    child: Text(
+                                                      'Previous',
+                                                      style: GoogleFonts.montserrat(
+                                                          color: currentIndex ==
+                                                                  0
+                                                              ? const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  174,
+                                                                  155,
+                                                                  141)
+                                                              : const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  25,
+                                                                  170,
+                                                                  151),
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      controller.nextPage(
+                                                          duration:
+                                                              const Duration(
+                                                                  milliseconds:
+                                                                      300),
+                                                          curve: Curves.easeIn);
+                                                    },
+                                                    child: Text(
+                                                      'Next',
+                                                      style: GoogleFonts.montserrat(
+                                                          color: (currentIndex +
+                                                                      1) >=
+                                                                  daysLength
+                                                              ? const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  174,
+                                                                  155,
+                                                                  141)
+                                                              : const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  25,
+                                                                  170,
+                                                                  151),
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ));
                               },
                             ),
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          SizedBox(
-                              width: double.infinity,
-                              child: Center(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.fade,
-                                        duration:
-                                            const Duration(milliseconds: 250),
-                                        child: ExerciseRunScreen(
-                                          exercisedetailmodel: snapshot.data!,
-                                          currentIndex: currentIndex,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 166, 181, 106),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 14, horizontal: 20),
-                                      textStyle: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
-                                  child: Text(
-                                    "Start",
-                                    style: GoogleFonts.notoSansMono(
-                                        color: Colors.black.withOpacity(.75),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                              ))
                         ]));
                   } else {
                     return const Center(child: CircularProgressIndicator());
                   }
                 }),
-            Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      controller.previousPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeIn);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Text(
-                        'Previous',
-                        style: GoogleFonts.montserrat(
-                            color: currentIndex == 0
-                                ? Color.fromARGB(255, 174, 155, 141)
-                                : Color.fromARGB(255, 25, 170, 151),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      controller.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeIn);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 15.0),
-                      child: Text(
-                        'Next',
-                        style: GoogleFonts.montserrat(
-                            color: (currentIndex + 1) >= daysLength
-                                ? Color.fromARGB(255, 174, 155, 141)
-                                : Color.fromARGB(255, 25, 170, 151),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
@@ -232,10 +289,11 @@ class _ExerciseDayDetailState extends State<ExerciseDayDetail> {
   }
 }
 
-class DietDetailWidget extends StatelessWidget {
+class ExerciseDetailWidget extends StatelessWidget {
   final String title;
   final String data;
-  const DietDetailWidget({Key? key, required this.title, required this.data})
+  const ExerciseDetailWidget(
+      {Key? key, required this.title, required this.data})
       : super(key: key);
 
   @override
