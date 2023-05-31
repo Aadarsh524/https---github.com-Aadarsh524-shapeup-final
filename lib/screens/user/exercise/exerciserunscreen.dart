@@ -46,14 +46,17 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
 
   int currentIndex = 0;
   int time = 0;
-
+  bool isPause = false;
   Timer? _timer;
 
   startCounter() async {
-    print(currentExercise!.duration);
+    setState(() {
+      isPause = false;
+    });
     if (currentExercise!.duration == "true") {
-      await Future.delayed(const Duration(milliseconds: 3000), () {
+      await Future.delayed(const Duration(milliseconds: 2000), () {
         _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          print(_timer);
           if (mounted) {
             setState(() {
               time--;
@@ -87,6 +90,15 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
           }
         });
       });
+    }
+  }
+
+  stopCounter() {
+    if (_timer != null && _timer!.isActive) {
+      setState(() {
+        isPause = true;
+      });
+      _timer!.cancel();
     }
   }
 
@@ -192,29 +204,57 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
                       height: 40,
                     ),
                     currentExercise!.duration == "true"
-                        ? SizedBox(
-                            width: double.infinity,
-                            child: Center(
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    elevation: 0,
-                                    backgroundColor: const Color.fromARGB(
-                                        255, 166, 181, 106),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 14, horizontal: 24),
-                                    textStyle: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold)),
-                                child: Text(
-                                  "Wait",
-                                  style: GoogleFonts.notoSansMono(
-                                      color: Colors.black.withOpacity(.75),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            ))
+                        ? (isPause == true
+                            ? SizedBox(
+                                width: double.infinity,
+                                child: Center(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      startCounter();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 166, 181, 106),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 14, horizontal: 24),
+                                        textStyle: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    child: Text(
+                                      "Continue",
+                                      style: GoogleFonts.notoSansMono(
+                                          color: Colors.black.withOpacity(.75),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ))
+                            : SizedBox(
+                                width: double.infinity,
+                                child: Center(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      stopCounter();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 166, 181, 106),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 14, horizontal: 24),
+                                        textStyle: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    child: Text(
+                                      "Wait",
+                                      style: GoogleFonts.notoSansMono(
+                                          color: Colors.black.withOpacity(.75),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                )))
                         : Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, bottom: 0),

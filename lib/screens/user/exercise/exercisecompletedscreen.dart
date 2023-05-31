@@ -17,36 +17,48 @@ class _ExerciseCompletedScreenState extends State<ExerciseCompletedScreen> {
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 28, 28, 30),
         body: SafeArea(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-              Text(
-                "Congratulation, You've burned enough for the day.",
-                textAlign: TextAlign.start,
-                style: GoogleFonts.notoSansMono(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.leftToRight,
-                      duration: const Duration(milliseconds: 250),
-                      child: DashBoardScreen(),
-                    ),
-                  );
-                },
-                child: Text(
-                  "Leave",
+            child: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Congratulation, You've burned enough for the day.",
+                  textAlign: TextAlign.start,
                   style: GoogleFonts.notoSansMono(
-                      color: Colors.teal,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600),
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700),
                 ),
-              )
-            ])));
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Navigator.pushReplacement(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.leftToRight,
+                          duration: const Duration(milliseconds: 250),
+                          child: DashBoardScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        textStyle: const TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      "Leave",
+                      style: GoogleFonts.notoSansMono(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ]),
+        )));
   }
 }
