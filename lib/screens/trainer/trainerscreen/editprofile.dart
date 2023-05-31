@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:page_transition/page_transition.dart';
 
-
-
+import '../trainerRegister/setting_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -20,12 +23,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   FilePickerResult? result;
   PlatformFile? pickedfile;
   File? fileToDisplay;
+  late final Box dataBox;
 
   final _newAgeController = TextEditingController();
   final _newDescController = TextEditingController();
   final _newExpController = TextEditingController();
   final _newPhoneController = TextEditingController();
   var phoneExpression = RegExp('[^0-9]');
+  
+  late String phone;
+  late String age;
+  late String descrp;
+  late String expage;
 
   var authName = '';
   @override
@@ -39,6 +48,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         });
       }
     }
+    dataBox = Hive.box('storage');
     super.initState();
   }
 
@@ -307,47 +317,96 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (_newAgeController.text != "") {
+                                print(
+                                    "before change ${_newAgeController.text}");
+                                await dataBox.put(
+                                    'age', _newAgeController.text);
+                                print("After change ${age}");
+                              }
+                              if (_newPhoneController.text != "") {
+                                if (int.tryParse(_newPhoneController.text)! <
+                                    10) {
+                                  SnackBar snackBar = SnackBar(
+                                    padding: const EdgeInsets.all(20),
+                                    backgroundColor: Colors.white,
+                                    duration: const Duration(seconds: 2),
+                                    content: Text(
+                                      "Phone value is invalid",
+                                      style: GoogleFonts.montserrat(
+                                        height: .5,
+                                        letterSpacing: 0.5,
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  );
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                                await dataBox.put(
+                                    'phone', _newPhoneController.text);
+                              }
+                              if (_newDescController.text != "") {
+                                await dataBox.put(
+                                    'weight', _newDescController.text);
+                              }
+                              if (_newExpController.text != "") {
+                                await dataBox.put(
+                                    'height',_newExpController.text);
+                              }
+
+                              print(descrp);
+                              print(expage);
+                              print(phone);
+                              print(age);
+                              await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(user?.uid)
+                                  .update({
+                                'age': age.toString(),
+                                'phone': phone.toString(),
+                                'descrp': descrp.toString(),
+                                'weight': expage.toString(),
+                              }).then((value) => Navigator.pushReplacement(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.fade,
+                                          duration:
+                                              const Duration(milliseconds: 250),
+                                          child: const SettingUpScreenT())));
+                            },
+                            style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor:
+                                    const Color.fromARGB(255, 125, 128, 122),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
+                                textStyle: const TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold)),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, top: 1, bottom: 1),
+                              child: Text(
+                                "Update",
+                                style: GoogleFonts.notoSansMono(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     )),
               ))),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            print(_newAgeController.text);
-            print(_newExpController.text);
-            print(_newDescController.text);
-            print(_newPhoneController.text);
-            // await FirebaseFirestore.instance
-            //     .collection('profile')
-            //     .doc(user?.uid)
-            //     .update({
-            //   'age': _newAgeController.text,
-            //   'descrip': _newDescController.text,
-            //   'expage': _newExpController.text,
-            //   'phone': _newPhoneController,
-            // }).then((value) => Navigator.pushReplacement(
-            //         context,
-            //         PageTransition(
-            //             type: PageTransitionType.fade,
-            //             duration: const Duration(milliseconds: 250),
-            //             child: const SettingUpScreenT())));
-          },
-          backgroundColor: const Color.fromARGB(
-            255,
-            208,
-            253,
-            62,
-          ),
-          label: Padding(
-            padding: const EdgeInsets.all(5),
-            child: Text(
-              'Update',
-              style: GoogleFonts.notoSansMono(
-                  fontSize: 14,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600),
-            ),
-          )),
     );
   }
 }
