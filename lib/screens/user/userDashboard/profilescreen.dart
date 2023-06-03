@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/login_screen.dart';
+import 'package:shapeup/screens/user/premium/subscription_screen.dart';
 
 import 'editprofilescreen.dart';
 
@@ -28,9 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String bmi;
   late String email;
   late String phone;
+  late bool premium;
 
   @override
   void initState() {
+    super.initState();
     dataBox = Hive.box('storage');
     firstName = dataBox.get("firstName").toString();
     lastName = dataBox.get("lastName").toString();
@@ -41,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     height = dataBox.get("height").toString();
     weight = dataBox.get("weight").toString().toString();
     bmi = dataBox.get("bmi").toString();
-    super.initState();
+    premium = dataBox.get('premium');
   }
 
   @override
@@ -166,18 +169,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 20.0, right: 5),
-                                    child: InkWell(
-                                      onTap: () {},
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Text("Buy Premium",
-                                            style: GoogleFonts.montserrat(
-                                                color: const Color.fromARGB(
-                                                    255, 214, 21, 11),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500)),
-                                      ),
-                                    )),
+                                    child: premium == true
+                                        ? InkWell(
+                                            onTap: () {},
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Text("Premium Account",
+                                                  style: GoogleFonts.montserrat(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 255, 215, 0),
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: () {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  PageTransition(
+                                                      type: PageTransitionType
+                                                          .fade,
+                                                      duration: const Duration(
+                                                          milliseconds: 250),
+                                                      child:
+                                                          const SubscriptionPage()));
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Text("Buy Premium",
+                                                  style: GoogleFonts.montserrat(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 214, 21, 11),
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                            ),
+                                          )),
                               ),
                             )
                           ],
@@ -302,7 +334,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "BMI:",
+                                    "Age:",
                                     textAlign: TextAlign.left,
                                     style: GoogleFonts.montserrat(
                                         color: Colors.white,
@@ -310,7 +342,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    bmi,
+                                    age,
                                     textAlign: TextAlign.left,
                                     style: GoogleFonts.montserrat(
                                         letterSpacing: .5,
@@ -341,7 +373,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Age:",
+                                    "BMI:",
                                     textAlign: TextAlign.left,
                                     style: GoogleFonts.montserrat(
                                         color: Colors.white,
@@ -349,7 +381,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    age,
+                                    bmi,
                                     textAlign: TextAlign.left,
                                     style: GoogleFonts.montserrat(
                                         letterSpacing: .5,

@@ -30,6 +30,8 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
   late String userImage;
   late String uid;
   late String email;
+  late bool premium = false;
+  late bool hasTrainer = false;
 
   int calories = 0;
   int burn = 0;
@@ -143,6 +145,8 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
           'protein': protein.toString(),
           'fat': fat.toString(),
           'fiber': fiber.toString(),
+          'premium': premium,
+          'hasTrainer': hasTrainer
         })
         .then((value) async => {
               print("Data added suceccfully"),
@@ -157,6 +161,8 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
               await dataBox.put('protein', protein),
               await dataBox.put('fat', fat),
               await dataBox.put('fiber', fiber),
+              await dataBox.put('premium', premium),
+              await dataBox.put('hasTrainer', hasTrainer),
               Navigator.pushReplacement(
                   context,
                   PageTransition(

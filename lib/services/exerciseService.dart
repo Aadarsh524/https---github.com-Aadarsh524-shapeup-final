@@ -46,11 +46,8 @@ class ExerciseService {
     return _dayExericsePlan(querySnapshot);
   }
 
-  final CollectionReference doc =
-      FirebaseFirestore.instance.collection('exercise');
-
   Future<DocumentSnapshot<Object?>> get list async {
-    final documentSnapshot = await doc.doc(docID).get();
+    final documentSnapshot = await exercisecollection.doc(docID).get();
     return documentSnapshot;
   }
 }

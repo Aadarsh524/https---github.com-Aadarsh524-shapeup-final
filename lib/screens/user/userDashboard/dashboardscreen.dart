@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:shapeup/screens/user/diet/dietscreen.dart';
 import 'package:shapeup/screens/user/exercise/exercisescreen.dart';
+import 'package:shapeup/screens/user/premium/trainerListScreen.dart';
 import 'package:shapeup/screens/user/userDashboard/homescreen.dart';
 import 'package:shapeup/screens/user/notification/notificationscreen.dart';
 import 'package:shapeup/screens/user/premium/premiumscreen.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class DashBoardScreen extends StatefulWidget {
   final int? selectedIndex;
@@ -14,10 +17,17 @@ class DashBoardScreen extends StatefulWidget {
 }
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
+  late final Box dataBox;
+  late bool premium;
+  late bool hasTrainer;
   @override
   void initState() {
-    setSelectedIndex();
     super.initState();
+
+    dataBox = Hive.box('storage');
+    premium = dataBox.get('premium');
+    hasTrainer = dataBox.get('hasTrainer');
+    setSelectedIndex();
   }
 
   final List<Widget> screens = [
@@ -52,8 +62,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         showUnselectedLabels: false,
         elevation: 10,
         backgroundColor: Colors.black,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             activeIcon: Icon(
               Icons.home,
               color: Colors.white,
@@ -64,7 +74,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             ),
             label: '',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             activeIcon: Icon(
               Icons.run_circle,
               color: Colors.white,
@@ -75,7 +85,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             ),
             label: '',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             activeIcon: Icon(
               Icons.food_bank,
               color: Colors.white,
@@ -86,7 +96,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             ),
             label: '',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             activeIcon: Icon(
               Icons.notifications,
               color: Colors.white,
@@ -99,11 +109,17 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           ),
           BottomNavigationBarItem(
             activeIcon: Icon(
-              Icons.monetization_on,
+              premium == true
+                  ? (hasTrainer == true
+                      ? MdiIcons.facebookMessenger
+                      : MdiIcons.selectArrowUp)
+                  : Icons.monetization_on,
               color: Colors.white,
             ),
             icon: Icon(
-              Icons.monetization_on_outlined,
+              premium == true
+                  ? MdiIcons.facebookMessenger
+                  : Icons.monetization_on,
               color: Colors.white,
             ),
             label: '',
