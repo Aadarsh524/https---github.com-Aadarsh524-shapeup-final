@@ -1,6 +1,6 @@
 class SubscriptionModel {
   final String title;
-  final String price;
+  final int price;
   final String time;
   bool isSelected;
 

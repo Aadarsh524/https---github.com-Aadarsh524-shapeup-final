@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 import 'package:shapeup/models/subscription_model.dart';
@@ -7,8 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
-import 'package:shapeup/screens/user/userDashboard/trainerListScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SubscriptionPage extends StatefulWidget {
   const SubscriptionPage({Key? key}) : super(key: key);
@@ -21,49 +20,40 @@ User? user = FirebaseAuth.instance.currentUser;
 final userId = FirebaseAuth.instance.currentUser?.uid;
 
 class _SubscriptionPageState extends State<SubscriptionPage> {
+  late final Box dataBox;
+  User? user = FirebaseAuth.instance.currentUser;
+  final userId = FirebaseAuth.instance.currentUser?.uid;
   late bool premium;
-  String? notificationMessage;
   String? date;
   DateTime subsDate = DateTime.now();
   var newDate;
 
   List<SubscriptionModel> subscriptionPlans = [
     SubscriptionModel(
-        title: 'Monthly', price: "199", time: "1", isSelected: false),
+        title: 'Monthly', price: 199, time: "1", isSelected: false),
     SubscriptionModel(
-        title: 'Quaterly', price: "499", time: "3", isSelected: false),
+        title: 'Quaterly', price: 499, time: "3", isSelected: false),
     SubscriptionModel(
-        title: 'Yearly', price: "1799", time: "12", isSelected: false),
+        title: 'Yearly', price: 1799, time: "12", isSelected: false),
   ];
-
-  setPremium() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      premium = true;
-      prefs.setBool("premium", premium);
-    });
-    if (premium == true) {
-      notificationMessage = "Your premium has been activated till $date";
-      FirebaseFirestore.instance
-          .collection('notifications')
-          .doc(user?.uid)
-          .collection("list")
-          .doc()
-          .set({
-        'message': notificationMessage,
-      });
-    }
-  }
 
   @override
   void initState() {
+    super.initState();
+    dataBox = Hive.box('storage');
+    premium = dataBox.get("premium");
     newDate = DateTime(subsDate.year, subsDate.month + 1, subsDate.day);
     date = DateFormat('MMMd').format(newDate);
     subscriptionPlans[0].isSelected = true;
-    super.initState();
+    setState(() {
+      selectedIndex = 0;
+    });
+    print(selectedIndex);
+    getAmt(selectedIndex);
+    print(getAmt(selectedIndex));
   }
 
-  int? selectedIndex;
+  late int selectedIndex;
 
   List<String> includedList = [
     'Ad-free UI',
@@ -73,11 +63,11 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     'Chat interface with your trainer'
   ];
 
-  getAmt() {
-    if (selectedIndex != null) {
-      return int.tryParse(subscriptionPlans[selectedIndex!].price * 100);
-    }
-    return null; //returns the amount to be payed in paisa
+  int getAmt(int index) {
+    index = selectedIndex;
+
+    return subscriptionPlans[index].price * 100;
+    //returns the amount to be payed in paisa
   }
 
   @override
@@ -86,17 +76,41 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         backgroundColor: Color.fromARGB(255, 28, 28, 30),
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          toolbarHeight: 60,
-          centerTitle: true,
-          title: Text("Premium",
-              style: GoogleFonts.montserrat(
-                  letterSpacing: .5,
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600)),
-          backgroundColor: Color.fromARGB(255, 28, 28, 30),
-          elevation: 0.0,
-        ),
+            toolbarHeight: 60,
+            centerTitle: true,
+            title: Text("Premium",
+                style: GoogleFonts.montserrat(
+                    letterSpacing: .5,
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600)),
+            backgroundColor: Color.fromARGB(255, 28, 28, 30),
+            elevation: 0.0,
+            leading: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  height: 28,
+                  width: 28,
+                  decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 114, 97, 89),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Center(
+                    child: IconButton(
+                      color: Colors.black,
+                      iconSize: 12,
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            )),
         body: SafeArea(
           child: SizedBox(
             height: double.infinity,
@@ -182,6 +196,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             setState(() {
                               subscriptionPlans[index].isSelected = true;
                               selectedIndex = index;
+                              print(getAmt(selectedIndex));
                             });
                           },
                           activeColor: const Color.fromARGB(255, 25, 170,
@@ -234,110 +249,124 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
             onPressed: () async {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.fade,
-                      duration: const Duration(milliseconds: 300),
-                      child: const TrainerListScreen()));
-            }
-
-            //   final amount = getAmt();
-            //   if (amount == null) {
-            //     SnackBar errorSnackBar = SnackBar(
-            //       padding: const EdgeInsets.all(20),
-            //       backgroundColor: Colors.white,
-            //       duration: const Duration(seconds: 2),
-            //       content: Text(
-            //         "Please selected a plan to continue.",
-            //         style: GoogleFonts.montserrat(
-            //           height: .5,
-            //           letterSpacing: 0.5,
-            //           fontSize: 12,
-            //           color: Colors.black,
-            //         ),
-            //       ),
-            //     );
-            //     ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
-            //     return;
-            //   }
-            //   KhaltiScope.of(context).pay(
-            //     config: PaymentConfig(
-            //       amount: getAmt(),
-            //       productIdentity: 'dells-sssssg5-g5510-2021',
-            //       productName: 'Product Name',
-            //     ),
-            //     preferences: [
-            //       PaymentPreference.khalti,
-            //     ],
-            //     onSuccess: (su) async => {
-            //       await FirebaseFirestore.instance
-            //           .collection('profile')
-            //           .doc(user?.uid)
-            //           .update({
-            //         'premium': true,
-            //       }),
-            //       setPremium(),
-            //       Future(() {
-            //         SnackBar successsnackBar = SnackBar(
-            //           padding: const EdgeInsets.all(20),
-            //           backgroundColor: Colors.white,
-            //           duration: const Duration(seconds: 2),
-            //           content: Text(
-            //             "Payment Success",
-            //             style: GoogleFonts.montserrat(
-            //               height: .5,
-            //               letterSpacing: 0.5,
-            //               fontSize: 12,
-            //               color: Colors.black,
-            //             ),
-            //           ),
-            //         );
-            //         ScaffoldMessenger.of(context).showSnackBar(successsnackBar);
-            //       }).then((value) => Navigator.push(
-            //           context,
-            //           PageTransition(
-            //               type: PageTransitionType.fade,
-            //               duration: const Duration(milliseconds: 300),
-            //               child: const DashBoardScreen())))
-            //     },
-            //     onFailure: (fa) {
-            //       SnackBar failedSnackBar = SnackBar(
-            //         padding: const EdgeInsets.all(20),
-            //         backgroundColor: Colors.white,
-            //         duration: const Duration(seconds: 2),
-            //         content: Text(
-            //           "Payment Failed",
-            //           style: GoogleFonts.montserrat(
-            //             height: .5,
-            //             letterSpacing: 0.5,
-            //             fontSize: 12,
-            //             color: Colors.black,
-            //           ),
-            //         ),
-            //       );
-            //       ScaffoldMessenger.of(context).showSnackBar(failedSnackBar);
-            //     },
-            //     onCancel: () {
-            //       SnackBar cancelledSnackBar = SnackBar(
-            //         padding: const EdgeInsets.all(20),
-            //         backgroundColor: Colors.white,
-            //         duration: const Duration(seconds: 2),
-            //         content: Text(
-            //           "Payment Failed",
-            //           style: GoogleFonts.montserrat(
-            //             height: .5,
-            //             letterSpacing: 0.5,
-            //             fontSize: 12,
-            //             color: Colors.black,
-            //           ),
-            //         ),
-            //       );
-            //       ScaffoldMessenger.of(context).showSnackBar(cancelledSnackBar);
-            //     },
-            //   );
-            // },
-            ,
+              final amount = getAmt(selectedIndex);
+              print(amount);
+              if (amount == null) {
+                SnackBar errorSnackBar = SnackBar(
+                  padding: const EdgeInsets.all(20),
+                  backgroundColor: Colors.white,
+                  duration: const Duration(seconds: 2),
+                  content: Text(
+                    "Please selected a plan to continue.",
+                    style: GoogleFonts.montserrat(
+                      height: .5,
+                      letterSpacing: 0.5,
+                      fontSize: 12,
+                      color: Colors.black,
+                    ),
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
+                return;
+              }
+              KhaltiScope.of(context).pay(
+                config: PaymentConfig(
+                  amount: getAmt(selectedIndex),
+                  productIdentity: 'dells-sssssg5-g5510-2021',
+                  productName: 'Product Name',
+                ),
+                preferences: [
+                  PaymentPreference.khalti,
+                ],
+                onSuccess: (su) async => {
+                  premium = true,
+                  dataBox
+                      .put('premium', premium)
+                      .then((value) => FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user?.uid)
+                              .update({
+                            'premium': true,
+                          }))
+                      .then((value) => Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.fade,
+                              duration: const Duration(milliseconds: 300),
+                              child: const DashBoardScreen())))
+                      .then((value) => Future(() {
+                            SnackBar successsnackBar = SnackBar(
+                              padding: const EdgeInsets.all(20),
+                              backgroundColor: Colors.white,
+                              duration: const Duration(seconds: 2),
+                              content: Text(
+                                "Payment Success",
+                                style: GoogleFonts.montserrat(
+                                  height: .5,
+                                  letterSpacing: 0.5,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(successsnackBar);
+                          }))
+                      .then((value) => Future(() {
+                            SnackBar successsnackBar = SnackBar(
+                              padding: const EdgeInsets.all(20),
+                              backgroundColor: Colors.white,
+                              duration: const Duration(seconds: 2),
+                              content: Text(
+                                "Now you can proceed to trainer selection.",
+                                style: GoogleFonts.montserrat(
+                                  height: .5,
+                                  letterSpacing: 0.5,
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(successsnackBar);
+                          }))
+                },
+                onFailure: (fa) {
+                  SnackBar failedSnackBar = SnackBar(
+                    padding: const EdgeInsets.all(20),
+                    backgroundColor: Colors.white,
+                    duration: const Duration(seconds: 2),
+                    content: Text(
+                      "Payment Failed",
+                      style: GoogleFonts.montserrat(
+                        height: .5,
+                        letterSpacing: 0.5,
+                        fontSize: 12,
+                        color: Colors.black,
+                      ),
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(failedSnackBar);
+                },
+                onCancel: () {
+                  SnackBar cancelledSnackBar = SnackBar(
+                    padding: const EdgeInsets.all(20),
+                    backgroundColor: Colors.white,
+                    duration: const Duration(seconds: 2),
+                    content: Text(
+                      "Payment Failed",
+                      style: GoogleFonts.montserrat(
+                        height: .5,
+                        letterSpacing: 0.5,
+                        fontSize: 12,
+                        color: Colors.black,
+                      ),
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(cancelledSnackBar);
+                },
+              );
+            },
             backgroundColor: const Color.fromARGB(255, 166, 181, 106),
             label: Text(
               'Buy Premium',

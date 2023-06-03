@@ -43,6 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late String bmi;
   late String expage;
   late String descrp;
+  late bool premium;
+  late bool hasTrainer;
 
   Future<void> loginWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -114,6 +116,8 @@ class _LoginScreenState extends State<LoginScreen> {
               fiber = data['fiber'];
               bmi = data['bmi'];
               uid = data['uid'];
+              premium = data['premium'];
+              hasTrainer = data['hasTrainer'];
 
               await dataBox.put('firstName', firstName);
               await dataBox.put('lastName', lastName);
@@ -138,6 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
               await dataBox.put('protein', protein);
               await dataBox.put('fat', fat);
               await dataBox.put('fiber', fiber);
+              await dataBox.put('premium', premium);
+              await dataBox.put('hasTrainer', hasTrainer);
 
               // ignore: use_build_context_synchronously
               Navigator.pushReplacement(
@@ -172,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
               await dataBox.put('descrp', descrp);
               await dataBox.put('gender', gender);
               await dataBox.put('userImage', userImage);
-               await dataBox.put('email', email);
+              await dataBox.put('email', email);
 
               print(firstName);
               // ignore: use_build_context_synchronously

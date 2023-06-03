@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:blur/blur.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:shapeup/screens/user/premium/subscription_screen.dart';
 import 'package:shapeup/screens/user/userDashboard/profilescreen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,6 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
   late String protein;
   late String fat;
   late String fiber;
+
+  late bool premium;
+
   DateTime date = DateTime.now();
   String? week;
   String? day;
@@ -81,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
     protein = dataBox.get("protein").toString();
     fat = dataBox.get("fat").toString();
     fiber = dataBox.get("fiber").toString();
+    premium = dataBox.get('premium');
   }
 
   @override
@@ -283,159 +289,406 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)),
                             ),
-                            color: Color.fromARGB(255, 190, 227, 57),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    "Macros",
-                                    textAlign: TextAlign.left,
-                                    style: GoogleFonts.manjari(
-                                        letterSpacing: 1,
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Column(
-                                        children: [
-                                          CircularPercentIndicator(
-                                            radius: 30.0,
-                                            lineWidth: 5.0,
-                                            percent: .4,
-                                            center: Text(
-                                              "Carbs",
-                                              style: GoogleFonts.manjari(
-                                                  letterSpacing: 1,
-                                                  color: Colors.black,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w700),
+                            color: const Color.fromARGB(255, 190, 227, 57),
+                            child: premium == true
+                                ? Padding(
+                                    padding: const EdgeInsets.all(15),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          "Macros",
+                                          textAlign: TextAlign.left,
+                                          style: GoogleFonts.manjari(
+                                              letterSpacing: 1,
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        const SizedBox(
+                                          height: 15,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Column(
+                                              children: [
+                                                CircularPercentIndicator(
+                                                  radius: 30.0,
+                                                  lineWidth: 5.0,
+                                                  percent: .4,
+                                                  center: Text(
+                                                    "Carbs",
+                                                    style: GoogleFonts.manjari(
+                                                        letterSpacing: 1,
+                                                        color: Colors.black,
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                  progressColor: Colors.black,
+                                                ),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Text(
+                                                  "$carbs gm",
+                                                  textAlign: TextAlign.left,
+                                                  style: GoogleFonts.manjari(
+                                                      letterSpacing: 1,
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                )
+                                              ],
                                             ),
-                                            progressColor: Colors.black,
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(
-                                            "$carbs gm",
-                                            textAlign: TextAlign.left,
-                                            style: GoogleFonts.manjari(
-                                                letterSpacing: 1,
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        children: [
-                                          CircularPercentIndicator(
-                                            radius: 30.0,
-                                            lineWidth: 5.0,
-                                            percent: .3,
-                                            center: Text(
-                                              "Protein",
-                                              style: GoogleFonts.manjari(
-                                                  letterSpacing: 1,
-                                                  color: Colors.black,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w700),
+                                            const SizedBox(
+                                              width: 10,
                                             ),
-                                            progressColor: Colors.black,
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(
-                                            "$protein gm",
-                                            textAlign: TextAlign.left,
-                                            style: GoogleFonts.manjari(
-                                                letterSpacing: 1,
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        children: [
-                                          CircularPercentIndicator(
-                                            radius: 30.0,
-                                            lineWidth: 5.0,
-                                            percent: .3,
-                                            center: Text(
-                                              "Fat",
-                                              style: GoogleFonts.manjari(
-                                                  letterSpacing: 1,
-                                                  color: Colors.black,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w700),
+                                            Column(
+                                              children: [
+                                                CircularPercentIndicator(
+                                                  radius: 30.0,
+                                                  lineWidth: 5.0,
+                                                  percent: .3,
+                                                  center: Text(
+                                                    "Protein",
+                                                    style: GoogleFonts.manjari(
+                                                        letterSpacing: 1,
+                                                        color: Colors.black,
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                  progressColor: Colors.black,
+                                                ),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Text(
+                                                  "$protein gm",
+                                                  textAlign: TextAlign.left,
+                                                  style: GoogleFonts.manjari(
+                                                      letterSpacing: 1,
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                )
+                                              ],
                                             ),
-                                            progressColor: Colors.black,
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(
-                                            "$fat gm",
-                                            textAlign: TextAlign.left,
-                                            style: GoogleFonts.manjari(
-                                                letterSpacing: 1,
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 20,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            "Fiber",
-                                            style: GoogleFonts.manjari(
-                                                letterSpacing: 1,
-                                                color: Colors.black,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(
-                                            "$fiber gm",
-                                            textAlign: TextAlign.left,
-                                            style: GoogleFonts.manjari(
-                                                letterSpacing: 1,
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      )
-                                    ],
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Column(
+                                              children: [
+                                                CircularPercentIndicator(
+                                                  radius: 30.0,
+                                                  lineWidth: 5.0,
+                                                  percent: .3,
+                                                  center: Text(
+                                                    "Fat",
+                                                    style: GoogleFonts.manjari(
+                                                        letterSpacing: 1,
+                                                        color: Colors.black,
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                  progressColor: Colors.black,
+                                                ),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Text(
+                                                  "$fat gm",
+                                                  textAlign: TextAlign.left,
+                                                  style: GoogleFonts.manjari(
+                                                      letterSpacing: 1,
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  "Fiber",
+                                                  style: GoogleFonts.manjari(
+                                                      letterSpacing: 1,
+                                                      color: Colors.black,
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Text(
+                                                  "$fiber gm",
+                                                  textAlign: TextAlign.left,
+                                                  style: GoogleFonts.manjari(
+                                                      letterSpacing: 1,
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   )
-                                ],
-                              ),
-                            ),
+                                : Stack(children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Blur(
+                                        blur: 8,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Text(
+                                              "Macros",
+                                              textAlign: TextAlign.left,
+                                              style: GoogleFonts.manjari(
+                                                  letterSpacing: 1,
+                                                  color: Colors.black,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    CircularPercentIndicator(
+                                                      radius: 30.0,
+                                                      lineWidth: 5.0,
+                                                      percent: .4,
+                                                      center: Text(
+                                                        "Carbs",
+                                                        style:
+                                                            GoogleFonts.manjari(
+                                                                letterSpacing:
+                                                                    1,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                      ),
+                                                      progressColor:
+                                                          Colors.black,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Text(
+                                                      "$carbs gm",
+                                                      textAlign: TextAlign.left,
+                                                      style:
+                                                          GoogleFonts.manjari(
+                                                              letterSpacing: 1,
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700),
+                                                    )
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    CircularPercentIndicator(
+                                                      radius: 30.0,
+                                                      lineWidth: 5.0,
+                                                      percent: .3,
+                                                      center: Text(
+                                                        "Protein",
+                                                        style:
+                                                            GoogleFonts.manjari(
+                                                                letterSpacing:
+                                                                    1,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                      ),
+                                                      progressColor:
+                                                          Colors.black,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Text(
+                                                      "$protein gm",
+                                                      textAlign: TextAlign.left,
+                                                      style:
+                                                          GoogleFonts.manjari(
+                                                              letterSpacing: 1,
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700),
+                                                    )
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    CircularPercentIndicator(
+                                                      radius: 30.0,
+                                                      lineWidth: 5.0,
+                                                      percent: .3,
+                                                      center: Text(
+                                                        "Fat",
+                                                        style:
+                                                            GoogleFonts.manjari(
+                                                                letterSpacing:
+                                                                    1,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                      ),
+                                                      progressColor:
+                                                          Colors.black,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Text(
+                                                      "$fat gm",
+                                                      textAlign: TextAlign.left,
+                                                      style:
+                                                          GoogleFonts.manjari(
+                                                              letterSpacing: 1,
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700),
+                                                    )
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      "Fiber",
+                                                      style:
+                                                          GoogleFonts.manjari(
+                                                              letterSpacing: 1,
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Text(
+                                                      "$fiber gm",
+                                                      textAlign: TextAlign.left,
+                                                      style:
+                                                          GoogleFonts.manjari(
+                                                              letterSpacing: 1,
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700),
+                                                    )
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: SizedBox(
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const SubscriptionPage()));
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              elevation: 0,
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 125, 128, 122),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 14),
+                                              textStyle: const TextStyle(
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.bold)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20,
+                                                right: 20,
+                                                top: 1,
+                                                bottom: 1),
+                                            child: Text(
+                                              "Buy Premium",
+                                              style: GoogleFonts.notoSansMono(
+                                                  color: Colors.black,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ]),
                           ),
                         ),
                       ]),
