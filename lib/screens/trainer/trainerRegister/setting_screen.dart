@@ -28,6 +28,7 @@ class _SettingUpScreenTState extends State<SettingUpScreenT> {
   late String email;
   late String expage;
   late String descrp;
+  late String clients;
 
   @override
   void initState() {

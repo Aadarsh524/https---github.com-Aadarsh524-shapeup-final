@@ -4,11 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shapeup/screens/trainer/trainerscreen/editprofile.dart';
+
 
 // import '../../../../services/firebaseservices.dart';
 
 import '../../login_screen.dart';
+import 'edit_trainer_profile.dart';
+
 
 class TrainerProfile extends StatefulWidget {
   const TrainerProfile({Key? key}) : super(key: key);
