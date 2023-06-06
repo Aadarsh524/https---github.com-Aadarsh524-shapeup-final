@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shapeup/screens/trainer/trainerscreen/homepage.dart';
-import 'package:shapeup/screens/trainer/trainerscreen/peoplepage.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/trainer_dashboard.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/trainer_chat.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainernotfication.dart';
 
 

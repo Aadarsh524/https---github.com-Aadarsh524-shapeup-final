@@ -30,7 +30,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _newExpController = TextEditingController();
   final _newPhoneController = TextEditingController();
   var phoneExpression = RegExp('[^0-9]');
-  
+
   late String phone;
   late String age;
   late String descrp;
@@ -40,15 +40,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      for (final providerProfile in user.providerData) {
-        final name = providerProfile.displayName;
-        setState(() {
-          authName = name!;
-        });
-      }
-    }
+    // if (user != null) {
+    //   for (final providerProfile in user.providerData) {
+    //     final name = providerProfile.displayName;
+      
+    //     setState(() {
+    //       authName = name!;
+    //     });
+    //   }
+    // }
+      
     dataBox = Hive.box('storage');
+    phone = dataBox.get("phone");
+    age = dataBox.get("age");
+    descrp = dataBox.get("descrp");
+    expage = dataBox.get("expage");
+    print(age);
     super.initState();
   }
 
@@ -356,11 +363,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               }
                               if (_newDescController.text != "") {
                                 await dataBox.put(
-                                    'weight', _newDescController.text);
+                                    'descrp', _newDescController.text);
                               }
                               if (_newExpController.text != "") {
                                 await dataBox.put(
-                                    'height',_newExpController.text);
+                                    'expage', _newExpController.text);
                               }
 
                               print(descrp);
@@ -374,7 +381,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 'age': age.toString(),
                                 'phone': phone.toString(),
                                 'descrp': descrp.toString(),
-                                'weight': expage.toString(),
+                                'expage': expage.toString(),
                               }).then((value) => Navigator.pushReplacement(
                                       context,
                                       PageTransition(

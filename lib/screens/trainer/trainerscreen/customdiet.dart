@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class UpdateDietPlan extends StatefulWidget {
-  const UpdateDietPlan({Key? key}) : super(key: key);
+class CustomerList extends StatefulWidget {
+  const CustomerList({Key? key}) : super(key: key);
 
   @override
-  State<UpdateDietPlan> createState() => _UpdateDietPlanState();
+  State<CustomerList> createState() => _CustomerListState();
 }
 
-class _UpdateDietPlanState extends State<UpdateDietPlan> {
+class _CustomerListState extends State<CustomerList> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
