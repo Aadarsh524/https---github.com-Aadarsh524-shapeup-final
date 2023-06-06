@@ -5,12 +5,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
 
-
 // import '../../../../services/firebaseservices.dart';
 
 import '../../login_screen.dart';
 import 'edit_trainer_profile.dart';
-
 
 class TrainerProfile extends StatefulWidget {
   const TrainerProfile({Key? key}) : super(key: key);
@@ -28,6 +26,7 @@ class _TrainerProfileState extends State<TrainerProfile> {
   late String gender;
   late String expage;
   late String descrp;
+  late String userImage;
 
   late String email;
   late String phone;
@@ -43,6 +42,7 @@ class _TrainerProfileState extends State<TrainerProfile> {
     phone = dataBox.get("phone").toString();
     descrp = dataBox.get("descrp").toString();
     expage = dataBox.get("expage").toString();
+    userImage = dataBox.get("userImage").toString();
 
     super.initState();
   }
@@ -165,9 +165,9 @@ class _TrainerProfileState extends State<TrainerProfile> {
                                 padding: const EdgeInsets.all(2.0),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100.0),
-                                  child: Image.asset(
+                                  child: Image.network(
                                     fit: BoxFit.fill,
-                                    "assets/male.png",
+                                    userImage,
                                   ),
                                 ),
                               ),

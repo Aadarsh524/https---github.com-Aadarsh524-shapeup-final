@@ -8,6 +8,7 @@ import '../models/trainee_profile_model.dart';
 class TraineeProfileService {
   User? users = FirebaseAuth.instance.currentUser;
   final userId = FirebaseAuth.instance.currentUser?.uid;
+  
   TraineeProfileService();
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');

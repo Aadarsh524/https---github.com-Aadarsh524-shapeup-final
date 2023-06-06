@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/customworkout.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/daycard.dart';
 import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 
 import '../../../models/trainee_profile_model.dart';
@@ -143,7 +145,7 @@ class _TraineeProfileState extends State<TraineeProfile> {
                                       ),
                                       const SizedBox(width: 10),
                                       Text(
-                                        "${traineeProfile.firstName}${traineeProfile.lastName}",
+                                        "${traineeProfile.firstName} ${traineeProfile.lastName}",
                                         style: GoogleFonts.montserrat(
                                           letterSpacing: .5,
                                           color: const Color.fromARGB(
@@ -409,44 +411,88 @@ class _TraineeProfileState extends State<TraineeProfile> {
                                     ),
                                   ),
                                   const SizedBox(height: 30),
-                                  Center(
-                                    child: SizedBox(
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          // String name =
-                                          //     trainerProfile.firstName;
-                                          // String tID = trainerProfile.id;
-                                          // _showAlertDialog(name, tID);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          elevation: 0,
-                                          backgroundColor: const Color.fromARGB(
-                                              255, 190, 227, 57),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 14),
-                                          textStyle: const TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold,
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            // String name =
+                                            //     trainerProfile.firstName;
+                                            // String tID = trainerProfile.id;
+                                            // _showAlertDialog(name, tID);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            elevation: 0,
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 190, 227, 57),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 14),
+                                            textStyle: const TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
-                                            top: 1,
-                                            bottom: 1,
-                                          ),
-                                          child: Text(
-                                            "Chat",
-                                            style: GoogleFonts.notoSansMono(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 20,
+                                              right: 20,
+                                              top: 1,
+                                              bottom: 1,
+                                            ),
+                                            child: Text(
+                                              "Chat",
+                                              style: GoogleFonts.notoSansMono(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
+                                      SizedBox(
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const DayCard()));
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            elevation: 0,
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 190, 227, 57),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 14),
+                                            textStyle: const TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 20,
+                                              right: 20,
+                                              top: 1,
+                                              bottom: 1,
+                                            ),
+                                            child: Text(
+                                              "Update Workout",
+                                              style: GoogleFonts.notoSansMono(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   const SizedBox(
                                     height: 10,

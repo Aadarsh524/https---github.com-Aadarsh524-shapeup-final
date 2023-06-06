@@ -78,8 +78,10 @@ class _SettingUpScreenTState extends State<SettingUpScreenT> {
           'email': email,
           'expage': expage,
           'descrp': descrp,
+          'clients': [],
         })
         .then((value) async => {
+          await dataBox.put('userImage',userImage),
               print("Data added suceccfully"),
               print("Data added suceccfully"),
               print("Data added suceccfully"),
