@@ -30,6 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String email;
   late String phone;
   late bool premium;
+  late String userImage;
 
   @override
   void initState() {
@@ -45,6 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     weight = dataBox.get("weight").toString().toString();
     bmi = dataBox.get("bmi").toString();
     premium = dataBox.get('premium');
+    userImage = dataBox.get('userImage').toString();
   }
 
   @override
@@ -148,9 +150,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 padding: const EdgeInsets.all(2.0),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100.0),
-                                  child: Image.asset(
+                                  child: Image.network(
                                     fit: BoxFit.fill,
-                                    "assets/male.png",
+                                    userImage,
                                   ),
                                 ),
                               ),
