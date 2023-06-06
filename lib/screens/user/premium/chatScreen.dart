@@ -28,6 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 28, 28, 30),
       appBar: AppBar(
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(4.0),
@@ -43,24 +44,6 @@ class _ChatScreenState extends State<ChatScreen> {
             padding: const EdgeInsets.only(right: 16),
             child: Row(
               children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(left: 15),
-                  height: 28,
-                  width: 28,
-                  decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 114, 97, 89),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Center(
-                    child: IconButton(
-                      color: Colors.black,
-                      iconSize: 12,
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                ),
                 const SizedBox(
                   width: 15,
                 ),

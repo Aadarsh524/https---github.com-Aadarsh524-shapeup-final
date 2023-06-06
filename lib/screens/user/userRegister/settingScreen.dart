@@ -153,6 +153,7 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
               print("Data added suceccfully"),
               print("Data added suceccfully"),
               print("Data added suceccfully"),
+              await dataBox.put('userImage', userImage),
               await dataBox.put('calories', calories),
               await dataBox.put('burn', burn),
               await dataBox.put('glasses', glasses),
