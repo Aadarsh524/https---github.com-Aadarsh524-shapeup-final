@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -15,9 +14,6 @@ class ImagePickerScreen extends StatefulWidget {
 }
 
 class _ImagePickerScreenState extends State<ImagePickerScreen> {
-  FilePickerResult? result;
-  String? _filename;
-  PlatformFile? pickedfile;
   bool isLoading = false;
   File? imagePath;
 
@@ -29,22 +25,22 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
     dataBox = Hive.box('storage');
   }
 
-  void pickfile() async {
-    try {
-      result = await FilePicker.platform.pickFiles(
-          type: FileType.any,
-          allowMultiple: false); //allowedExtensions: ['pdf']);
-      if (result != null) {
-        _filename = result!.files.first.name;
-        pickedfile = result!.files.first;
-        imagePath = File(pickedfile!.path.toString());
+  // void pickfile() async {
+  //   try {
+  //     result = await FilePicker.platform.pickFiles(
+  //         type: FileType.any,
+  //         allowMultiple: false); //allowedExtensions: ['pdf']);
+  //     if (result != null) {
+  //       _filename = result!.files.first.name;
+  //       pickedfile = result!.files.first;
+  //       imagePath = File(pickedfile!.path.toString());
 
-        setState(() {
-          isLoading = false;
-        });
-      }
-    } catch (e) {}
-  }
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //     }
+  //   } catch (e) {}
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -91,18 +87,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                   height: 360,
                   child: isLoading
                       ? const CircularProgressIndicator()
-                      : pickedfile != null
-                          ? Container(
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.white)),
-                              child: Image.file(
-                                imagePath!,
-                                fit: BoxFit.fill,
-                              ),
-                            )
-                          : const Text('')),
+                      : const Text('')),
               const SizedBox(
                 height: 20,
               ),
@@ -115,7 +100,6 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                       setState(() {
                         isLoading = true;
                       });
-                      pickfile();
                     },
                     child: Text(
                       'Choose file',
