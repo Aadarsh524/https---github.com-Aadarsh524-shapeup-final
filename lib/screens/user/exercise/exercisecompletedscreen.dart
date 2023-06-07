@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
+import 'package:wakelock/wakelock.dart';
 
 class ExerciseCompletedScreen extends StatefulWidget {
   const ExerciseCompletedScreen({Key? key}) : super(key: key);
@@ -64,5 +65,11 @@ class _ExerciseCompletedScreenState extends State<ExerciseCompletedScreen> {
                 ]),
           ),
         )));
+  }
+
+  @override
+  void dispose() {
+    Wakelock.disable();
+    super.dispose();
   }
 }

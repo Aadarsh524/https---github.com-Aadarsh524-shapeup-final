@@ -5,40 +5,6 @@ class AppTheme {
   AppTheme._();
 
   static final Color _iconColor = Colors.blueAccent.shade200;
-  // static const Color _lightPrimaryColor = Color(0xFF546E7A);
-  // static const Color _lightPrimaryVariantColor = Color(0xFF546E7A);
-  // static const Color _lightSecondaryColor = Colors.green;
-  static const Color _lightOnPrimaryColor = Colors.black;
-  // static final ThemeData lightTheme = ThemeData(
-  //     appBarTheme: AppBarTheme(
-  //       titleTextStyle: TextStyle(
-  //           color: _darkSecondaryColor,
-  //           fontFamily: "Roboto",
-  //           fontWeight: FontWeight.bold,
-  //           fontSize: 26),
-  //       color: _lightPrimaryVariantColor,
-  //       iconTheme: IconThemeData(color: _lightOnPrimaryColor),
-  //     ),
-  //     colorScheme: ColorScheme.light(
-  //       primary: _lightPrimaryColor,
-  //       primaryVariant: _lightPrimaryVariantColor,
-  //       secondary: _lightSecondaryColor,
-  //       onPrimary: _lightOnPrimaryColor,
-  //     ),
-  //     iconTheme: IconThemeData(
-  //       color: _iconColor,
-  //     ),
-  //     textTheme: _lightTextTheme,
-  //     dividerTheme: DividerThemeData(color: Colors.black12));
-
-  //   static final TextTheme _lightTextTheme = TextTheme(
-  //   displayLarge: _lightScreenHeading1TextStyle,
-  // );
-  static const TextStyle _lightScreenHeading1TextStyle = TextStyle(
-      fontSize: 26.0,
-      fontWeight: FontWeight.bold,
-      color: _lightOnPrimaryColor,
-      fontFamily: "Roboto");
 
   static const Color _darkPrimaryColor = Color.fromARGB(255, 28, 28, 30);
   static const Color _darkSecondaryColor = Color.fromARGB(255, 190, 227, 57);
@@ -95,7 +61,4 @@ class AppTheme {
         fontWeight: FontWeight.w300,
         color: Colors.black.withOpacity(.25),
       ));
-
-  static final TextStyle _darkScreenHeading1TextStyle =
-      _lightScreenHeading1TextStyle.copyWith(color: _darkOnPrimaryColor);
 }

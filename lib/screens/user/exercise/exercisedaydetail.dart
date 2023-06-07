@@ -7,6 +7,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 import '../../../models/exercise_detail_model.dart';
 import '../../../services/exerciseService.dart';
+import 'package:wakelock/wakelock.dart';
 
 class ExerciseDayDetail extends StatefulWidget {
   final String docId;
@@ -144,6 +145,7 @@ class _ExerciseDayDetailState extends State<ExerciseDayDetail> {
                                                 child: Center(
                                                   child: ElevatedButton(
                                                     onPressed: () {
+                                                      Wakelock.enable();
                                                       Navigator.pushReplacement(
                                                         context,
                                                         PageTransition(
@@ -318,6 +320,4 @@ class ExerciseDetailWidget extends StatelessWidget {
       ),
     ).padding(bottom: 10);
   }
-
-  void save() {}
 }

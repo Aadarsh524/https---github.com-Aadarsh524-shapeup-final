@@ -5,6 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/models/exercise_detail_model.dart';
 import 'package:shapeup/screens/user/exercise/exerciserunscreen.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:wakelock/wakelock.dart';
 
 class RestScreen extends StatefulWidget {
   final ExerciseDetailModel nextExercise;
@@ -25,6 +28,8 @@ class RestScreen extends StatefulWidget {
 
 class _RestScreenState extends State<RestScreen> {
   int timeLeft = 20;
+  FlutterTts flutterTts = FlutterTts();
+  AudioPlayer audioPlayer = AudioPlayer();
 
   setAgain() {
     setState(() {
@@ -34,22 +39,36 @@ class _RestScreenState extends State<RestScreen> {
 
   Timer? _timer;
 
-  startTimer() {
+  void _playWhistleSound() async {
+    await audioPlayer.setVolume(1);
+
+    int result =
+        await audioPlayer.play("assets/whistle_sound.wav", isLocal: true);
+    if (result == 1) {
+      // Successfully started playing the whistle sound effect
+    }
+  }
+
+  startTimer() async {
+    await flutterTts.setLanguage('en-US');
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setSpeechRate(0.45);
+    await flutterTts.speak("Take some Rest");
+    _playWhistleSound();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         timeLeft--;
       });
 
       if (timeLeft == 0) {
-        Navigator.pushReplacement(
-          context,
-          PageTransition(
-              type: PageTransitionType.fade,
-              duration: const Duration(milliseconds: 250),
-              child: ExerciseRunScreen(
-                  currentIndex: widget.nextExerciseIndex,
-                  exercisedetailmodel: widget.nextExerciseList)),
-        );
+        flutterTts.stop().then((value) => Navigator.pushReplacement(
+            context,
+            PageTransition(
+                type: PageTransitionType.fade,
+                duration: const Duration(milliseconds: 250),
+                child: ExerciseRunScreen(
+                    currentIndex: widget.nextExerciseIndex,
+                    exercisedetailmodel: widget.nextExerciseList))));
       }
     });
   }
@@ -57,6 +76,7 @@ class _RestScreenState extends State<RestScreen> {
   @override
   void initState() {
     super.initState();
+
     startTimer();
     setAgain();
   }
@@ -183,6 +203,7 @@ class _RestScreenState extends State<RestScreen> {
                             ),
                             TextButton(
                               onPressed: () {
+                                flutterTts.stop();
                                 Navigator.pushReplacement(
                                     context,
                                     PageTransition(
