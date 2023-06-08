@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,9 +19,6 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   late final Box dataBox;
-  FilePickerResult? result;
-  PlatformFile? pickedfile;
-  File? fileToDisplay;
 
   final _newAgeController = TextEditingController();
   final _newHeightController = TextEditingController();
@@ -57,17 +53,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.initState();
   }
 
-  void pickfile() async {
-    try {
-      result = await FilePicker.platform.pickFiles(
-          type: FileType.any,
-          allowMultiple: false); //allowedExtensions: ['pdf']);
-      if (result != null) {
-        pickedfile = result!.files.first;
-        fileToDisplay = File(pickedfile!.path.toString());
-      }
-    } catch (e) {}
-  }
+  // void pickfile() async {
+  //   try {
+  //     result = await FilePicker.platform.pickFiles(
+  //         type: FileType.any,
+  //         allowMultiple: false); //allowedExtensions: ['pdf']);
+  //     if (result != null) {
+  //       pickedfile = result!.files.first;
+  //       fileToDisplay = File(pickedfile!.path.toString());
+  //     }
+  //   } catch (e) {}
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -133,23 +129,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             width: 100,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(100.0),
-                              child: pickedfile != null
-                                  ? Container(
-                                      padding: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border:
-                                              Border.all(color: Colors.white)),
-                                      child: Image.file(
-                                        fileToDisplay!,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    )
-                                  : Image.asset(
-                                      "assets/male.png",
-                                      fit: BoxFit.fill,
-                                    ),
+                              child: Image.asset(
+                                "assets/male.png",
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
                           Positioned(
@@ -166,9 +149,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 color: Colors.white,
                                 iconSize: 15,
                                 icon: const Icon(Icons.camera_alt_outlined),
-                                onPressed: () {
-                                  pickfile();
-                                },
+                                onPressed: () {},
                               ),
                             ),
                           ),

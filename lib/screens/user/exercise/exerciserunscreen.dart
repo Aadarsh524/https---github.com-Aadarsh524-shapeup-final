@@ -4,8 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/user/exercise/exercisecompletedscreen.dart';
 import 'package:shapeup/screens/user/exercise/restscreen.dart';
-
 import '../../../models/exercise_detail_model.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:wakelock/wakelock.dart';
 
 class ExerciseRunScreen extends StatefulWidget {
   final List<ExerciseDetailModel> exercisedetailmodel;
@@ -21,6 +22,7 @@ class ExerciseRunScreen extends StatefulWidget {
 class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
   ExerciseDetailModel? currentExercise;
   PageController controller = PageController();
+  FlutterTts flutterTts = FlutterTts();
 
   setCurrentExercise() {
     if (mounted) {
@@ -29,6 +31,31 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
           currentExercise = widget.exercisedetailmodel[widget.currentIndex];
         }
       });
+    }
+  }
+
+  startSpeech() async {
+    await flutterTts.setLanguage('en-US');
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setSpeechRate(0.45);
+    await flutterTts.speak("Three! Two! One! Start!");
+  }
+
+  exerciseNameSpeech() async {
+    if (currentExercise!.duration == "true") {
+      await flutterTts.setLanguage('en-US');
+      await flutterTts.setPitch(1.0);
+      await flutterTts.setSpeechRate(0.5);
+      await flutterTts.speak(
+          "${currentExercise?.counter}! seconds! ${currentExercise!.name}");
+    } else {
+      if (currentExercise!.duration == "false") {
+        await flutterTts.setLanguage('en-US');
+        await flutterTts.setPitch(1.0);
+        await flutterTts.setSpeechRate(0.5);
+        await flutterTts
+            .speak("${currentExercise?.counter}! ${currentExercise!.name}");
+      }
     }
   }
 
@@ -47,16 +74,23 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
   int currentIndex = 0;
   int time = 0;
   bool isPause = false;
+  bool startedAfterWait = false;
   Timer? _timer;
 
   startCounter() async {
     setState(() {
       isPause = false;
     });
+
     if (currentExercise!.duration == "true") {
+      startSpeech();
+
+      await Future.delayed(const Duration(milliseconds: 3000), () {
+        exerciseNameSpeech();
+      });
+
       await Future.delayed(const Duration(milliseconds: 2000), () {
         _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-          print(_timer);
           if (mounted) {
             setState(() {
               time--;
@@ -64,6 +98,7 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
           }
           if (time == 0) {
             if (currentIndex == (widget.exercisedetailmodel.length - 1)) {
+              flutterTts.stop();
               Navigator.pushReplacement(
                 context,
                 PageTransition(
@@ -74,6 +109,7 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
               );
             }
             if (currentIndex < (widget.exercisedetailmodel.length - 1)) {
+              flutterTts.stop();
               Navigator.pushReplacement(
                 context,
                 PageTransition(
@@ -90,6 +126,10 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
           }
         });
       });
+    } else {
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        exerciseNameSpeech();
+      });
     }
   }
 
@@ -97,13 +137,16 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
     if (_timer != null && _timer!.isActive) {
       setState(() {
         isPause = true;
+        startedAfterWait = true;
       });
+      flutterTts.stop();
       _timer!.cancel();
     }
   }
 
   @override
   void initState() {
+    print(Wakelock.enabled);
     if (mounted) {
       setCurrentExercise();
       setExerciseCounter();
@@ -139,6 +182,7 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
                     iconSize: 12,
                     icon: const Icon(Icons.arrow_back_ios_new_rounded),
                     onPressed: () {
+                      flutterTts.stop();
                       Navigator.pop(context);
                     },
                   ),
@@ -262,6 +306,7 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
+                                  flutterTts.stop();
                                   Navigator.pushReplacement(
                                     context,
                                     PageTransition(
@@ -311,6 +356,7 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
                             onPressed: () {
                               print(currentIndex);
                               if (currentIndex > 0) {
+                                flutterTts.stop();
                                 Navigator.pushReplacement(
                                   context,
                                   PageTransition(
@@ -352,6 +398,7 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
                               }
                               if (currentIndex <
                                   (widget.exercisedetailmodel.length - 1)) {
+                                flutterTts.stop();
                                 Navigator.pushReplacement(
                                   context,
                                   PageTransition(
@@ -388,7 +435,7 @@ class _ExerciseRunScreenState extends State<ExerciseRunScreen> {
 
   @override
   void dispose() {
-    _timer?.cancel();
     super.dispose();
+    _timer?.cancel();
   }
 }
