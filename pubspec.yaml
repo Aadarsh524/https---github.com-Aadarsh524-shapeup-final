@@ -42,9 +42,7 @@ dependencies:
   cloud_firestore: ^4.6.0
   flutter_image_slideshow: ^0.1.2
   animated_text_kit: ^4.2.2
-
   blur: ^3.1.0
-
   pedometer: ^3.0.0
   khalti_flutter: ^2.1.0
   firestore_ui: ^1.24.0

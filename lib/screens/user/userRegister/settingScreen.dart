@@ -146,7 +146,8 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
           'fat': fat.toString(),
           'fiber': fiber.toString(),
           'premium': premium,
-          'hasTrainer': hasTrainer
+          'hasTrainer': hasTrainer,
+          "myTrainer": ''
         })
         .then((value) async => {
               print("Data added suceccfully"),
@@ -164,6 +165,7 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
               await dataBox.put('fiber', fiber),
               await dataBox.put('premium', premium),
               await dataBox.put('hasTrainer', hasTrainer),
+              await dataBox.put('myTrainer', ''),
               Navigator.pushReplacement(
                   context,
                   PageTransition(

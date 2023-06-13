@@ -42,7 +42,6 @@ class ExerciseService {
   Future<List<ExerciseDetailModel>> get listExerciseInfo async {
     final querySnapshot =
         await exercisecollection.doc(docID).collection("day$dayindex").get();
-    print(querySnapshot);
     return _dayExericsePlan(querySnapshot);
   }
 

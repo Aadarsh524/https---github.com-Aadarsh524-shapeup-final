@@ -5,9 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
-import 'package:shapeup/screens/trainer/trainerRegister/agescreen.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
-
 import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/register_screen.dart';
@@ -43,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late String bmi;
   late String expage;
   late String descrp;
+  late String myTrainer;
   late bool premium;
   late bool hasTrainer;
 
@@ -118,6 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
               uid = data['uid'];
               premium = data['premium'];
               hasTrainer = data['hasTrainer'];
+              myTrainer = data['myTrainer'];
 
               await dataBox.put('firstName', firstName);
               await dataBox.put('lastName', lastName);
@@ -144,6 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
               await dataBox.put('fiber', fiber);
               await dataBox.put('premium', premium);
               await dataBox.put('hasTrainer', hasTrainer);
+              await dataBox.put('myTrainer', myTrainer);
 
               // ignore: use_build_context_synchronously
               Navigator.pushReplacement(
