@@ -26,12 +26,13 @@ class _TrainerProfileState extends State<TrainerProfile> {
   User? user = FirebaseAuth.instance.currentUser;
   late final Box dataBox;
   late bool hasTrainer;
-
+  late String myTrainer;
   @override
   void initState() {
     super.initState();
     dataBox = Hive.box('storage');
     hasTrainer = dataBox.get('hasTrainer');
+    myTrainer = dataBox.get('myTrainer');
   }
 
   Future<void> _showAlertDialog(String name, String tID) async {
@@ -69,13 +70,14 @@ class _TrainerProfileState extends State<TrainerProfile> {
                     fontSize: 14,
                     fontWeight: FontWeight.w600),
               ),
-              onPressed: () {
+              onPressed: () async {
+                await dataBox.put('myTrainer', tID);
                 FirebaseFirestore.instance.collection('users').doc(tID).update({
                   'clients': [user!.uid]
                 }).then((value) => FirebaseFirestore.instance
                     .collection('users')
                     .doc(user?.uid)
-                    .update({'mytrainer': tID, 'hasTrainer': true})
+                    .update({'myTrainer': tID, 'hasTrainer': true})
                     .then(
                       (value) => dataBox.put('hasTrainer', true),
                     )
@@ -154,7 +156,7 @@ class _TrainerProfileState extends State<TrainerProfile> {
               child: Padding(
                   padding: const EdgeInsets.only(
                       top: 20, left: 20, right: 20, bottom: 10),
-                  child: FutureBuilder<TrainerProfileModel?>(
+                  child: FutureBuilder<TrainerProfileModel>(
                     future:
                         TrainerProfileService().trainerProfile(widget.docId),
                     builder: (BuildContext context, snapshot) {
