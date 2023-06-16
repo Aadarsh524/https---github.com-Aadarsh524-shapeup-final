@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shapeup/screens/trainer/trainerplans/exercises.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/customworkout.dart';
 
-
 class DayCard extends StatefulWidget {
+  
   const DayCard({Key? key}) : super(key: key);
 
   @override
@@ -33,8 +34,10 @@ class _DayCardState extends State<DayCard> {
             itemBuilder: ((context, index) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => UpdateWork()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AddExercise()));
                 },
                 child: Card(
                   elevation: 15,

@@ -26,6 +26,7 @@ class _AgePickerState extends State<AgePicker> {
   @override
   void initState() {
     dataBox = Hive.box('storage');
+    firstName = dataBox.get("firstName");
 
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -73,7 +74,7 @@ class _AgePickerState extends State<AgePicker> {
                             const SizedBox(
                               height: 5,
                             ),
-                            Text("Bibash",
+                            Text(firstName,
                                 style: GoogleFonts.montserrat(
                                     letterSpacing: .5,
                                     color: Color.fromARGB(255, 190, 227, 57),

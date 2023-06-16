@@ -9,6 +9,10 @@ class ExerciseService {
   ExerciseService({this.docID, this.dayindex});
   final CollectionReference exercisecollection =
       FirebaseFirestore.instance.collection('exercise');
+  final CollectionReference allexercisecollection =
+      FirebaseFirestore.instance.collection('allexercises');
+  final CollectionReference customcollection =
+      FirebaseFirestore.instance.collection('exercises');
 
   List<ExerciseModel> _exerciseTypeFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
@@ -48,5 +52,41 @@ class ExerciseService {
   Future<DocumentSnapshot<Object?>> get list async {
     final documentSnapshot = await exercisecollection.doc(docID).get();
     return documentSnapshot;
+  }
+
+  Future<List<ExerciseDetailModel>> get allExercises async {
+    final snapshot = await allexercisecollection.get();
+    return _allExercises(snapshot);
+  }
+
+  List<ExerciseDetailModel> _allExercises(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return ExerciseDetailModel(
+        name: doc.get('name') ?? '',
+        counter: doc.get('counter').toString(),
+        description: doc.get('description') ?? '',
+        duration: doc.get('duration').toString(),
+        gif: doc.get('gif') ?? '',
+      );
+    }).toList();
+  }
+
+  List<ExerciseDetailModel> _customExericsePlan(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return ExerciseDetailModel(
+        name: doc.get('name') ?? '',
+        counter: doc.get('counter').toString(),
+        description: doc.get('description') ?? '',
+        duration: doc.get('duration').toString(),
+        gif: doc.get('gif') ?? '',
+      );
+    }).toList();
+  }
+
+  Future<List<ExerciseDetailModel>> customExerciseInfo(planUid) async {
+    final querySnapshot =
+        await customcollection.doc(planUid).collection("day1").get();
+    print(querySnapshot);
+    return _customExericsePlan(querySnapshot);
   }
 }
