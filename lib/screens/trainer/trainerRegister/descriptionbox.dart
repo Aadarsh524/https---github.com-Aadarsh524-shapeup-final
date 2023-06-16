@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:shapeup/screens/trainer/trainerRegister/filepicker.dart';
 // import 'package:shapeup/screens/settingScreen.dart';
 // import 'package:shapeup/screens/trainer/trainerRegister/filepicker.dart';
 import 'package:shapeup/screens/trainer/trainerRegister/setting_screen.dart';
@@ -96,7 +97,7 @@ class _DescBoxState extends State<DescBox> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SettingUpScreenT()));
+                          builder: (context) => const Validation()));
                 } else {
                   SnackBar snackBar = SnackBar(
                     padding: const EdgeInsets.all(20),

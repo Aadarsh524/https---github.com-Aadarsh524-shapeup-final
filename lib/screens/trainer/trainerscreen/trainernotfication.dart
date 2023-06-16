@@ -12,7 +12,6 @@ class _TrainerNotifyState extends State<TrainerNotify> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 28, 28, 30),
         elevation: 0,

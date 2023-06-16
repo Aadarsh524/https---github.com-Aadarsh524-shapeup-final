@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/traineesprofile.dart';
@@ -21,11 +22,13 @@ class HomePageT extends StatefulWidget {
 }
 
 class _HomePageTState extends State<HomePageT> {
+  late final Box dataBox;
   User? trainerId = FirebaseAuth.instance.currentUser;
   String? week;
   String? day;
   String? month;
   DateTime date = DateTime.now();
+  late String firstName;
 
   @override
   void initState() {
@@ -34,6 +37,8 @@ class _HomePageTState extends State<HomePageT> {
       day = DateFormat('d').format(date);
       month = DateFormat('MMMM').format(date);
     });
+    dataBox = Hive.box('storage');
+    firstName = dataBox.get("firstName");
     super.initState();
   }
 
@@ -90,7 +95,7 @@ class _HomePageTState extends State<HomePageT> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Hey, Bibash", //firebase trainer name
+                          Text("Hey," + firstName, //firebase trainer name
                               textAlign: TextAlign.center,
                               style: GoogleFonts.montserrat(
                                   color: Color.fromARGB(255, 190, 227, 57),
