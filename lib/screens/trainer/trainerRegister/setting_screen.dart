@@ -30,6 +30,7 @@ class _SettingUpScreenTState extends State<SettingUpScreenT> {
   late String descrp;
   late String clients;
 
+
   @override
   void initState() {
     super.initState();
@@ -79,6 +80,7 @@ class _SettingUpScreenTState extends State<SettingUpScreenT> {
           'expage': expage,
           'descrp': descrp,
           'clients': [],
+          'isVerified': false,
         })
         .then((value) async => {
           await dataBox.put('userImage',userImage),

@@ -26,12 +26,11 @@ class _UserPageState extends State<UserPage> {
   }
   //list of premium users
 
-  final List<Widget> customers = [const Text('sad'), const Text("dpgshit")];
+  final List<Widget> customers = [const Text('addarsh'), const Text("Sagar")];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 28, 28, 30),
         elevation: 0,
