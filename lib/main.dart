@@ -5,7 +5,6 @@ import 'package:shapeup/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-
 import 'apptheme/app_theme.dart';
 import 'bloc/cubit/register_cubit.dart';
 

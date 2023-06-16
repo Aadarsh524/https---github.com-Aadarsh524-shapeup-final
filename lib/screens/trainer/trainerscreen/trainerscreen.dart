@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/chatRoomScreen.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainer_dashboard.dart';
-import 'package:shapeup/screens/trainer/trainerscreen/trainer_chat.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainernotfication.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/workoutplan.dart';
 
@@ -14,8 +14,8 @@ class TrainerPage extends StatefulWidget {
 class _TrainerPageState extends State<TrainerPage> {
   final List<Widget> screens = [
     const HomePageT(),
-    const UserPage(),
     const TrainerNotify(),
+    const ChatRoomScreen(),,
     const WorkoutPlan(),
   ];
   int _selectedIndex = 0;
@@ -44,13 +44,13 @@ class _TrainerPageState extends State<TrainerPage> {
             label: '',
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.message),
-            icon: Icon(Icons.message_outlined),
+            activeIcon: Icon(Icons.notifications),
+            icon: Icon(Icons.notifications_outlined),
             label: '',
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.notifications),
-            icon: Icon(Icons.notifications_outlined),
+            activeIcon: Icon(Icons.message),
+            icon: Icon(Icons.message_outlined),
             label: '',
           ),
           BottomNavigationBarItem(

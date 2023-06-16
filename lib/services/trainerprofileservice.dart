@@ -17,7 +17,8 @@ class TrainerProfileService {
     List<TrainerProfileModel> trainerProfiles = [];
 
     for (var doc in snapshot.docs) {
-      if (doc.get('userType') == 'trainer') {
+      if (doc.get('userType') == 'trainer' &&
+          doc.get('isVerified').toString() == 'True') {
         TrainerProfileModel trainerProfile = TrainerProfileModel(
             email: doc.get("email") ?? '',
             firstName: doc.get('firstName') ?? '',
@@ -37,29 +38,26 @@ class TrainerProfileService {
     return trainerProfiles;
   }
 
-  Future<TrainerProfileModel?> trainerProfile(String docID) async {
+  Future<TrainerProfileModel> trainerProfile(String docID) async {
     final docRef = usersCollection.doc(docID);
     final snapshot = await docRef.get();
     return _trainerProfileFromSnapshot(snapshot);
   }
 
-  TrainerProfileModel? _trainerProfileFromSnapshot(DocumentSnapshot snapshot) {
-    if (snapshot.exists) {
-      TrainerProfileModel trainerProfile = TrainerProfileModel(
-          email: snapshot.get("email") ?? '',
-          firstName: snapshot.get('firstName') ?? '',
-          lastName: snapshot.get('lastName') ?? '',
-          age: snapshot.get('age') ?? '',
-          gender: snapshot.get('gender') ?? '',
-          descrp: snapshot.get('descrp') ?? '',
-          userType: snapshot.get('userType') ?? '',
-          phone: snapshot.get('phone') ?? '',
-          userImage: snapshot.get('userImage'),
-          expage: snapshot.get('expage') ?? '',
-          id: snapshot.id,
-          clients: snapshot.get('clients'));
-      return trainerProfile;
-    }
-    return null;
+  TrainerProfileModel _trainerProfileFromSnapshot(DocumentSnapshot snapshot) {
+    TrainerProfileModel trainerProfile = TrainerProfileModel(
+        email: snapshot.get("email") ?? '',
+        firstName: snapshot.get('firstName') ?? '',
+        lastName: snapshot.get('lastName') ?? '',
+        age: snapshot.get('age') ?? '',
+        gender: snapshot.get('gender') ?? '',
+        descrp: snapshot.get('descrp') ?? '',
+        userType: snapshot.get('userType') ?? '',
+        phone: snapshot.get('phone') ?? '',
+        userImage: snapshot.get('userImage'),
+        expage: snapshot.get('expage') ?? '',
+        id: snapshot.id,
+        clients: snapshot.get('clients'));
+    return trainerProfile;
   }
 }

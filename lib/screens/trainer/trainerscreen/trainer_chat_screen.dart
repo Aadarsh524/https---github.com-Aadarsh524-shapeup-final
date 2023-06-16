@@ -5,17 +5,23 @@ import 'package:hive/hive.dart';
 import 'package:shapeup/services/chat_service.dart';
 
 import '../../../models/chat_model.dart';
+import '../../../models/trainee_profile_model.dart';
 import '../../../models/trainer_profile_model.dart';
+import '../../../services/traineeprofileservice.dart';
 import '../../../services/trainerprofileservice.dart';
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+class TrainerChatScreen extends StatefulWidget {
+  final String chatRoomID;
+  final String traineeID;
+  const TrainerChatScreen(
+      {Key? key, required this.chatRoomID, required this.traineeID})
+      : super(key: key);
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<TrainerChatScreen> createState() => _TrainerChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _TrainerChatScreenState extends State<TrainerChatScreen> {
   late final Box dataBox;
   late String firstName;
   late String lastName;
@@ -23,7 +29,6 @@ class _ChatScreenState extends State<ChatScreen> {
   late String myTrainer;
   User? user = FirebaseAuth.instance.currentUser;
   final TextEditingController _textEditingController = TextEditingController();
-  late String chatRoomID;
   @override
   void initState() {
     super.initState();
@@ -32,22 +37,10 @@ class _ChatScreenState extends State<ChatScreen> {
     lastName = dataBox.get("lastName").toString();
     userImage = dataBox.get('userImage').toString();
     myTrainer = dataBox.get('myTrainer').toString();
-    String traineeId = user!.uid;
-    String trainerId = myTrainer;
-    chatRoomID = chatRoom(traineeId, trainerId);
-  }
-
-  String chatRoom(String user1, String user2) {
-    if (user1.toLowerCase().compareTo(user2.toLowerCase()) > 0) {
-      return "$user1$user2";
-    } else {
-      return "$user2$user1";
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(chatRoomID);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 28, 28, 30),
       appBar: AppBar(
@@ -61,10 +54,10 @@ class _ChatScreenState extends State<ChatScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 28, 28, 30),
         flexibleSpace: SafeArea(
-          child: FutureBuilder<TrainerProfileModel>(
-              future: TrainerProfileService().trainerProfile(myTrainer),
+          child: FutureBuilder<TraineeProfileModel?>(
+              future: TraineeProfileService().traineeProfile(widget.traineeID),
               builder: (BuildContext context, snapshot) {
-                final trainerProfile = snapshot.data;
+                final traineeProfile = snapshot.data;
 
                 if (snapshot.hasError) {
                   return const Center(child: Text("Something went wrong"));
@@ -83,7 +76,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             borderRadius: BorderRadius.circular(100.0),
                             child: Image.network(
                               fit: BoxFit.fill,
-                              trainerProfile!.userImage,
+                              traineeProfile!.userImage,
                             ),
                           ),
                         ),
@@ -96,7 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                  "${trainerProfile.firstName} ${trainerProfile.lastName}",
+                                  "${traineeProfile.firstName} ${traineeProfile.lastName}",
                                   style: GoogleFonts.montserrat(
                                       letterSpacing: .5,
                                       color: Colors.white,
@@ -120,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Stack(
         children: <Widget>[
           StreamBuilder<List<ChatMessageModel>>(
-            stream: ChatService().chatMessageStream(chatRoomID),
+            stream: ChatService().chatMessageStream(widget.chatRoomID),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
@@ -220,12 +213,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       String sender = user!.uid;
                       String receiver = myTrainer;
 
-                      String chatRoomID = chatRoom(sender, receiver);
-
                       String messageContent = _textEditingController.text;
 
                       ChatService().sendChatMessage(
-                          messageContent, chatRoomID, sender, receiver);
+                          messageContent, widget.chatRoomID, sender, receiver);
                       _textEditingController.clear();
                     },
                     backgroundColor: Colors.blue,
