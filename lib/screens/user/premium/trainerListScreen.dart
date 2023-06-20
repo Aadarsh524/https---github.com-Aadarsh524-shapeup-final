@@ -28,6 +28,7 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
             backgroundColor: Color.fromARGB(255, 28, 28, 30),
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               centerTitle: true,
               title: Text("TrainerList",
                   style: GoogleFonts.montserrat(

@@ -34,7 +34,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     const HomeScreen(),
     const ExerciseScreen(),
     const DietScreen(),
-    const NotificationScreen(),
+    const NotificationScreen(
+      id: "0",
+    ),
     const PremiumScreen(),
   ];
   int _selectedIndex = 0;

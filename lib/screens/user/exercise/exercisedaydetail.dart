@@ -281,7 +281,10 @@ class _ExerciseDayDetailState extends State<ExerciseDayDetail> {
                           ),
                         ]));
                   } else {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ));
                   }
                 }),
           ],

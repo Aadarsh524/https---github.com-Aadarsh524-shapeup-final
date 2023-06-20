@@ -15,7 +15,7 @@ class _TrainerPageState extends State<TrainerPage> {
   final List<Widget> screens = [
     const HomePageT(),
     const TrainerNotify(),
-    const ChatRoomScreen(),,
+    const ChatRoomScreen(),
     const WorkoutPlan(),
   ];
   int _selectedIndex = 0;

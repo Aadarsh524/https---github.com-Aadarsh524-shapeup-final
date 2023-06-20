@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive/hive.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:shapeup/screens/user/premium/trainerProfile.dart';
 import 'package:shapeup/services/chat_service.dart';
 
 import '../../../models/chat_model.dart';
@@ -77,13 +79,25 @@ class _ChatScreenState extends State<ChatScreen> {
                         const SizedBox(
                           width: 15,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(7),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100.0),
-                            child: Image.network(
-                              fit: BoxFit.fill,
-                              trainerProfile!.userImage,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.fade,
+                                    duration: const Duration(milliseconds: 250),
+                                    child: TrainerProfile(
+                                      docId: trainerProfile!.id,
+                                    )));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(7),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100.0),
+                              child: Image.network(
+                                fit: BoxFit.fill,
+                                trainerProfile!.userImage,
+                              ),
                             ),
                           ),
                         ),
