@@ -3,10 +3,10 @@ class ChatRoomModel {
   String trainee;
   String id;
 
-  String timeStamp;
+  DateTime timestamp;
   ChatRoomModel(
       {required this.trainer,
       required this.id,
       required this.trainee,
-      required this.timeStamp});
+      required this.timestamp});
 }

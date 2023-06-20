@@ -81,7 +81,7 @@ class _AddExerciseState extends State<AddExercise> {
                 253,
                 62,
               ),
-              label: const SizedBox(
+              label: SizedBox(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

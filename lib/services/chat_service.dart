@@ -40,11 +40,14 @@ class ChatService {
       QuerySnapshot snapshot, String trainerID) {
     return snapshot.docs
         .map((doc) {
+          final timestamp = doc['timestamp'] != null
+              ? (doc['timestamp'] as Timestamp).toDate()
+              : null;
           return ChatRoomModel(
             id: doc.id,
             trainer: doc['trainer'],
             trainee: doc['trainee'] ?? '',
-            timeStamp: doc['timestamp'].toDate(),
+            timestamp: timestamp!,
           );
         })
         .where((chatRoom) => chatRoom.trainer == trainerID)

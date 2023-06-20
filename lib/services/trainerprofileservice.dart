@@ -18,7 +18,7 @@ class TrainerProfileService {
 
     for (var doc in snapshot.docs) {
       if (doc.get('userType') == 'trainer' &&
-          doc.get('isVerified').toString() == 'True') {
+          doc.get('isVerified').toString() == 'true') {
         TrainerProfileModel trainerProfile = TrainerProfileModel(
             email: doc.get("email") ?? '',
             firstName: doc.get('firstName') ?? '',
