@@ -76,41 +76,18 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         backgroundColor: Color.fromARGB(255, 28, 28, 30),
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-            toolbarHeight: 60,
-            centerTitle: true,
-            title: Text("Premium",
-                style: GoogleFonts.montserrat(
-                    letterSpacing: .5,
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600)),
-            backgroundColor: Color.fromARGB(255, 28, 28, 30),
-            elevation: 0.0,
-            leading: Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 10),
-                  height: 28,
-                  width: 28,
-                  decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 114, 97, 89),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Center(
-                    child: IconButton(
-                      color: Colors.black,
-                      iconSize: 12,
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            )),
+          automaticallyImplyLeading: false,
+          toolbarHeight: 60,
+          centerTitle: true,
+          title: Text("Premium",
+              style: GoogleFonts.montserrat(
+                  letterSpacing: .5,
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600)),
+          backgroundColor: Color.fromARGB(255, 28, 28, 30),
+          elevation: 0.0,
+        ),
         body: SafeArea(
           child: SizedBox(
             height: double.infinity,

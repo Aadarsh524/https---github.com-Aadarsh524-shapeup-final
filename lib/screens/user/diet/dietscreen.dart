@@ -42,6 +42,7 @@ class _DietScreenState extends State<DietScreen> {
       backgroundColor: Color.fromARGB(255, 28, 28, 30),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: 60,
         centerTitle: true,
         title: Text("Your Diet",

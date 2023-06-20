@@ -35,19 +35,27 @@ class _TrainerProfileState extends State<TrainerProfile> {
     myTrainer = dataBox.get('myTrainer');
   }
 
+  String chatRoom(String trainee, String trainer) {
+    if (trainee.toLowerCase().compareTo(trainer.toLowerCase()) > 0) {
+      return "$trainee$trainer";
+    } else {
+      return "$trainer$trainee";
+    }
+  }
+
   Future<void> _showAlertDialog(String name, String tID) async {
+    String chatRoomID = chatRoom(user!.uid, tID);
+    print(chatRoomID);
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          // <-- SEE HERE
           title: Text(
             "Appoint $name As Trainer",
             style: GoogleFonts.montserrat(
                 color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
           ),
-
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -71,22 +79,41 @@ class _TrainerProfileState extends State<TrainerProfile> {
                     fontWeight: FontWeight.w600),
               ),
               onPressed: () async {
-                await dataBox.put('myTrainer', tID);
-                FirebaseFirestore.instance.collection('users').doc(tID).update({
-                  'clients': [user!.uid]
-                }).then((value) => FirebaseFirestore.instance
+                FirebaseFirestore.instance
                     .collection('users')
-                    .doc(user?.uid)
-                    .update({'myTrainer': tID, 'hasTrainer': true})
-                    .then(
-                      (value) => dataBox.put('hasTrainer', true),
-                    )
-                    .then((value) => Navigator.pushReplacement(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.fade,
-                            duration: const Duration(milliseconds: 250),
-                            child: const DashBoardScreen()))));
+                    .doc(tID)
+                    .update({
+                      'clients': [user!.uid]
+                    })
+                    .then((value) => {
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user?.uid)
+                              .update({
+                            'myTrainer': tID,
+                            'hasTrainer': true
+                          }).then((value) => {
+                                    dataBox.put('hasTrainer', true),
+                                    dataBox.put('myTrainer', tID)
+                                  }),
+                        })
+                    .then((value) => {
+                          print("chatroom created"),
+                          FirebaseFirestore.instance
+                              .collection('chatrooms')
+                              .doc(chatRoomID)
+                              .set({
+                            'trainer': tID,
+                            'trainee': user!.uid,
+                            "timestamp": Timestamp.now(),
+                          }).then((value) => Navigator.pushReplacement(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.fade,
+                                      duration:
+                                          const Duration(milliseconds: 250),
+                                      child: const DashBoardScreen())))
+                        });
               },
             ),
             TextButton(
