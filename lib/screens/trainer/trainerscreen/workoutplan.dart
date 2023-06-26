@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shapeup/components/exercise_card.dart';
+import 'package:shapeup/models/custom_exercise_model.dart';
+import 'package:shapeup/models/exercise_model.dart';
 import 'package:shapeup/screens/trainer/trainerplans/planName.dart';
-import 'package:shapeup/screens/trainer/trainerscreen/daycard.dart';
+import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
+import 'package:shapeup/services/exerciseService.dart';
+
+import '../../../components/customPlanCard.dart';
 
 class WorkoutPlan extends StatefulWidget {
   const WorkoutPlan({super.key});
@@ -28,6 +34,24 @@ class _WorkoutPlanState extends State<WorkoutPlan> {
           child: Center(
             child: Column(
               children: [
+                FutureBuilder<List<CustomExerciseModel>>(
+                    future: ExerciseService().customPlanList,
+                    builder: ((context, snapshot){
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount:snapshot.data!.length, 
+                            itemBuilder: (context, index) {
+                              return CustomPlanCard(
+                                  customPlanmodel: snapshot.data![index]);
+                            });
+                      }else {
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ));
+                      }
+                    })),
                 Card(
                   color: Theme.of(context).colorScheme.secondary,
                   child: ElevatedButton.icon(
@@ -48,8 +72,10 @@ class _WorkoutPlanState extends State<WorkoutPlan> {
                       color: Colors.black,
                     ),
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const PlanName()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const PlanName()));
                     },
                   ),
                 )
