@@ -9,14 +9,17 @@ import 'package:shapeup/screens/trainer/trainerplans/exercises.dart';
 import 'package:shapeup/screens/trainer/trainerplans/planName.dart';
 import 'package:shapeup/services/exerciseService.dart';
 
-class UpdateWork extends StatefulWidget {
-  const UpdateWork({Key? key}) : super(key: key);
+class AddWorkout extends StatefulWidget {
+  final String dayIndex;
+  final String uid;
+  const AddWorkout({Key? key, required this.dayIndex, required this.uid})
+      : super(key: key);
 
   @override
-  State<UpdateWork> createState() => _UpdateWorkState();
+  State<AddWorkout> createState() => _AddWorkoutState();
 }
 
-class _UpdateWorkState extends State<UpdateWork> {
+class _AddWorkoutState extends State<AddWorkout> {
   //variables
 
   var _counterValueController = TextEditingController();
@@ -30,7 +33,7 @@ class _UpdateWorkState extends State<UpdateWork> {
   void initState() {
     // TODO: implement initState
     dataBox = Hive.box('storage');
-    planName = dataBox.get('planName');
+
     super.initState();
   }
 
@@ -41,7 +44,7 @@ class _UpdateWorkState extends State<UpdateWork> {
         backgroundColor: Color.fromARGB(255, 28, 28, 30),
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 28, 28, 30),
-          title: Text('Update Workout',
+          title: Text('Add Workout',
               style: GoogleFonts.montserrat(
                   letterSpacing: .5,
                   color: Colors.white,
@@ -53,21 +56,6 @@ class _UpdateWorkState extends State<UpdateWork> {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                // DropdownButtonFormField(
-                //     decoration: InputDecoration(labelText: 'Day'),
-                //     dropdownColor: const Color.fromARGB(255, 114, 97, 89),
-                //     value: _selectedVal,
-                //     items: _days.map((e) {
-                //       return DropdownMenuItem(
-                //         child: Text(e),
-                //         value: e,
-                //       );
-                //     }).toList(),
-                //     onChanged: (val) {
-                //       setState(() {
-                //         _selectedVal = val as String;
-                //       });
-                //     }),
                 FutureBuilder<List<ExerciseDetailModel>>(
                   future: ExerciseService().allExercises,
                   builder: (context, snapshot) {
@@ -289,19 +277,20 @@ class _UpdateWorkState extends State<UpdateWork> {
           child: FloatingActionButton.extended(
               onPressed: () async {
                 FirebaseFirestore.instance
-                    .collection('exercises')
-                    .doc(planName)
-                    .collection('day1')
+                    .collection('userSpecific')
+                    .doc(widget.uid)
+                    .collection('day${widget.dayIndex}')
                     .add({
                   'name': selectedExerciseModel!.name,
                   'duration': selectedValue,
                   'description': selectedExerciseModel!.description,
                   'counter': selectedExerciseModel!.counter,
                   'gif': selectedExerciseModel!.gif,
-                }).then((value) => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddExercise())));
+                });
+                // then((value) => Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => const AddExercise())));
               },
               backgroundColor: const Color.fromARGB(
                 255,

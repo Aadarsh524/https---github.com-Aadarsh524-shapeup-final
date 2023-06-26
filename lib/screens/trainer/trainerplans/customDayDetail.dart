@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+
 import 'package:shapeup/screens/user/exercise/exerciserunscreen.dart';
 
 import 'package:styled_widget/styled_widget.dart';
@@ -9,19 +10,18 @@ import '../../../models/exercise_detail_model.dart';
 import '../../../services/exerciseService.dart';
 import 'package:wakelock/wakelock.dart';
 
-class ExerciseDayDetail extends StatefulWidget {
+class CustomDayDetail extends StatefulWidget {
   final String docId;
   final int dayindex;
 
-  const ExerciseDayDetail(
-      {Key? key, required this.docId, required this.dayindex})
+  const CustomDayDetail({Key? key, required this.docId, required this.dayindex})
       : super(key: key);
 
   @override
-  State<ExerciseDayDetail> createState() => _ExerciseDayDetailState();
+  State<CustomDayDetail> createState() => _CustomDayDetailState();
 }
 
-class _ExerciseDayDetailState extends State<ExerciseDayDetail> {
+class _CustomDayDetailState extends State<CustomDayDetail> {
   PageController controller = PageController();
 
   int currentIndex = 0;
@@ -34,14 +34,6 @@ class _ExerciseDayDetailState extends State<ExerciseDayDetail> {
         daysLength = length;
       });
     });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print(widget.dayindex);
-    print(widget.docId);
   }
 
   @override
@@ -75,11 +67,11 @@ class _ExerciseDayDetailState extends State<ExerciseDayDetail> {
             FutureBuilder<List<ExerciseDetailModel>>(
                 future: ExerciseService(
                         docID: widget.docId, dayindex: widget.dayindex)
-                    .listExerciseInfo,
+                    .customPlanDayList,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     print("have data");
-                    print(snapshot.data);
+                    print(snapshot.data!.length);
                     return Expanded(
                         flex: 1,
                         child: Column(children: [
@@ -149,66 +141,6 @@ class _ExerciseDayDetailState extends State<ExerciseDayDetail> {
                                             const SizedBox(
                                               height: 15,
                                             ),
-                                            SizedBox(
-                                                width: double.infinity,
-                                                child: Center(
-                                                  child: ElevatedButton(
-                                                    onPressed: () {
-                                                      Wakelock.enable();
-                                                      Navigator.pushReplacement(
-                                                        context,
-                                                        PageTransition(
-                                                          type:
-                                                              PageTransitionType
-                                                                  .fade,
-                                                          duration:
-                                                              const Duration(
-                                                                  milliseconds:
-                                                                      250),
-                                                          child:
-                                                              ExerciseRunScreen(
-                                                            exercisedetailmodel:
-                                                                snapshot.data!,
-                                                            currentIndex: 0,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    style: ElevatedButton.styleFrom(
-                                                        elevation: 0,
-                                                        backgroundColor:
-                                                            const Color
-                                                                    .fromARGB(
-                                                                255,
-                                                                166,
-                                                                181,
-                                                                106),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                vertical: 14,
-                                                                horizontal: 20),
-                                                        textStyle:
-                                                            const TextStyle(
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                    child: Text(
-                                                      "Start",
-                                                      style: GoogleFonts
-                                                          .notoSansMono(
-                                                              color: Colors
-                                                                  .black
-                                                                  .withOpacity(
-                                                                      .75),
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
-                                                    ),
-                                                  ),
-                                                )),
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   top: 15, bottom: 8.0),

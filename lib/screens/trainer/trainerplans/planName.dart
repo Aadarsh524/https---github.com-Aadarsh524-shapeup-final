@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:shapeup/screens/trainer/trainerplans/exercises.dart';
-import 'package:shapeup/screens/trainer/trainerscreen/daycard.dart';
+
+import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
 
 class PlanName extends StatefulWidget {
   const PlanName({super.key});
@@ -228,17 +228,17 @@ class _PlanNameState extends State<PlanName> {
                     _selectedLevel != null) {
                   await dataBox.put('planName', _planNameController.text);
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DayCard()));
-                  // FirebaseFirestore.instance
-                  //     .collection('exercises')
-                  //     .doc(_planNameController.text)
-                  //     .set({
-                  //   "planName": _planNameController.text,
-                  //   "level": _selectedLevel,
-                  //   "description": _newDescController.text,
-                  //   "exerciseDuration": _timeController.text,
-                  //   "createBy": user!.uid
-                  // });
+                      MaterialPageRoute(builder: (context) => DayListCustom()));
+                  FirebaseFirestore.instance
+                      .collection('exercises')
+                      .doc(_planNameController.text)
+                      .set({
+                    "planName": _planNameController.text,
+                    "level": _selectedLevel,
+                    "description": _newDescController.text,
+                    "exerciseDuration": _timeController.text,
+                    "createBy": user!.uid
+                  });
                 } else {
                   SnackBar snackBar = SnackBar(
                     padding: const EdgeInsets.all(20),

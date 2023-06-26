@@ -5,8 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shapeup/screens/trainer/trainerscreen/customworkout.dart';
-import 'package:shapeup/screens/trainer/trainerscreen/daycard.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/chatRoomScreen.dart';
+import 'package:shapeup/screens/trainer/trainerplans/customworkout.dart';
+import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
+import 'package:shapeup/screens/trainer/userSpecificWorkout/dayList.dart';
 import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 
 import '../../../models/trainee_profile_model.dart';
@@ -418,10 +420,11 @@ class _TraineeProfileState extends State<TraineeProfile> {
                                       SizedBox(
                                         child: ElevatedButton(
                                           onPressed: () async {
-                                            // String name =
-                                            //     trainerProfile.firstName;
-                                            // String tID = trainerProfile.id;
-                                            // _showAlertDialog(name, tID);
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChatRoomScreen()));
                                           },
                                           style: ElevatedButton.styleFrom(
                                             elevation: 0,
@@ -460,7 +463,11 @@ class _TraineeProfileState extends State<TraineeProfile> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const DayCard()));
+                                                        DaysList(
+                                                          uid:
+                                                              traineeProfile.id,
+                                                        )));
+                                            print(traineeProfile.id);
                                           },
                                           style: ElevatedButton.styleFrom(
                                             elevation: 0,

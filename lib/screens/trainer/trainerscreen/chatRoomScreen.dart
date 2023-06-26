@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hive/hive.dart';
+
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainer_chat_screen.dart';
 import 'package:shapeup/services/chat_service.dart';
