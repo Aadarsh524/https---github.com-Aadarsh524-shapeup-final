@@ -8,6 +8,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../services/notification_services.dart';
+
 class SettingUpScreen extends StatefulWidget {
   const SettingUpScreen({Key? key}) : super(key: key);
 
@@ -33,6 +35,8 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
   late bool premium = false;
   late bool hasTrainer = false;
 
+  late String sleepTime;
+  late String exerciseTime;
   int calories = 0;
   int burn = 0;
   double bmr = 0;
@@ -48,9 +52,81 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
   int fat = 0;
   int fiber = 0;
 
+  String? deviceToken;
+
+  void fetchDeviceToken() async {
+    String? token = await NotificationServices().getDeviceToken();
+    if (token != null) {
+      setState(() {
+        deviceToken = token;
+        print(deviceToken);
+
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .set({
+              "uid": uid,
+              'firstName': firstName,
+              'lastName': lastName,
+              'age': age,
+              'gender': gender,
+              'phone': phone,
+              'userType': userType,
+              'height': height,
+              'weight': weight,
+              'userImage': userImage,
+              'email': email,
+              'calories': calories.toString(),
+              'burn': burn.toString(),
+              'glasses': glasses.toString(),
+              'bmi': bmi.toString(),
+              'carbs': carbs.toString(),
+              'protein': protein.toString(),
+              'fat': fat.toString(),
+              'fiber': fiber.toString(),
+              'premium': premium,
+              'hasTrainer': hasTrainer,
+              "myTrainer": '',
+              "sleepTime": '',
+              "exerciseTime": '',
+              "deviceToken": deviceToken
+            })
+            .then((value) async => {
+                  print("Data added suceccfully"),
+                  print("Data added suceccfully"),
+                  print("Data added suceccfully"),
+                  print("Data added suceccfully"),
+                  await dataBox.put('userImage', userImage),
+                  await dataBox.put('calories', calories),
+                  await dataBox.put('burn', burn),
+                  await dataBox.put('glasses', glasses),
+                  await dataBox.put('bmi', bmi),
+                  await dataBox.put('carbs', carbs),
+                  await dataBox.put('protein', protein),
+                  await dataBox.put('fat', fat),
+                  await dataBox.put('fiber', fiber),
+                  await dataBox.put('premium', premium),
+                  await dataBox.put('hasTrainer', hasTrainer),
+                  await dataBox.put('myTrainer', ''),
+                  await dataBox.put('sleepTime', sleepTime),
+                  await dataBox.put('exerciseTime', exerciseTime),
+                  await dataBox.put('deviceToken', deviceToken),
+                  Navigator.pushReplacement(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.fade,
+                          duration: const Duration(milliseconds: 250),
+                          child: const DashBoardScreen()))
+                })
+            .catchError((error) => print("Failed to add user: $error"));
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+
     dataBox = Hive.box('storage');
     firstName = dataBox.get("firstName");
     lastName = dataBox.get("lastName");
@@ -62,16 +138,8 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
     weight = dataBox.get("weight");
     uid = dataBox.get("uid");
     email = dataBox.get("email");
-
-    print(firstName);
-    print(lastName);
-    print(phone);
-    print(userType);
-    print(age);
-    print(gender);
-    print(height);
-    print(uid);
-    print(email);
+    sleepTime = dataBox.get("sleepTime");
+    exerciseTime = dataBox.get("exerciseTime");
 
 // calorie counter
     if (gender == "male") {
@@ -122,58 +190,7 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
       }
     }
 
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .set({
-          "uid": uid,
-          'firstName': firstName,
-          'lastName': lastName,
-          'age': age,
-          'gender': gender,
-          'phone': phone,
-          'userType': userType,
-          'height': height,
-          'weight': weight,
-          'userImage': userImage,
-          'email': email,
-          'calories': calories.toString(),
-          'burn': burn.toString(),
-          'glasses': glasses.toString(),
-          'bmi': bmi.toString(),
-          'carbs': carbs.toString(),
-          'protein': protein.toString(),
-          'fat': fat.toString(),
-          'fiber': fiber.toString(),
-          'premium': premium,
-          'hasTrainer': hasTrainer,
-          "myTrainer": ''
-        })
-        .then((value) async => {
-              print("Data added suceccfully"),
-              print("Data added suceccfully"),
-              print("Data added suceccfully"),
-              print("Data added suceccfully"),
-              await dataBox.put('userImage', userImage),
-              await dataBox.put('calories', calories),
-              await dataBox.put('burn', burn),
-              await dataBox.put('glasses', glasses),
-              await dataBox.put('bmi', bmi),
-              await dataBox.put('carbs', carbs),
-              await dataBox.put('protein', protein),
-              await dataBox.put('fat', fat),
-              await dataBox.put('fiber', fiber),
-              await dataBox.put('premium', premium),
-              await dataBox.put('hasTrainer', hasTrainer),
-              await dataBox.put('myTrainer', ''),
-              Navigator.pushReplacement(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.fade,
-                      duration: const Duration(milliseconds: 250),
-                      child: const DashBoardScreen()))
-            })
-        .catchError((error) => print("Failed to add user: $error"));
+    fetchDeviceToken();
   }
 
   @override
