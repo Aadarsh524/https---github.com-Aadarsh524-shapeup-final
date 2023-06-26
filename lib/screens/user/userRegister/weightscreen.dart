@@ -46,7 +46,7 @@ class _WeightScreenState extends State<WeightScreen> {
               SizedBox(
                 height: 75,
               ),
-              Text("What are your Weight?",
+              Text("What is your Weight?",
                   style: GoogleFonts.montserrat(
                       letterSpacing: .5,
                       color: Colors.white,
@@ -126,6 +126,8 @@ class _WeightScreenState extends State<WeightScreen> {
           child: FloatingActionButton.extended(
               onPressed: () async {
                 await dataBox.put('weight', _currentIntValue.toString());
+                await dataBox.put('sleepTime', '');
+                await dataBox.put('exerciseTime', '');
                 // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(
                     context,

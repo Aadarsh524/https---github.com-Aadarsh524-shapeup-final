@@ -125,6 +125,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     firstNameController.text = '';
     lastNameController.text = '';
     phoneController.text = '';
+
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    googleSignIn.signOut();
   }
 
   late AccountType selectedType = AccountType.trainee;
