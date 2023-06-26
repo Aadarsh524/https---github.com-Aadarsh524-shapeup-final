@@ -1,11 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shapeup/services/notification_services.dart';
-
-import '../../../components/notificationcard.dart';
-import '../../../models/notification_model.dart';
 
 class NotificationScreen extends StatefulWidget {
   final String id;
@@ -19,14 +13,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
     super.initState();
-    // NotificationServices().requestNotificationPermission();
-
-    // NotificationServices().getDeviceToken().then((value) => {
-    //       print("Device Token"),
-    //       print(value),
-    //     });
-    // NotificationServices().setInteractMessage(context);
-    // NotificationServices().firebaseInit(context);
   }
 
   @override
