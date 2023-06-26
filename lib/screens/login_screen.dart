@@ -44,6 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
   late String myTrainer;
   late bool premium;
   late bool hasTrainer;
+  late String sleepTime;
+  late bool exerciseTime;
+  late bool deviceToken;
 
   Future<void> loginWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -119,6 +122,10 @@ class _LoginScreenState extends State<LoginScreen> {
               hasTrainer = data['hasTrainer'];
               myTrainer = data['myTrainer'];
 
+              sleepTime = data['sleepTime'];
+              exerciseTime = data['exerciseTime'];
+              deviceToken = data['deviceToken'];
+
               await dataBox.put('firstName', firstName);
               await dataBox.put('lastName', lastName);
               await dataBox.put('phone', phone);
@@ -145,6 +152,10 @@ class _LoginScreenState extends State<LoginScreen> {
               await dataBox.put('premium', premium);
               await dataBox.put('hasTrainer', hasTrainer);
               await dataBox.put('myTrainer', myTrainer);
+
+              await dataBox.put('sleepTime', sleepTime);
+              await dataBox.put('exerciseTime', exerciseTime);
+              await dataBox.put('deviceToken', deviceToken);
 
               // ignore: use_build_context_synchronously
               Navigator.pushReplacement(
@@ -234,6 +245,13 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    googleSignIn.signOut();
   }
 
   @override

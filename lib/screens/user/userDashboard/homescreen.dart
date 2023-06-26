@@ -1,19 +1,20 @@
-import 'dart:async';
-
 import 'package:blur/blur.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging_platform_interface/src/remote_message.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:shapeup/screens/user/premium/subscription_screen.dart';
 import 'package:shapeup/screens/user/userDashboard/profilescreen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shapeup/services/notification_services.dart';
+import '../../../services/local_notification_service.dart';
 import '../../../services/stepstracker.dart';
 import 'package:intl/intl.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:day_night_time_picker/day_night_time_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -23,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  User? user = FirebaseAuth.instance.currentUser;
   late final Box dataBox;
   late String firstName;
   late String calories;
@@ -35,43 +37,102 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late bool premium;
 
+  late String sleepTime;
+  late String exerciseTime;
+
   DateTime date = DateTime.now();
   String? week;
   String? day;
   String? month;
-  String? sleeptime = '';
 
-  setSleeptTime() async {
-    TimeOfDay? pickedTime = await showTimePicker(
-      initialTime: TimeOfDay.now(),
-      context: context, //context of current state
-    );
-    if (pickedTime != null) {
-      DateTime parsedTime = DateFormat.jm()
-          // ignore: use_build_context_synchronously
-          .parse(pickedTime.format(context).toString());
-      //converting to DateTime so that we can further format on different pattern.
-
-      String formattedTime = DateFormat('h:mma').format(parsedTime);
-      debugPrint(formattedTime);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("sleeptime", formattedTime);
-
+  setSleepTime() async {
+    Time newSleepTime = Time(hour: 12, minute: 00, second: 00);
+    void onTimeChanged(Time newTime) {
       setState(() {
-        sleeptime = prefs.getString("sleeptime");
-        User? user = FirebaseAuth.instance.currentUser;
-        FirebaseFirestore.instance.collection('profile').doc(user?.uid).update({
-          'sleeptime': sleeptime,
-        });
+        newSleepTime = newTime;
       });
-    } else {
-      debugPrint("Time is not selected");
     }
+
+    Navigator.of(context).push(
+      showPicker(
+        showSecondSelector: false,
+        context: context,
+        value: newSleepTime,
+        onChange: onTimeChanged,
+        minuteInterval: TimePickerInterval.FIVE,
+        // Optional onChange to receive value as DateTime
+        onChangeDateTime: (DateTime dateTime) async {
+          {
+            String formattedTime = DateFormat('h:mm a').format(dateTime);
+
+            await dataBox.put('sleepTime', formattedTime);
+            setState(() {
+              sleepTime = formattedTime;
+            });
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(user?.uid)
+                .update({
+              'sleepTime': formattedTime,
+            }).then((value) => {
+                      if (sleepTime != '')
+                        {
+                          LocalNotificationServices()
+                              .scheduleSleepNotification(sleepTime)
+                        }
+                    });
+          }
+        },
+      ),
+    );
+  }
+
+  setExerciseTime() async {
+    Time newSleepTime = Time(hour: 12, minute: 00, second: 00);
+    void onTimeChanged(Time newTime) {
+      setState(() {
+        newSleepTime = newTime;
+      });
+    }
+
+    Navigator.of(context).push(
+      showPicker(
+        showSecondSelector: false,
+        context: context,
+        value: newSleepTime,
+        onChange: onTimeChanged,
+        minuteInterval: TimePickerInterval.FIVE,
+        // Optional onChange to receive value as DateTime
+        onChangeDateTime: (DateTime dateTime) async {
+          {
+            String formattedTime = DateFormat('h:mm a').format(dateTime);
+
+            await dataBox.put('exerciseTime', formattedTime);
+            setState(() {
+              exerciseTime = formattedTime;
+            });
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(user?.uid)
+                .update({
+              'exerciseTime': formattedTime,
+            }).then((value) => {
+                      if (exerciseTime != '')
+                        {
+                          LocalNotificationServices()
+                              .scheduleSleepNotification(sleepTime)
+                        }
+                    });
+          }
+        },
+      ),
+    );
   }
 
   @override
   void initState() {
     super.initState();
+
     setState(() {
       week = DateFormat('EEEE').format(date);
       day = DateFormat('d').format(date);
@@ -87,12 +148,16 @@ class _HomeScreenState extends State<HomeScreen> {
     fat = dataBox.get("fat").toString();
     fiber = dataBox.get("fiber").toString();
     premium = dataBox.get('premium');
+    sleepTime = dataBox.get("sleepTime").toString();
+    exerciseTime = dataBox.get("exerciseTime").toString();
+
+    NotificationServices().requestNotificationPermission();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 28, 28, 30),
+      backgroundColor: const Color.fromARGB(255, 28, 28, 30),
       body: SafeArea(
           child: SizedBox(
         height: double.infinity,
@@ -833,7 +898,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Sleep Time : $sleeptime",
+                                  "Sleep Time : $sleepTime",
                                   textAlign: TextAlign.left,
                                   style: GoogleFonts.montserrat(
                                       color: Colors.black,
@@ -846,7 +911,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   iconSize: 20,
                                   icon: const Icon(Icons.edit),
                                   onPressed: () async {
-                                    setSleeptTime();
+                                    setSleepTime();
                                   },
                                 ),
                               ],
@@ -869,7 +934,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Exercise Time : $sleeptime",
+                                  "Exercise Time : $exerciseTime",
                                   textAlign: TextAlign.left,
                                   style: GoogleFonts.montserrat(
                                       color: Colors.black,
@@ -882,7 +947,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   iconSize: 20,
                                   icon: const Icon(Icons.edit),
                                   onPressed: () async {
-                                    setSleeptTime();
+                                    setExerciseTime();
                                   },
                                 ),
                               ],

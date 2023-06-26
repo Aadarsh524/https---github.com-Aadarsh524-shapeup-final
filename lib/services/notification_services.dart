@@ -10,12 +10,39 @@ import 'package:page_transition/page_transition.dart';
 import '../screens/user/notification/notificationscreen.dart';
 
 class NotificationServices {
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationPlugin =
-      FlutterLocalNotificationsPlugin();
-
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
-  void initLocalNotification(
+  final FlutterLocalNotificationsPlugin flutterNotificationPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  Future<void> requestNotificationPermission() async {
+    await Future.delayed(const Duration(milliseconds: 2000), () async {
+      NotificationSettings notificationSetting =
+          await firebaseMessaging.requestPermission(
+              alert: true,
+              announcement: true,
+              badge: true,
+              carPlay: true,
+              criticalAlert: true,
+              provisional: true,
+              sound: true);
+
+      if (notificationSetting.authorizationStatus ==
+          AuthorizationStatus.authorized) {
+        print('User granted permission');
+      } else {
+        AppSettings.openNotificationSettings();
+        print('User declined or has not accepted permission');
+      }
+    });
+  }
+
+  Future<String?> getDeviceToken() async {
+    String? deviceToken = await firebaseMessaging.getToken();
+    return deviceToken;
+  }
+
+  void initNotification(
       BuildContext buildContext, RemoteMessage message) async {
     var androidInitializationSettings =
         const AndroidInitializationSettings('@mipmap/icon.png');
@@ -23,21 +50,9 @@ class NotificationServices {
     var initializationSettings =
         InitializationSettings(android: androidInitializationSettings);
 
-    await flutterLocalNotificationPlugin.initialize(initializationSettings,
+    await flutterNotificationPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (payload) {
       handleMessage(buildContext, message);
-    });
-  }
-
-  void firebaseInit(BuildContext buildContext) {
-    FirebaseMessaging.onMessage.listen((message) {
-      print("FCM Message Received: ${message.notification?.title.toString()}");
-      print("FCM Message Received: ${message.notification?.body.toString()}");
-
-      if (Platform.isAndroid) {
-        initLocalNotification(buildContext, message);
-        showNotifications(message);
-      }
     });
   }
 
@@ -60,7 +75,7 @@ class NotificationServices {
     Future.delayed(
         Duration.zero,
         () => {
-              flutterLocalNotificationPlugin.show(
+              flutterNotificationPlugin.show(
                   1,
                   message.notification!.title.toString(),
                   message.notification!.body.toString(),
@@ -68,48 +83,15 @@ class NotificationServices {
             });
   }
 
-  Future<void> requestNotificationPermission() async {
-    NotificationSettings notificationSetting =
-        await firebaseMessaging.requestPermission(
-            alert: true,
-            announcement: true,
-            badge: true,
-            carPlay: true,
-            criticalAlert: true,
-            provisional: true,
-            sound: true);
-    if (notificationSetting.authorizationStatus ==
-        AuthorizationStatus.authorized) {
-      print("User granted permission");
-    } else {
-      AppSettings.openNotificationSettings();
-      print("User denied permission");
-    }
-  }
+  void firebaseNotificationInit(BuildContext buildContext) {
+    FirebaseMessaging.onMessage.listen((message) {
+      print("FCM Message Received: ${message.notification?.title.toString()}");
+      print("FCM Message Received: ${message.notification?.body.toString()}");
 
-  Future<String?> getDeviceToken() async {
-    String? deviceToken = await firebaseMessaging.getToken();
-    return deviceToken;
-  }
-
-  void isTokenRefresh() async {
-    firebaseMessaging.onTokenRefresh.listen((event) {
-      event.toString();
-    });
-  }
-
-  Future<String?> setInteractMessage(BuildContext buildContext) async {
-    //when app is terminated
-    Future<RemoteMessage?> initialMessage =
-        FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
-      handleMessage(buildContext, initialMessage as RemoteMessage);
-    }
-
-    //when app is backgrounf
-
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      handleMessage(buildContext, message);
+      if (Platform.isAndroid) {
+        initNotification(buildContext, message);
+        showNotifications(message);
+      }
     });
   }
 
@@ -122,5 +104,21 @@ class NotificationServices {
               duration: const Duration(milliseconds: 300),
               child: NotificationScreen(id: (message.data['id'].toString()))));
     }
+  }
+
+  Future<String?> setUpInteractMessage(BuildContext buildContext) async {
+    //when app is terminated
+    Future<RemoteMessage?> initialMessage =
+        FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      handleMessage(buildContext, initialMessage as RemoteMessage);
+    }
+
+    //when app is background
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      handleMessage(buildContext, message);
+    });
   }
 }
