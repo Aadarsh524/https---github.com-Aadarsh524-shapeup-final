@@ -1,4 +1,4 @@
-import 'dart:math';
+
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,7 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:shapeup/screens/trainer/trainerRegister/filepicker.dart';
 // import 'package:shapeup/screens/settingScreen.dart';
 // import 'package:shapeup/screens/trainer/trainerRegister/filepicker.dart';
-import 'package:shapeup/screens/trainer/trainerRegister/setting_screen.dart';
+
 
 class DescBox extends StatefulWidget {
   const DescBox({Key? key}) : super(key: key);

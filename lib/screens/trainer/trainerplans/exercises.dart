@@ -1,14 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:shapeup/screens/trainer/trainerscreen/customworkout.dart';
+import 'package:shapeup/screens/trainer/trainerplans/customworkout.dart';
+import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
 
 import '../../../models/exercise_detail_model.dart';
 import '../../../services/exerciseService.dart';
 
 class AddExercise extends StatefulWidget {
-  const AddExercise({super.key});
+  final String dayIndex;
+  const AddExercise({super.key, required this.dayIndex});
 
   @override
   State<AddExercise> createState() => _AddExerciseState();
@@ -23,6 +25,7 @@ class _AddExerciseState extends State<AddExercise> {
     // TODO: implement initState
     dataBox = Hive.box('storage');
     planUid = dataBox.get('planName');
+    print(widget.dayIndex);
     super.initState();
   }
 
@@ -31,6 +34,13 @@ class _AddExerciseState extends State<AddExercise> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 28, 28, 30),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DayListCustom()));
+            },
+          ),
           title: Text('Add Exercises',
               style: GoogleFonts.montserrat(
                   letterSpacing: .5,
@@ -41,7 +51,8 @@ class _AddExerciseState extends State<AddExercise> {
         ),
         body: SafeArea(
           child: FutureBuilder<List<ExerciseDetailModel>>(
-              future: ExerciseService().customExerciseInfo(planUid),
+              future: ExerciseService()
+                  .customExerciseInfo(planUid, widget.dayIndex),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<ExerciseDetailModel>? allExercises = snapshot.data;
@@ -73,7 +84,9 @@ class _AddExerciseState extends State<AddExercise> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const UpdateWork()));
+                        builder: (context) => UpdateWork(
+                              dayIndex: widget.dayIndex,
+                            )));
               },
               backgroundColor: const Color.fromARGB(
                 255,
