@@ -21,7 +21,6 @@ class _ValidationState extends State<Validation> {
   bool isLoading = false;
   File? fileToDisplay;
   User? user = FirebaseAuth.instance.currentUser;
-  
 
   void pickfile() async {
     try {
@@ -41,7 +40,7 @@ class _ValidationState extends State<Validation> {
 
         // Upload the file to Firebase Storage
         Reference ref =
-            FirebaseStorage.instance.ref().child('users').child('user?.uid').child(_filename!);
+            FirebaseStorage.instance.ref().child('trainer/${user?.uid}');
         UploadTask uploadTask = ref.putFile(File(pickedfile!.path!));
 
         uploadTask.whenComplete(() async {
@@ -50,11 +49,12 @@ class _ValidationState extends State<Validation> {
 
           // Save the download URL to Firebase Firestore
           String uid = FirebaseAuth.instance.currentUser!.uid;
-        DocumentReference documentRef = FirebaseFirestore.instance.collection('users').doc(uid);
-        documentRef.set({
-          'fileName': _filename,
-          'downloadURL': downloadURL,
-        }, SetOptions(merge: true));
+          DocumentReference documentRef =
+              FirebaseFirestore.instance.collection('users').doc(uid);
+          documentRef.set({
+            'fileName': _filename,
+            'downloadURL': downloadURL,
+          }, SetOptions(merge: true));
 
           setState(() {
             isLoading = false;
