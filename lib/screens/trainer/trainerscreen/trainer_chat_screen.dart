@@ -67,8 +67,15 @@ class _TrainerChatScreenState extends State<TrainerChatScreen> {
                     padding: const EdgeInsets.only(right: 16),
                     child: Row(
                       children: <Widget>[
-                        const SizedBox(
-                          width: 15,
+                        SizedBox(
+                          height: 60,
+                          width: 60,
+                          child: IconButton(
+                            icon: Icon(Icons.arrow_back),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(7),

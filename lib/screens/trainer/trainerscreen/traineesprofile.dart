@@ -8,6 +8,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/chatRoomScreen.dart';
 import 'package:shapeup/screens/trainer/trainerplans/customworkout.dart';
 import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
 import 'package:shapeup/screens/trainer/userSpecificWorkout/dayList.dart';
 import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 
@@ -70,7 +71,10 @@ class _TraineeProfileState extends State<TraineeProfile> {
                     iconSize: 12,
                     icon: const Icon(Icons.arrow_back_ios_new_rounded),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TrainerPage()));
                     },
                   ),
                 ),

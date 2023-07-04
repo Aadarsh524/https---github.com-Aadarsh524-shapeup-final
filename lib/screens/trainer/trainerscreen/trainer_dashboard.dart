@@ -12,6 +12,7 @@ import 'package:shapeup/services/traineeprofileservice.dart';
 
 import '../../../models/trainee_profile_model.dart';
 import '../../../models/trainer_profile_model.dart';
+import '../../../services/notification_services.dart';
 import '../../../services/trainerprofileservice.dart';
 
 class HomePageT extends StatefulWidget {
@@ -32,6 +33,7 @@ class _HomePageTState extends State<HomePageT> {
 
   @override
   void initState() {
+    super.initState();
     setState(() {
       week = DateFormat('EEEE').format(date);
       day = DateFormat('d').format(date);
@@ -39,7 +41,9 @@ class _HomePageTState extends State<HomePageT> {
     });
     dataBox = Hive.box('storage');
     firstName = dataBox.get("firstName");
-    super.initState();
+    NotificationServices().requestNotificationPermission();
+    NotificationServices().firebaseNotificationInit(context);
+    //NotificationServices().setUpInteractMessage(context);
   }
 
   @override
