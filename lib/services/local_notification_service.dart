@@ -135,4 +135,8 @@ class LocalNotificationServices {
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
+
+  Future<void> cancelUserNotifications() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
+  }
 }

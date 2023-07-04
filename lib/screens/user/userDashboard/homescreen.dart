@@ -34,9 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late String protein;
   late String fat;
   late String fiber;
-
   late bool premium;
-
   late String sleepTime;
   late String exerciseTime;
 
@@ -63,17 +61,19 @@ class _HomeScreenState extends State<HomeScreen> {
         // Optional onChange to receive value as DateTime
         onChangeDateTime: (DateTime dateTime) async {
           {
-            String formattedTime = DateFormat('h:mm a').format(dateTime);
+            String formattedSleepTime = DateFormat('h:mm a').format(dateTime);
 
-            await dataBox.put('sleepTime', formattedTime);
             setState(() {
-              sleepTime = formattedTime;
+              sleepTime = formattedSleepTime;
             });
+
+            await dataBox.put('sleepTime', sleepTime);
+
             FirebaseFirestore.instance
                 .collection('users')
                 .doc(user?.uid)
                 .update({
-              'sleepTime': formattedTime,
+              'sleepTime': sleepTime,
             }).then((value) => {
                       if (sleepTime != '')
                         {
@@ -105,22 +105,24 @@ class _HomeScreenState extends State<HomeScreen> {
         // Optional onChange to receive value as DateTime
         onChangeDateTime: (DateTime dateTime) async {
           {
-            String formattedTime = DateFormat('h:mm a').format(dateTime);
-
-            await dataBox.put('exerciseTime', formattedTime);
+            String formattedExerciseTime =
+                DateFormat('h:mm a').format(dateTime);
             setState(() {
-              exerciseTime = formattedTime;
+              exerciseTime = formattedExerciseTime;
             });
+
+            await dataBox.put('exerciseTime', exerciseTime);
+
             FirebaseFirestore.instance
                 .collection('users')
                 .doc(user?.uid)
                 .update({
-              'exerciseTime': formattedTime,
+              'exerciseTime': exerciseTime,
             }).then((value) => {
                       if (exerciseTime != '')
                         {
                           LocalNotificationServices()
-                              .scheduleSleepNotification(sleepTime)
+                              .scheduleExerciseNotification(exerciseTime)
                         }
                     });
           }
@@ -132,6 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    NotificationServices().requestNotificationPermission();
+    NotificationServices().firebaseNotificationInit(context);
+    NotificationServices().setUpInteractMessage(context);
 
     setState(() {
       week = DateFormat('EEEE').format(date);
@@ -150,8 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
     premium = dataBox.get('premium');
     sleepTime = dataBox.get("sleepTime").toString();
     exerciseTime = dataBox.get("exerciseTime").toString();
-
-    NotificationServices().requestNotificationPermission();
   }
 
   @override
