@@ -5,6 +5,8 @@ import 'package:shapeup/models/exercise_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../components/customPlanCard.dart';
+import '../../../models/custom_exercise_model.dart';
 import '../../../services/exerciseService.dart';
 
 class ExerciseScreen extends StatefulWidget {
@@ -49,6 +51,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           child: SizedBox(
             height: double.infinity,
             child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               child: Column(
                 children: [
                   const SizedBox(
@@ -56,23 +59,51 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                   ),
                   FutureBuilder<List<ExerciseModel>>(
                     future: ExerciseService().exerciseInfo,
-                    builder: ((context, snapshot) {
+                    builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              return ExerciseCard(
-                                exercisemodel: snapshot.data![index],
-                              );
-                            });
+                          physics:
+                              NeverScrollableScrollPhysics(), // Disable inner list scrolling
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return ExerciseCard(
+                              exercisemodel: snapshot.data![index],
+                            );
+                          },
+                        );
                       } else {
                         return const Center(
-                            child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ));
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        );
                       }
-                    }),
+                    },
+                  ),
+                  FutureBuilder<List<CustomExerciseModel>>(
+                    future: ExerciseService().customExerciseList,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          physics:
+                              NeverScrollableScrollPhysics(), // Disable inner list scrolling
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return CustomPlanCard(
+                              customPlanmodel: snapshot.data![index],
+                            );
+                          },
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ],
               ),

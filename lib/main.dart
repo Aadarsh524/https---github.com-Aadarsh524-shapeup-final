@@ -16,13 +16,11 @@ void main() async {
   final appDocDir = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocDir.path);
   await Hive.openBox('storage');
-
   runApp(const MyApp());
 }
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print(message.notification!.title.toString());
   await Firebase.initializeApp();
 }
 

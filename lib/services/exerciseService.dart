@@ -17,6 +17,29 @@ class ExerciseService {
   final CollectionReference customcollection =
       FirebaseFirestore.instance.collection('exercises');
 
+  List<CustomExerciseModel> _customExerciseFromSnapshot(
+      QuerySnapshot snapshot) {
+    User? users = FirebaseAuth.instance.currentUser;
+    List<CustomExerciseModel> customExerciseModel = [];
+
+    for (var doc in snapshot.docs) {
+      CustomExerciseModel customModel = CustomExerciseModel(
+        id: doc.id,
+        planName: doc['planName'] ?? '',
+        description: doc['description'] ?? '',
+        level: doc['level'] ?? '',
+      );
+      customExerciseModel.add(customModel);
+    }
+    return customExerciseModel;
+  }
+
+  //get dietInfo stream
+  Future<List<CustomExerciseModel>> get customExerciseList async {
+    final snapshot = await customcollection.get();
+    return _customExerciseFromSnapshot(snapshot);
+  }
+
   List<CustomExerciseModel> _customPlanFromSnapshot(QuerySnapshot snapshot) {
     User? users = FirebaseAuth.instance.currentUser;
     List<CustomExerciseModel> customExerciseModel = [];

@@ -8,6 +8,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/login_screen.dart';
 import 'package:shapeup/screens/user/premium/subscription_screen.dart';
 
+import '../../../services/local_notification_service.dart';
 import 'editprofilescreen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -568,6 +569,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               SizedBox(
                                 child: ElevatedButton(
                                   onPressed: () async {
+                                    LocalNotificationServices()
+                                        .cancelUserNotifications();
                                     GoogleSignIn googleSignIn = GoogleSignIn();
                                     await googleSignIn.signOut();
                                     await dataBox.clear();

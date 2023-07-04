@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 
 import '../../../models/trainer_profile_model.dart';
 import '../../../services/trainerprofileservice.dart';
+import 'package:http/http.dart' as http;
 
 class TrainerProfile extends StatefulWidget {
   final String docId;
@@ -43,8 +46,18 @@ class _TrainerProfileState extends State<TrainerProfile> {
     }
   }
 
-  Future<void> _showAlertDialog(String name, String tID) async {
-    String chatRoomID = chatRoom(user!.uid, tID);
+  Future<void> _showAlertDialog(
+      String name, String tID, String trainerDeviceToken) async {
+    var data = {
+      'to': trainerDeviceToken,
+      'priority': 'high',
+      'notification': {'title': 'New Client', 'body': 'You got a new trainee'},
+      'date': {'type': 'message', "id": "1233"}
+    };
+    String chatRoomID = chatRoom(
+      user!.uid,
+      tID,
+    );
     print(chatRoomID);
     return showDialog<void>(
       context: context,
@@ -83,7 +96,7 @@ class _TrainerProfileState extends State<TrainerProfile> {
                     .collection('users')
                     .doc(tID)
                     .update({
-                      'clients': [user!.uid]
+                      'clients': FieldValue.arrayUnion([user!.uid])
                     })
                     .then((value) => {
                           FirebaseFirestore.instance
@@ -103,10 +116,24 @@ class _TrainerProfileState extends State<TrainerProfile> {
                               .collection('chatrooms')
                               .doc(chatRoomID)
                               .set({
-                            'trainer': tID,
-                            'trainee': user!.uid,
-                            "timestamp": Timestamp.now(),
-                          }).then((value) => Navigator.pushReplacement(
+                                'trainer': tID,
+                                'trainee': user!.uid,
+                                "timestamp": Timestamp.now(),
+                              })
+                              .then((value) => {
+                                    http.post(
+                                        Uri.parse(
+                                            'https://fcm.googleapis.com/fcm/send'),
+                                        body: jsonEncode(data),
+                                        headers: {
+                                          'Content-Type':
+                                              'application/json; charset=UTF-8',
+                                          'Authorization':
+                                              'key=AAAATDAzS6c:APA91bFZhr4WPrr1tqt9iZ-s4MS0gODumBAJwl5TAL6czX0BtYrN_qj7-gaedAlILR87vaflnG1Ok7IhfPSHP1aTmbA-woxuMg_tUEaouLtiugUV6ZLEqFD_RipGY52DF2r87elf4eJM'
+                                        }),
+                                    print("notificaiton sent")
+                                  })
+                              .then((value) => Navigator.pushReplacement(
                                   context,
                                   PageTransition(
                                       type: PageTransitionType.fade,
@@ -479,7 +506,11 @@ class _TrainerProfileState extends State<TrainerProfile> {
                                           String name =
                                               trainerProfile.firstName;
                                           String tID = trainerProfile.id;
-                                          _showAlertDialog(name, tID);
+                                          String trainerDeviceToken =
+                                              trainerProfile.id;
+
+                                          _showAlertDialog(
+                                              name, tID, trainerDeviceToken);
                                         },
                                         style: ElevatedButton.styleFrom(
                                           elevation: 0,
