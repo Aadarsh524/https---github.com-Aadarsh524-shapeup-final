@@ -85,13 +85,8 @@ class NotificationServices {
 
   void firebaseNotificationInit(BuildContext buildContext) {
     FirebaseMessaging.onMessage.listen((message) {
-      print("FCM Message Received: ${message.notification?.title.toString()}");
-      print("FCM Message Received: ${message.notification?.body.toString()}");
-
-      if (Platform.isAndroid) {
-        initNotification(buildContext, message);
-        showNotifications(message);
-      }
+      initNotification(buildContext, message);
+      showNotifications(message);
     });
   }
 
@@ -108,11 +103,12 @@ class NotificationServices {
 
   Future<String?> setUpInteractMessage(BuildContext buildContext) async {
     //when app is terminated
-    Future<RemoteMessage?> initialMessage =
-        FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
-      handleMessage(buildContext, initialMessage as RemoteMessage);
+      // ignore: use_build_context_synchronously
+      handleMessage(buildContext, initialMessage);
     }
 
     //when app is background

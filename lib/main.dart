@@ -16,7 +16,6 @@ void main() async {
   final appDocDir = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocDir.path);
   await Hive.openBox('storage');
-
   runApp(const MyApp());
 }
 

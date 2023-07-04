@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:shapeup/screens/user/diet/dietscreen.dart';
 import 'package:shapeup/screens/user/exercise/exercisescreen.dart';
-import 'package:shapeup/screens/user/premium/trainerListScreen.dart';
 import 'package:shapeup/screens/user/userDashboard/homescreen.dart';
 import 'package:shapeup/screens/user/notification/notificationscreen.dart';
 import 'package:shapeup/screens/user/premium/premiumscreen.dart';
