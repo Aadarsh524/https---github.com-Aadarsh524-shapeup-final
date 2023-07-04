@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
 
 import 'package:shapeup/screens/user/exercise/exerciserunscreen.dart';
 
@@ -178,6 +179,35 @@ class _CustomDayDetailState extends State<CustomDayDetail> {
                                                           fontSize: 18,
                                                           fontWeight:
                                                               FontWeight.w600),
+                                                    ),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () => {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  const DayListCustom()))
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      elevation: 0,
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                      // padding: const EdgeInsets.symmetric(vertical: 14),
+                                                    ),
+                                                    child: Text(
+                                                      'Edit',
+                                                      style: GoogleFonts
+                                                          .notoSansMono(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
                                                     ),
                                                   ),
                                                   TextButton(

@@ -183,7 +183,7 @@ class _ValidationState extends State<Validation> {
             padding: EdgeInsets.all(5),
             child: FloatingActionButton.extended(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => SettingUpScreenT()));

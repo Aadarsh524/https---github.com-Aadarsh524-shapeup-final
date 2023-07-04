@@ -22,7 +22,7 @@ void main() async {
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print(message.notification!.title.toString());
+
   await Firebase.initializeApp();
 }
 

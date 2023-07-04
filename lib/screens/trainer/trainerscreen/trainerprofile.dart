@@ -7,6 +7,7 @@ import 'package:page_transition/page_transition.dart';
 
 // import '../../../../services/firebaseservices.dart';
 
+import '../../../services/local_notification_service.dart';
 import '../../login_screen.dart';
 import 'edit_trainer_profile.dart';
 
@@ -495,6 +496,8 @@ class _TrainerProfileState extends State<TrainerProfile> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
+            //LocalNotificationServices().cancelUserNotifications();
+                                        
             GoogleSignIn googleSignIn = GoogleSignIn();
             await googleSignIn.signOut();
             await dataBox.clear();
@@ -502,21 +505,6 @@ class _TrainerProfileState extends State<TrainerProfile> {
                 context,
                 MaterialPageRoute(builder: (context) => const LoginScreen())));
 
-            // print(_ageController.text),
-            //         await FirebaseFirestore.instance
-            //             .collection('profile')
-            //             .doc(user?.uid)
-            //             .set({
-            //           'age': _ageController.text,
-            //         }).then((value) => Navigator.pushReplacement(
-            //                 context,
-            //                 PageTransition(
-            //                     type: PageTransitionType.fade,
-            //                     duration:
-            //                         const Duration(milliseconds: 250),
-            //                     child: const GenderScreen())));
-            // Navigator.push(context,
-            //     MaterialPageRoute(builder: (context) => const LoginScreen()));
           },
           backgroundColor: Color.fromARGB(255, 214, 21, 11),
           label: SizedBox(

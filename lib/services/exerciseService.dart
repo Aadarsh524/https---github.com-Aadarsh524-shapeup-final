@@ -16,6 +16,9 @@ class ExerciseService {
       FirebaseFirestore.instance.collection('allexercises');
   final CollectionReference customcollection =
       FirebaseFirestore.instance.collection('exercises');
+       final CollectionReference usercollection =
+      FirebaseFirestore.instance.collection('userSpecific');
+  
 
   List<CustomExerciseModel> _customPlanFromSnapshot(QuerySnapshot snapshot) {
     User? users = FirebaseAuth.instance.currentUser;
@@ -66,6 +69,7 @@ class ExerciseService {
         description: doc.get('description') ?? '',
         duration: doc.get('duration').toString(),
         gif: doc.get('gif') ?? '',
+        id: doc.id,
       );
     }).toList();
   }
@@ -85,6 +89,7 @@ class ExerciseService {
         description: doc.get('description') ?? '',
         duration: doc.get('duration').toString(),
         gif: doc.get('gif') ?? '',
+        id: doc.id,
       );
     }).toList();
   }
@@ -113,6 +118,7 @@ class ExerciseService {
         description: doc.get('description') ?? '',
         duration: doc.get('duration').toString(),
         gif: doc.get('gif') ?? '',
+        id: doc.id,
       );
     }).toList();
   }
@@ -125,6 +131,7 @@ class ExerciseService {
         description: doc.get('description') ?? '',
         duration: doc.get('duration').toString(),
         gif: doc.get('gif') ?? '',
+        id: doc.id,
       );
     }).toList();
   }
@@ -135,5 +142,26 @@ class ExerciseService {
         await customcollection.doc(planUid).collection("day$dayIndex").get();
     print(querySnapshot);
     return _customExericsePlan(querySnapshot);
+  }
+  
+  List<ExerciseDetailModel> _userSpecificPlan(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return ExerciseDetailModel(
+        name: doc.get('name') ?? '',
+        counter: doc.get('counter').toString(),
+        description: doc.get('description') ?? '',
+        duration: doc.get('duration').toString(),
+        gif: doc.get('gif') ?? '',
+        id: doc.id,
+      );
+    }).toList();
+  }
+
+  Future<List<ExerciseDetailModel>> userSpecificExerciseInfo(
+      uid, dayIndex) async {
+    final querySnapshot =
+        await usercollection.doc(uid).collection("day$dayIndex").get();
+    print(querySnapshot);
+    return _userSpecificPlan(querySnapshot);
   }
 }

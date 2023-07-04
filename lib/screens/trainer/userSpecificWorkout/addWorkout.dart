@@ -9,6 +9,8 @@ import 'package:shapeup/screens/trainer/trainerplans/exercises.dart';
 import 'package:shapeup/screens/trainer/trainerplans/planName.dart';
 import 'package:shapeup/services/exerciseService.dart';
 
+import 'addUserExercise.dart';
+
 class AddWorkout extends StatefulWidget {
   final String dayIndex;
   final String uid;
@@ -50,6 +52,18 @@ class _AddWorkoutState extends State<AddWorkout> {
                   color: Colors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.w600)),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddUserExercise(
+                            uid: widget.uid,
+                            dayIndex: widget.dayIndex,
+                          )));
+            },
+          ),
         ),
         body: SafeArea(
           child: Padding(
@@ -125,11 +139,11 @@ class _AddWorkoutState extends State<AddWorkout> {
                           print('Description: ${selected.description}');
                           print('GIF URL: ${selected.gif}');
                           print('Duration: ${selected.duration}');
-                          print('Counter: ${selected.counter}');
+                          print('Counter:${_counterValueController}');
                         },
                       );
                     } else {
-                      return Text('Something went wrong');
+                      return CircularProgressIndicator();
                     }
                   },
                 ),
@@ -155,12 +169,8 @@ class _AddWorkoutState extends State<AddWorkout> {
                             color: Colors.white,
                           ),
                         ),
-                        Text(
-                          selectedExerciseModel!.description,
-                          style: GoogleFonts.montserrat(
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
+                        SizedBox(
+                          height: 10,
                         ),
                         Container(
                           margin: const EdgeInsets.only(
@@ -170,6 +180,31 @@ class _AddWorkoutState extends State<AddWorkout> {
                           decoration: BoxDecoration(
                             border: Border.all(
                               width: .5,
+                              color: Colors.white,
+                            ),
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Text(
+                            selectedExerciseModel!.description,
+                            textAlign: TextAlign.start,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(
+                              bottom: 12, left: 5, right: 5),
+                          padding: EdgeInsets.only(
+                              left: 14, right: 7, top: 7, bottom: 7),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: .5,
+                              color: Colors.white,
                             ),
                             borderRadius: BorderRadius.circular(5.0),
                           ),
@@ -284,13 +319,17 @@ class _AddWorkoutState extends State<AddWorkout> {
                   'name': selectedExerciseModel!.name,
                   'duration': selectedValue,
                   'description': selectedExerciseModel!.description,
-                  'counter': selectedExerciseModel!.counter,
+                  'counter': _counterValueController.text,
                   'gif': selectedExerciseModel!.gif,
-                });
-                // then((value) => Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //             builder: (context) => const AddExercise())));
+                }).then((value) => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddUserExercise(
+                                  dayIndex: widget.dayIndex,
+                                  uid: widget.uid,
+                                ))));
+                ;
+                print(_counterValueController.text);
               },
               backgroundColor: const Color.fromARGB(
                 255,

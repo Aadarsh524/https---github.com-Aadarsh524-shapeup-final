@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shapeup/screens/trainer/trainerplans/exercises.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
 
 import 'package:shapeup/screens/trainer/trainerscreen/workoutplan.dart';
 
@@ -35,7 +36,7 @@ class _DayListCustomState extends State<DayListCustom> {
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => WorkoutPlan()));
+                MaterialPageRoute(builder: (context) => TrainerPage()));
           },
         ),
         title: Text('Days',

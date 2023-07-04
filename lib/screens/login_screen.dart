@@ -176,6 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
               descrp = data['descrp'];
               uid = data['uid'];
               email = data['email'];
+              deviceToken = data['deviceToken'];
 
               await dataBox.put('firstName', firstName);
               await dataBox.put('lastName', lastName);
@@ -191,6 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
               await dataBox.put('gender', gender);
               await dataBox.put('userImage', userImage);
               await dataBox.put('email', email);
+              await dataBox.put('deviceToken', deviceToken);
 
               print(firstName);
               // ignore: use_build_context_synchronously

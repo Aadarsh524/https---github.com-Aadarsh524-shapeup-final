@@ -32,7 +32,7 @@ class TraineeProfileService {
           gender: doc.get('gender') ?? '',
           userType: doc.get('userType') ?? '',
           phone: doc.get('phone') ?? '',
-          userImage: doc.get('userImage'),
+          userImage: doc.get('userImage') ?? '',
           id: doc.id,
           height: doc.get("height") ?? '',
           weight: doc.get("weight") ?? '',

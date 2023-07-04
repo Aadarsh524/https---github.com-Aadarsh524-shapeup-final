@@ -1,12 +1,9 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:shapeup/screens/trainer/trainerRegister/filepicker.dart';
 // import 'package:shapeup/screens/settingScreen.dart';
 // import 'package:shapeup/screens/trainer/trainerRegister/filepicker.dart';
-
 
 class DescBox extends StatefulWidget {
   const DescBox({Key? key}) : super(key: key);
@@ -53,9 +50,11 @@ class _DescBoxState extends State<DescBox> {
               margin: const EdgeInsets.only(bottom: 12, left: 5, right: 5),
               padding: EdgeInsets.all(30),
               child: TextField(
+                cursorColor: Colors.white,
                 maxLength: 100,
                 onChanged: (val) {},
-                keyboardType: TextInputType.name,
+                keyboardType: TextInputType.multiline,
+                textInputAction: TextInputAction.newline,
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
                   fontWeight: FontWeight.w300,
