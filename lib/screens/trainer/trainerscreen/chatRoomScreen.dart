@@ -83,8 +83,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       print(traineeProfile);
 
                       print(traineeProfile!.userImage);
-                      print(traineeProfile!.userImage);
-                      print(traineeProfile!.userImage);
+                     
 
                       return Container(
                         padding: const EdgeInsets.only(
@@ -98,7 +97,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                     duration: const Duration(milliseconds: 250),
                                     child: TrainerChatScreen(
                                         chatRoomID: snapshot.data![index].id,
-                                        traineeID: traineeProfile!.id)));
+                                        traineeID: traineeProfile.id)));
                           },
                           child: Container(
                             width: double.infinity,

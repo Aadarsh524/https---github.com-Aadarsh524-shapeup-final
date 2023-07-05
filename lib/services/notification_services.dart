@@ -45,7 +45,7 @@ class NotificationServices {
   void initNotification(
       BuildContext buildContext, RemoteMessage message) async {
     var androidInitializationSettings =
-        const AndroidInitializationSettings('@mipmap/icon.png');
+        const AndroidInitializationSettings('@mipmap/icon');
 
     var initializationSettings =
         InitializationSettings(android: androidInitializationSettings);

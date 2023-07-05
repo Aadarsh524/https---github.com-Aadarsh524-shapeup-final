@@ -11,8 +11,10 @@ import 'package:shapeup/services/exerciseService.dart';
 
 class UpdateWork extends StatefulWidget {
   final String dayIndex;
+  final String planUid;
 
-  const UpdateWork({Key? key, required this.dayIndex}) : super(key: key);
+  const UpdateWork({Key? key, required this.dayIndex, required this.planUid})
+      : super(key: key);
 
   @override
   State<UpdateWork> createState() => _UpdateWorkState();
@@ -26,13 +28,11 @@ class _UpdateWorkState extends State<UpdateWork> {
   ExerciseDetailModel? selectedExerciseModel;
   bool? selectedValue;
   int _val = 1;
-  late Box dataBox;
-  late String planName;
+
   @override
   void initState() {
     // TODO: implement initState
-    dataBox = Hive.box('storage');
-    planName = dataBox.get('planName');
+
     super.initState();
   }
 
@@ -55,8 +55,10 @@ class _UpdateWorkState extends State<UpdateWork> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          AddExercise(dayIndex: widget.dayIndex)));
+                      builder: (context) => AddExercise(
+                            dayIndex: widget.dayIndex,
+                            planUid: widget.planUid,
+                          )));
             },
           ),
         ),
@@ -316,7 +318,7 @@ class _UpdateWorkState extends State<UpdateWork> {
               onPressed: () async {
                 FirebaseFirestore.instance
                     .collection('exercises')
-                    .doc(planName)
+                    .doc(widget.planUid)
                     .collection('day${widget.dayIndex}')
                     .add({
                   'name': selectedExerciseModel!.name,
@@ -329,6 +331,7 @@ class _UpdateWorkState extends State<UpdateWork> {
                         MaterialPageRoute(
                             builder: (context) => AddExercise(
                                   dayIndex: widget.dayIndex,
+                                  planUid: widget.planUid,
                                 ))));
               },
               backgroundColor: const Color.fromARGB(

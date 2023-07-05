@@ -8,7 +8,9 @@ import 'package:shapeup/screens/trainer/trainerscreen/workoutplan.dart';
 import '../../../models/day_model.dart';
 
 class DayListCustom extends StatefulWidget {
-  const DayListCustom({Key? key}) : super(key: key);
+  final String planUid;
+
+  const DayListCustom({Key? key, required this.planUid}) : super(key: key);
 
   @override
   State<DayListCustom> createState() => _DayListCustomState();
@@ -22,6 +24,7 @@ class _DayListCustomState extends State<DayListCustom> {
         MaterialPageRoute(
             builder: (context) => AddExercise(
                   dayIndex: day,
+                  planUid: widget.planUid,
                 )));
     print(day);
   }
@@ -35,6 +38,7 @@ class _DayListCustomState extends State<DayListCustom> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
+            // Navigator.pop(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => TrainerPage()));
           },

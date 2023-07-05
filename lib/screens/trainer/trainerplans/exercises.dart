@@ -10,33 +10,49 @@ import '../../../services/exerciseService.dart';
 
 class AddExercise extends StatefulWidget {
   final String dayIndex;
-  const AddExercise({super.key, required this.dayIndex});
+  final String planUid;
+  const AddExercise({super.key, required this.dayIndex, required this.planUid});
 
   @override
   State<AddExercise> createState() => _AddExerciseState();
 }
 
 class _AddExerciseState extends State<AddExercise> {
-  late Box dataBox;
-  late String planUid;
-  @override
   @override
   void initState() {
     // TODO: implement initState
-    dataBox = Hive.box('storage');
-    planUid = dataBox.get('planName');
+
     print(widget.dayIndex);
     super.initState();
   }
 
   Future<void> deleteExercise(ExerciseDetailModel exercise) async {
     try {
+      SnackBar snackBar = SnackBar(
+        padding: const EdgeInsets.all(20),
+        backgroundColor: Colors.white,
+        duration: const Duration(seconds: 2),
+        content: Text(
+          "Exercise deleted successfully",
+          style: GoogleFonts.montserrat(
+            height: .5,
+            letterSpacing: 0.5,
+            fontSize: 12,
+            color: Colors.red,
+          ),
+        ),
+      );
       await FirebaseFirestore.instance
           .collection('exercises')
+          .doc(widget.planUid)
+          .collection('day${widget.dayIndex}')
           .doc(exercise.id)
-          .delete();
-      print('Exercise deleted successfully');
-      print(exercise.id);
+          .delete()
+          .then(
+              (value) => ScaffoldMessenger.of(context).showSnackBar(snackBar));
+      setState(() {
+        // Refresh the page by triggering a rebuild
+      });
     } catch (error) {
       print('Error deleting exercise: $error');
     }
@@ -50,8 +66,12 @@ class _AddExerciseState extends State<AddExercise> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => DayListCustom()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DayListCustom(
+                            planUid: widget.planUid,
+                          )));
             },
           ),
           title: Text('Add Exercises',
@@ -65,7 +85,7 @@ class _AddExerciseState extends State<AddExercise> {
         body: SafeArea(
           child: FutureBuilder<List<ExerciseDetailModel>>(
               future: ExerciseService()
-                  .customExerciseInfo(planUid, widget.dayIndex),
+                  .customExerciseInfo(widget.planUid, widget.dayIndex),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<ExerciseDetailModel>? allExercises = snapshot.data;
@@ -105,6 +125,7 @@ class _AddExerciseState extends State<AddExercise> {
                     MaterialPageRoute(
                         builder: (context) => UpdateWork(
                               dayIndex: widget.dayIndex,
+                              planUid: widget.planUid,
                             )));
               },
               backgroundColor: const Color.fromARGB(

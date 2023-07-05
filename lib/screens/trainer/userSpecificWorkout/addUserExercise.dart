@@ -30,10 +30,33 @@ class _AddUserExerciseState extends State<AddUserExercise> {
 
   Future<void> deleteExercise(ExerciseDetailModel exercise) async {
     try {
+      SnackBar snackBar = SnackBar(
+        padding: const EdgeInsets.all(20),
+        backgroundColor: Colors.white,
+        duration: const Duration(seconds: 2),
+        content: Text(
+          "Exercise deleted successfully",
+          style: GoogleFonts.montserrat(
+            height: .5,
+            letterSpacing: 0.5,
+            fontSize: 12,
+            color: Colors.red,
+          ),
+        ),
+      );
       await FirebaseFirestore.instance
-          .collection('exercises')
+          .collection('userSpecific')
+          .doc(widget.uid)
+          .collection('day${widget.dayIndex}')
           .doc(exercise.id)
-          .delete();
+          .delete()
+          .then(
+            (value) => ScaffoldMessenger.of(context).showSnackBar(snackBar),
+          );
+
+      setState(() {
+        // Refresh the page by triggering a rebuild
+      });
       print('Exercise deleted successfully');
       print(exercise.id);
     } catch (error) {
