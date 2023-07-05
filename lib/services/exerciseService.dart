@@ -20,6 +20,30 @@ class ExerciseService {
       FirebaseFirestore.instance.collection('userSpecific');
   
 
+  final CollectionReference customcollectionfromTrainer =
+      FirebaseFirestore.instance.collection('userSpecific');
+
+  List<CustomExerciseModel> _customExerciseFromTrainerSnapshot(
+      QuerySnapshot snapshot) {
+    List<CustomExerciseModel> customExerciseModel = [];
+
+    for (var doc in snapshot.docs) {
+      CustomExerciseModel customModel = CustomExerciseModel(
+        id: doc.id,
+        planName: doc['planName'] ?? '',
+        description: doc['description'] ?? '',
+        level: doc['level'] ?? '',
+      );
+      customExerciseModel.add(customModel);
+    }
+    return customExerciseModel;
+  }
+
+  Future<List<CustomExerciseModel>> get customExerciseFromTrainerList async {
+    final snapshot = await customcollectionfromTrainer.get();
+    return _customExerciseFromTrainerSnapshot(snapshot);
+  }
+
   List<CustomExerciseModel> _customExerciseFromSnapshot(
       QuerySnapshot snapshot) {
     User? users = FirebaseAuth.instance.currentUser;
@@ -104,6 +128,29 @@ class ExerciseService {
     return _dayExericsePlan(querySnapshot);
   }
 
+  List<ExerciseDetailModel> _customPlanDayFromTrainer(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return ExerciseDetailModel(
+        name: doc.get('name') ?? '',
+        counter: doc.get('counter').toString(),
+        description: doc.get('description') ?? '',
+        duration: doc.get('duration').toString(),
+        gif: doc.get('gif') ?? '',
+      );
+    }).toList();
+  }
+
+  Future<List<ExerciseDetailModel>> get customPlanDayListFromTrainer async {
+    print(dayindex);
+    print(docID);
+
+    final querySnapshot = await customcollectionfromTrainer
+        .doc(docID)
+        .collection("day$dayindex")
+        .get();
+    return _customPlanDayFromTrainer(querySnapshot);
+  }
+
   List<ExerciseDetailModel> _customPlanDay(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return ExerciseDetailModel(
@@ -118,12 +165,16 @@ class ExerciseService {
   }
 
   Future<List<ExerciseDetailModel>> get customPlanDayList async {
+    print(dayindex);
+    print(docID);
+
     final querySnapshot =
         await customcollection.doc(docID).collection("day$dayindex").get();
     return _customPlanDay(querySnapshot);
   }
 
   Future<DocumentSnapshot<Object?>> get list async {
+    print(docID);
     final documentSnapshot = await exercisecollection.doc(docID).get();
     return documentSnapshot;
   }

@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shapeup/screens/user/exercise/customexercisedaydetail.dart';
 
 import '../../../models/custom_exercise_model.dart';
 import '../../../services/exerciseService.dart';
-import 'customDayDetail.dart';
 
 class CustomDayList extends StatelessWidget {
   final CustomExerciseModel exercisemodel;
@@ -58,6 +58,7 @@ class CustomDayList extends StatelessWidget {
             future: ExerciseService(docID: exercisemodel.id).list,
             builder: ((context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
+                print(snapshot.data);
                 return ListView.builder(
                     //shrinkWrap: true,
                     itemCount: 7,
@@ -67,7 +68,7 @@ class CustomDayList extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => CustomDayDetail(
+                                  builder: (_) => Customexercisedaydetail(
                                         dayindex: listindex + 1,
                                         docId: exercisemodel.id,
                                       ))),
@@ -79,20 +80,23 @@ class CustomDayList extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           elevation: 10.0,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Text(
-                                  "Day ${listindex + 1}",
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.montserrat(
-                                      color: Color.fromARGB(255, 226, 226, 226),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              )
-                            ],
+                          child: Expanded(
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Text(
+                                    "Day ${listindex + 1}",
+                                    textAlign: TextAlign.left,
+                                    style: GoogleFonts.montserrat(
+                                        color:
+                                            Color.fromARGB(255, 226, 226, 226),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       );

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:shapeup/screens/user/diet/dietscreen.dart';
+
 import 'package:shapeup/screens/user/exercise/exercisescreen.dart';
+
 import 'package:shapeup/screens/user/userDashboard/homescreen.dart';
 import 'package:shapeup/screens/user/notification/notificationscreen.dart';
 import 'package:shapeup/screens/user/premium/premiumscreen.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import '../exerciseFromTrainer/exerciseFromTrainerScreen.dart';
 
 class DashBoardScreen extends StatefulWidget {
   final int? selectedIndex;
@@ -33,9 +37,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     const HomeScreen(),
     const ExerciseScreen(),
     const DietScreen(),
-    const NotificationScreen(
-      id: "0",
-    ),
+    // const NotificationScreen(
+    //   id: "0",
+    // ),
+    const ExerciseFromTrainerScreen(),
     const PremiumScreen(),
   ];
   int _selectedIndex = 0;
@@ -99,11 +104,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           ),
           const BottomNavigationBarItem(
             activeIcon: Icon(
-              Icons.notifications,
+              Icons.directions_walk,
               color: Colors.white,
             ),
             icon: Icon(
-              Icons.notifications_outlined,
+              Icons.directions_walk_outlined,
               color: Colors.white,
             ),
             label: '',
