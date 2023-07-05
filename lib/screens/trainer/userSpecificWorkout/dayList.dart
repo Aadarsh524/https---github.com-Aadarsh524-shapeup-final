@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/traineesprofile.dart';
+import 'package:shapeup/screens/trainer/userSpecificWorkout/addUserExercise.dart';
 import 'package:shapeup/screens/trainer/userSpecificWorkout/addWorkout.dart';
 
 import '../../../models/day_model.dart';
@@ -18,7 +21,7 @@ class _DaysListState extends State<DaysList> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AddWorkout(
+            builder: (context) => AddUserExercise(
                   dayIndex: day,
                   uid: widget.uid,
                 )));
@@ -28,10 +31,31 @@ class _DaysListState extends State<DaysList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TraineeProfile(
+                            docId: widget.uid,
+                          )));
+            },
+          ),
+          title: Text('Days',
+              style: GoogleFonts.montserrat(
+                  letterSpacing: .5,
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600)),
+          backgroundColor: Color.fromARGB(255, 28, 28, 30),
+        ),
         body: SafeArea(
             child: DayCard(
-      days: days,
-      onTap: handleDayTap,
-    )));
+          days: days,
+          onTap: handleDayTap,
+        )));
   }
 }

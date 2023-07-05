@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainer_chat_screen.dart';
+import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
 import 'package:shapeup/services/chat_service.dart';
 import '../../../models/chat_room_model.dart';
 import '../../../models/trainee_profile_model.dart';
@@ -27,6 +28,24 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 28, 28, 30),
+        elevation: 0,
+        toolbarHeight: 60,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TrainerPage()));
+          },
+        ),
+        title: Text("Chat History",
+            style: GoogleFonts.montserrat(
+                letterSpacing: .5,
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w600)),
+      ),
       backgroundColor: const Color.fromARGB(255, 28, 28, 30),
       body: Stack(
         children: <Widget>[
@@ -61,6 +80,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       }
 
                       final traineeProfile = traineeSnapshot.data;
+                      print(traineeProfile);
+
+                      print(traineeProfile!.userImage);
+                     
 
                       return Container(
                         padding: const EdgeInsets.only(
@@ -74,7 +97,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                     duration: const Duration(milliseconds: 250),
                                     child: TrainerChatScreen(
                                         chatRoomID: snapshot.data![index].id,
-                                        traineeID: traineeProfile!.id)));
+                                        traineeID: traineeProfile.id)));
                           },
                           child: Container(
                             width: double.infinity,
@@ -98,7 +121,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                             height: 65,
                                             width: 65,
                                             fit: BoxFit.contain,
-                                            traineeProfile!.userImage),
+                                            traineeProfile.userImage),
                                       ),
                                     ),
                                     const SizedBox(

@@ -6,6 +6,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../services/notification_services.dart';
+
 class SettingUpScreenT extends StatefulWidget {
   const SettingUpScreenT({Key? key}) : super(key: key);
 
@@ -29,7 +31,50 @@ class _SettingUpScreenTState extends State<SettingUpScreenT> {
   late String expage;
   late String descrp;
   late String clients;
-
+  String? deviceToken;
+  void fetchDeviceToken() async {
+    String? token = await NotificationServices().getDeviceToken();
+    if (token != null) {
+      setState(() {
+        deviceToken = token;
+        print(deviceToken);
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .set({
+              "uid": uid,
+              'firstName': firstName,
+              'lastName': lastName,
+              'age': age,
+              'gender': gender,
+              'phone': phone,
+              'userType': userType,
+              'userImage': userImage,
+              'email': email,
+              'expage': expage,
+              'descrp': descrp,
+              'clients': [],
+              'isVerified': false,
+              "deviceToken": deviceToken
+            })
+            .then((value) async => {
+                  await dataBox.put('userImage', userImage),
+                  await dataBox.put('deviceToken', deviceToken),
+                  print("Data added suceccfully"),
+                  print("Data added suceccfully"),
+                  print("Data added suceccfully"),
+                  print("Data added suceccfully"),
+                  Navigator.pushReplacement(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.fade,
+                          duration: const Duration(milliseconds: 250),
+                          child: const TrainerPage()))
+                })
+            .catchError((error) => print("Failed to add user: $error"));
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -63,39 +108,7 @@ class _SettingUpScreenTState extends State<SettingUpScreenT> {
         print(userImage);
       }
     }
-
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .set({
-          "uid": uid,
-          'firstName': firstName,
-          'lastName': lastName,
-          'age': age,
-          'gender': gender,
-          'phone': phone,
-          'userType': userType,
-          'userImage': userImage,
-          'email': email,
-          'expage': expage,
-          'descrp': descrp,
-          'clients': [],
-          'isVerified': false,
-        })
-        .then((value) async => {
-          await dataBox.put('userImage',userImage),
-              print("Data added suceccfully"),
-              print("Data added suceccfully"),
-              print("Data added suceccfully"),
-              print("Data added suceccfully"),
-              Navigator.pushReplacement(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.fade,
-                      duration: const Duration(milliseconds: 250),
-                      child: const TrainerPage()))
-            })
-        .catchError((error) => print("Failed to add user: $error"));
+    fetchDeviceToken();
   }
 
   @override

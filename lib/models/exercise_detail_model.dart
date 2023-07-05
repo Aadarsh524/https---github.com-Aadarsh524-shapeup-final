@@ -4,6 +4,7 @@ class ExerciseDetailModel {
   final String gif;
   final String counter;
   final String duration;
+  final String id;
 
   ExerciseDetailModel({
     required this.name,
@@ -11,5 +12,6 @@ class ExerciseDetailModel {
     required this.gif,
     required this.counter,
     required this.duration,
+    required this.id,
   });
 }
