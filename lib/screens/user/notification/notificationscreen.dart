@@ -26,13 +26,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
           automaticallyImplyLeading: false,
           title: Padding(
               padding: const EdgeInsets.only(left: 12, top: 10),
-              child: Text("Notifications",
+              child: Text("Notifications ",
                   style: GoogleFonts.montserrat(
                       textStyle:
                           const TextStyle(color: Colors.black, fontSize: 20)))),
         ),
         body: SafeArea(
-          child: Text("ID" + widget.id),
+          child: Text("ID${widget.id}",
+              style: GoogleFonts.montserrat(
+                  textStyle:
+                      const TextStyle(color: Colors.black, fontSize: 20))),
         ));
   }
 }

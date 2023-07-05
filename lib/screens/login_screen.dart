@@ -45,8 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late bool premium;
   late bool hasTrainer;
   late String sleepTime;
-  late bool exerciseTime;
-  late bool deviceToken;
+  late String exerciseTime;
+  late String deviceToken;
 
   Future<void> loginWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
