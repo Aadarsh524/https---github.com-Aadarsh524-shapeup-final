@@ -11,6 +11,7 @@ class TrainerProfileModel {
   final String id;
   String phone;
   List clients;
+  String deviceToken;
 
   TrainerProfileModel(
       {required this.firstName,
@@ -24,5 +25,6 @@ class TrainerProfileModel {
       required this.expage,
       required this.id,
       required this.phone,
+      required this.deviceToken,
       required this.clients});
 }
