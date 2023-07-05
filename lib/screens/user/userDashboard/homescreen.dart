@@ -992,7 +992,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         type: PageTransitionType.fade,
                                         duration:
                                             const Duration(milliseconds: 300),
-                                        child: const StepTracker(),
+                                        child: StepsTracker(),
                                       ),
                                     );
                                   },

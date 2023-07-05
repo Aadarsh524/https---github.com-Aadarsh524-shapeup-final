@@ -4,8 +4,7 @@ import 'package:shapeup/components/exercise_card.dart';
 import 'package:shapeup/models/exercise_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../../../components/customPlanCard.dart';
+import '../../../components/customExerciseCard.dart';
 import '../../../models/custom_exercise_model.dart';
 import '../../../services/exerciseService.dart';
 
@@ -91,7 +90,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
-                            return CustomPlanCard(
+                            return CustomExerciseCard(
                               customPlanmodel: snapshot.data![index],
                             );
                           },

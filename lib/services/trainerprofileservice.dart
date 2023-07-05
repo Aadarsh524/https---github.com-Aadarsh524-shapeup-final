@@ -30,6 +30,7 @@ class TrainerProfileService {
             phone: doc.get('phone') ?? '',
             userImage: doc.get('userImage'),
             expage: doc.get('expage') ?? '',
+            deviceToken: doc.get('deviceToken') ?? '',
             id: doc.id,
             clients: doc.get('clients'));
         trainerProfiles.add(trainerProfile);
@@ -56,6 +57,7 @@ class TrainerProfileService {
         phone: snapshot.get('phone') ?? '',
         userImage: snapshot.get('userImage'),
         expage: snapshot.get('expage') ?? '',
+        deviceToken: snapshot.get('deviceToken') ?? '',
         id: snapshot.id,
         clients: snapshot.get('clients'));
     return trainerProfile;

@@ -11,7 +11,7 @@ import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 
 import '../../../models/trainer_profile_model.dart';
 import '../../../services/trainerprofileservice.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class TrainerProfile extends StatefulWidget {
   final String docId;
@@ -27,6 +27,7 @@ class TrainerProfile extends StatefulWidget {
 
 class _TrainerProfileState extends State<TrainerProfile> {
   User? user = FirebaseAuth.instance.currentUser;
+  final dio = Dio();
   late final Box dataBox;
   late bool hasTrainer;
   late String myTrainer;
@@ -46,19 +47,47 @@ class _TrainerProfileState extends State<TrainerProfile> {
     }
   }
 
+  void sendPushNotification(String trainerDeviceToken) async {
+    const String serverKey =
+        'AAAATDAzS6c:APA91bFZhr4WPrr1tqt9iZ-s4MS0gODumBAJwl5TAL6czX0BtYrN_qj7-gaedAlILR87vaflnG1Ok7IhfPSHP1aTmbA-woxuMg_tUEaouLtiugUV6ZLEqFD_RipGY52DF2r87elf4eJM';
+
+    Map<String, dynamic> notification = {
+      'notification': {
+        'title': 'New Client',
+        'body': 'You have a new Trainee.',
+      },
+      'to': trainerDeviceToken,
+      'data': {'type': 'message', 'id': '123'}
+    };
+
+    try {
+      final dio = Dio();
+      dio.options.headers['Content-Type'] = 'application/json';
+      dio.options.headers['Authorization'] = 'key=$serverKey';
+
+      final response = await dio.post(
+        'https://fcm.googleapis.com/fcm/send',
+        data: notification,
+      );
+
+      if (response.statusCode == 200) {
+        print('Push notification sent successfully.');
+      } else {
+        print(
+            'Failed to send push notification. Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error sending push notification: $e');
+    }
+  }
+
   Future<void> _showAlertDialog(
       String name, String tID, String trainerDeviceToken) async {
-    var data = {
-      'to': trainerDeviceToken,
-      'priority': 'high',
-      'notification': {'title': 'New Client', 'body': 'You got a new trainee'},
-      'date': {'type': 'message', "id": "1233"}
-    };
     String chatRoomID = chatRoom(
       user!.uid,
       tID,
     );
-    print(chatRoomID);
+
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -121,17 +150,7 @@ class _TrainerProfileState extends State<TrainerProfile> {
                                 "timestamp": Timestamp.now(),
                               })
                               .then((value) => {
-                                    http.post(
-                                        Uri.parse(
-                                            'https://fcm.googleapis.com/fcm/send'),
-                                        body: jsonEncode(data),
-                                        headers: {
-                                          'Content-Type':
-                                              'application/json; charset=UTF-8',
-                                          'Authorization':
-                                              'key=AAAATDAzS6c:APA91bFZhr4WPrr1tqt9iZ-s4MS0gODumBAJwl5TAL6czX0BtYrN_qj7-gaedAlILR87vaflnG1Ok7IhfPSHP1aTmbA-woxuMg_tUEaouLtiugUV6ZLEqFD_RipGY52DF2r87elf4eJM'
-                                        }),
-                                    print("notificaiton sent")
+                                    sendPushNotification(trainerDeviceToken),
                                   })
                               .then((value) => Navigator.pushReplacement(
                                   context,
@@ -507,7 +526,8 @@ class _TrainerProfileState extends State<TrainerProfile> {
                                               trainerProfile.firstName;
                                           String tID = trainerProfile.id;
                                           String trainerDeviceToken =
-                                              trainerProfile.id;
+                                              trainerProfile.deviceToken;
+                                          print(trainerDeviceToken);
 
                                           _showAlertDialog(
                                               name, tID, trainerDeviceToken);
