@@ -9,7 +9,11 @@ import '../screens/trainer/trainerplans/customDayList.dart';
 
 class CustomPlanCard extends StatelessWidget {
   final CustomExerciseModel customPlanmodel;
-  const CustomPlanCard({Key? key, required this.customPlanmodel}) : super(key: key);
+  final VoidCallback onPressed;
+
+  const CustomPlanCard(
+      {Key? key, required this.customPlanmodel, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +31,11 @@ class CustomPlanCard extends StatelessWidget {
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                
                 Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
                   child: Text(
                     customPlanmodel.planName,
                     style: GoogleFonts.montserrat(
@@ -41,6 +44,7 @@ class CustomPlanCard extends StatelessWidget {
                         fontWeight: FontWeight.w600),
                   ),
                 ),
+                IconButton(onPressed: onPressed, icon: Icon(Icons.edit))
               ],
             ),
           ),

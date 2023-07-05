@@ -88,8 +88,15 @@ class _WorkoutPlanState extends State<WorkoutPlan> {
                                     itemCount: snapshot.data!.length,
                                     itemBuilder: (context, index) {
                                       return CustomPlanCard(
-                                          customPlanmodel:
-                                              snapshot.data![index]);
+                                        customPlanmodel: snapshot.data![index],
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DayListCustom(planUid: snapshot.data![index].id,)));
+                                        },
+                                      );
                                     });
                               } else {
                                 return const Center(

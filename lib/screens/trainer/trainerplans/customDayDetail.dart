@@ -181,35 +181,6 @@ class _CustomDayDetailState extends State<CustomDayDetail> {
                                                               FontWeight.w600),
                                                     ),
                                                   ),
-                                                  ElevatedButton(
-                                                    onPressed: () => {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  const DayListCustom()))
-                                                    },
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      elevation: 0,
-                                                      backgroundColor:
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .secondary,
-                                                      // padding: const EdgeInsets.symmetric(vertical: 14),
-                                                    ),
-                                                    child: Text(
-                                                      'Edit',
-                                                      style: GoogleFonts
-                                                          .notoSansMono(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                    ),
-                                                  ),
                                                   TextButton(
                                                     onPressed: () {
                                                       controller.nextPage(

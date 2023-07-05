@@ -16,6 +16,7 @@ class PlanName extends StatefulWidget {
 class _PlanNameState extends State<PlanName> {
   String? planName;
   late Box dataBox;
+  String? planUid;
 
   String? _selectedLevel;
   Color _borderColor = Colors.white;
@@ -26,6 +27,7 @@ class _PlanNameState extends State<PlanName> {
 
   CollectionReference exercise =
       FirebaseFirestore.instance.collection('exercise');
+
   @override
   void initState() {
     dataBox = Hive.box('storage');
@@ -226,9 +228,15 @@ class _PlanNameState extends State<PlanName> {
                     _newDescController.text != '' &&
                     _timeController.text != '' &&
                     _selectedLevel != null) {
-                  await dataBox.put('planName', _planNameController.text);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DayListCustom()));
+                  // await dataBox.put('planName', _planNameController.text);
+                  // await dataBox.put('planUid', exercise.doc().id);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DayListCustom(
+                            planUid: _planNameController.text,
+                                
+                              )));
                   FirebaseFirestore.instance
                       .collection('exercises')
                       .doc(_planNameController.text)
@@ -237,7 +245,8 @@ class _PlanNameState extends State<PlanName> {
                     "level": _selectedLevel,
                     "description": _newDescController.text,
                     "exerciseDuration": _timeController.text,
-                    "createBy": user!.uid
+                    "createBy": user!.uid,
+                    "planUid": exercise.doc().id,
                   });
                 } else {
                   SnackBar snackBar = SnackBar(
