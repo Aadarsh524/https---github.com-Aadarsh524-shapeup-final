@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
-import 'package:shapeup/screens/trainer/trainerplans/customworkout.dart';
-import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
 import 'package:shapeup/screens/trainer/userSpecificWorkout/addWorkout.dart';
 
-import '../../../models/exercise_detail_model.dart';
-import '../../../services/exerciseService.dart';
+import '../../../models/exercise/exercise_detail_model.dart';
+import '../../../services/exercise/exercise_service.dart';
 import 'dayList.dart';
 
 class AddUserExercise extends StatefulWidget {

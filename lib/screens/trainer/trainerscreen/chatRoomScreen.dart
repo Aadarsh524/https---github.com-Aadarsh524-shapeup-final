@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainer_chat_screen.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
-import 'package:shapeup/services/chat_service.dart';
-import '../../../models/chat_room_model.dart';
-import '../../../models/trainee_profile_model.dart';
-import '../../../services/traineeprofileservice.dart';
+import 'package:shapeup/services/chat/chat_service.dart';
+import '../../../models/chat/chat_room_model.dart';
+import '../../../models/profile/trainee_profile_model.dart';
+import '../../../services/profile/trainee_profile_service.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   const ChatRoomScreen({Key? key}) : super(key: key);
@@ -83,7 +83,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       print(traineeProfile);
 
                       print(traineeProfile!.userImage);
-                     
 
                       return Container(
                         padding: const EdgeInsets.only(

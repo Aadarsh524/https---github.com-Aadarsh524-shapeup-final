@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive/hive.dart';
-import 'package:shapeup/services/chat_service.dart';
+import 'package:shapeup/services/chat/chat_service.dart';
 
-import '../../../models/chat_model.dart';
-import '../../../models/trainee_profile_model.dart';
-import '../../../models/trainer_profile_model.dart';
-import '../../../services/traineeprofileservice.dart';
-import '../../../services/trainerprofileservice.dart';
+import '../../../models/chat/chat_model.dart';
+import '../../../models/profile/trainee_profile_model.dart';
+import '../../../services/profile/trainee_profile_service.dart';
 
 class TrainerChatScreen extends StatefulWidget {
   final String chatRoomID;

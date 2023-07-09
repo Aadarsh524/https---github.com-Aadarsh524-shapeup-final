@@ -5,7 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../screens/user/notification/notificationscreen.dart';
+import '../../screens/user/notification/notificationscreen.dart';
 
 class NotificationServices {
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;

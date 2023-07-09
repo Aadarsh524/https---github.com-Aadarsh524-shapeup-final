@@ -10,8 +10,8 @@ class TraineeProfileModel {
 
   String userImage;
   String userType;
-  
 
+  List purchasedPlans;
   final String id;
   String phone;
 
@@ -28,6 +28,6 @@ class TraineeProfileModel {
     required this.height,
     required this.weight,
     required this.bmi,
-    
+    required this.purchasedPlans,
   });
 }

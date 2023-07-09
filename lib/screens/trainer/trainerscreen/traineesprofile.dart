@@ -7,15 +7,11 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/chatRoomScreen.dart';
 import 'package:shapeup/screens/trainer/trainerplans/customworkout.dart';
-import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
 import 'package:shapeup/screens/trainer/userSpecificWorkout/dayList.dart';
-import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 
-import '../../../models/trainee_profile_model.dart';
-import '../../../models/trainer_profile_model.dart';
-import '../../../services/traineeprofileservice.dart';
-import '../../../services/trainerprofileservice.dart';
+import '../../../models/profile/trainee_profile_model.dart';
+import '../../../services/profile/trainee_profile_service.dart';
 
 class TraineeProfile extends StatefulWidget {
   final String docId;

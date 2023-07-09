@@ -7,7 +7,7 @@ import 'package:page_transition/page_transition.dart';
 
 // import '../../../../services/firebaseservices.dart';
 
-import '../../../services/local_notification_service.dart';
+import '../../../services/notification/local_notification_service.dart';
 import '../../login_screen.dart';
 import 'edit_trainer_profile.dart';
 
@@ -497,14 +497,13 @@ class _TrainerProfileState extends State<TrainerProfile> {
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
             //LocalNotificationServices().cancelUserNotifications();
-                                        
+
             GoogleSignIn googleSignIn = GoogleSignIn();
             await googleSignIn.signOut();
             await dataBox.clear();
             await _firebaseAuth.signOut().then((value) => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginScreen())));
-
           },
           backgroundColor: Color.fromARGB(255, 214, 21, 11),
           label: SizedBox(

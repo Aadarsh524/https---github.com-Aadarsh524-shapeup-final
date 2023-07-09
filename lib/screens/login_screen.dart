@@ -6,9 +6,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
-import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/register_screen.dart';
+
+import 'user/dashboard/dashboardscreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -63,7 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
       UserCredential result = await auth.signInWithCredential(authCredential);
 
       if (result.additionalUserInfo!.isNewUser) {
-        print("New User");
         SnackBar snackBar = SnackBar(
           padding: const EdgeInsets.all(20),
           backgroundColor: Colors.white,
@@ -84,8 +84,6 @@ class _LoginScreenState extends State<LoginScreen> {
         GoogleSignIn googleSignIn = GoogleSignIn();
         await googleSignIn.signOut();
       } else {
-        print("Old User");
-
         final User? user = auth.currentUser;
         await FirebaseFirestore.instance
             .collection('users')
@@ -93,8 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
             .get()
             .then((DocumentSnapshot documentSnapshot) async {
           if (documentSnapshot.exists) {
-            print("User Data");
-
             dataBox = Hive.box('storage');
             Map<String, dynamic> data =
                 documentSnapshot.data() as Map<String, dynamic>;
@@ -163,7 +159,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   PageTransition(
                       type: PageTransitionType.fade,
                       duration: const Duration(milliseconds: 250),
-                      child: const DashBoardScreen()));
+                      child: const DashBoardScreen(
+                        selectedIndex: 0,
+                      )));
             } else {
               userType = data['userType'];
               firstName = data['firstName'];
@@ -194,7 +192,6 @@ class _LoginScreenState extends State<LoginScreen> {
               await dataBox.put('email', email);
               await dataBox.put('deviceToken', deviceToken);
 
-              print(firstName);
               // ignore: use_build_context_synchronously
               Navigator.pushReplacement(
                   context,
@@ -204,8 +201,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const TrainerPage()));
             }
           } else {
-            print("Registration process was not completed.");
-
             SnackBar snackBar = SnackBar(
               padding: const EdgeInsets.all(20),
               backgroundColor: Colors.white,
@@ -291,7 +286,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: .5,
                           letterSpacing: 0.5,
                           fontSize: 16,
-                          color: Color.fromARGB(255, 125, 128, 122),
+                          color: const Color.fromARGB(255, 125, 128, 122),
                         ),
                       ),
                       Text(
@@ -300,7 +295,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.w600,
                           letterSpacing: 2,
                           fontSize: 28,
-                          color: Color.fromARGB(255, 190, 227, 57),
+                          color: const Color.fromARGB(255, 190, 227, 57),
                         ),
                       ),
                       const SizedBox(
@@ -312,7 +307,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: .5,
                           letterSpacing: 0.5,
                           fontSize: 12,
-                          color: Color.fromARGB(255, 125, 128, 122),
+                          color: const Color.fromARGB(255, 125, 128, 122),
                         ),
                       ),
                       const SizedBox(
@@ -356,8 +351,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: GoogleFonts.montserrat(
                               letterSpacing: .4,
                               fontSize: 11,
-                              color:
-                                  Color.fromARGB(255, 0, 0, 0).withOpacity(.65),
+                              color: const Color.fromARGB(255, 0, 0, 0)
+                                  .withOpacity(.65),
                             ),
                           ),
                           GestureDetector(
@@ -367,7 +362,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 letterSpacing: .4,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
-                                color: Color.fromARGB(255, 25, 170, 151),
+                                color: const Color.fromARGB(255, 25, 170, 151),
                               ),
                             ),
                             onTap: () {
