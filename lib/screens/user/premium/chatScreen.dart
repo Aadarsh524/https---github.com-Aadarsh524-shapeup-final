@@ -4,11 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/user/premium/trainerProfile.dart';
-import 'package:shapeup/services/chat_service.dart';
+import 'package:shapeup/services/chat/chat_service.dart';
 
-import '../../../models/chat_model.dart';
-import '../../../models/trainer_profile_model.dart';
-import '../../../services/trainerprofileservice.dart';
+import '../../../models/chat/chat_model.dart';
+import '../../../models/profile/trainer_profile_model.dart';
+import '../../../services/profile/trainer_profile_service.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);

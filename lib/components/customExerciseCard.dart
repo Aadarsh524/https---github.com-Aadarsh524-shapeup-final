@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shapeup/models/custom_exercise_model.dart';
+import 'package:shapeup/models/exercise/custom_exercise_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shapeup/screens/user/exercise/customDayList.dart';
 

@@ -4,16 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shapeup/components/exercise_card.dart';
-import 'package:shapeup/models/custom_exercise_model.dart';
-import 'package:shapeup/models/exercise_model.dart';
+import 'package:shapeup/models/exercise/custom_exercise_model.dart';
 import 'package:shapeup/screens/trainer/trainerplans/planName.dart';
 import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
-import 'package:shapeup/screens/user/premium/subscription_screen.dart';
-import 'package:shapeup/services/exerciseService.dart';
 
 import '../../../components/customPlanCard.dart';
+import '../../../services/exercise/exercise_service.dart';
 
 class WorkoutPlan extends StatefulWidget {
   const WorkoutPlan();
@@ -94,7 +91,10 @@ class _WorkoutPlanState extends State<WorkoutPlan> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      DayListCustom(planUid: snapshot.data![index].id,)));
+                                                      DayListCustom(
+                                                        planUid: snapshot
+                                                            .data![index].id,
+                                                      )));
                                         },
                                       );
                                     });

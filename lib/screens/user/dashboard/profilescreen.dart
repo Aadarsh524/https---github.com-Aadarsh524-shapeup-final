@@ -8,7 +8,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/login_screen.dart';
 import 'package:shapeup/screens/user/premium/subscription_screen.dart';
 
-import '../../../services/local_notification_service.dart';
+import '../../../services/notification/local_notification_service.dart';
 import 'editprofilescreen.dart';
 
 class ProfileScreen extends StatefulWidget {

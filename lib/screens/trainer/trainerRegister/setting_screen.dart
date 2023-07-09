@@ -6,7 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../services/notification_services.dart';
+import '../../../services/notification/notification_services.dart';
 
 class SettingUpScreenT extends StatefulWidget {
   const SettingUpScreenT({Key? key}) : super(key: key);

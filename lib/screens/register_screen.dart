@@ -5,10 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shapeup/bloc/cubit/register_cubit.dart';
-import 'package:shapeup/screens/trainer/trainerRegister/agescreen.dart';
 import 'package:shapeup/screens/trainer/trainerRegister/genderscreen.dart';
-
-import 'package:shapeup/screens/user/userRegister/agescreen.dart';
+import 'package:shapeup/screens/user/registration/agescreen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -70,8 +68,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         await dataBox.put('email', email);
 
         if (selectedType.name == 'trainee') {
-          print("registersucessfull");
-
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(
               context,
@@ -159,7 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: .5,
                             letterSpacing: 0.5,
                             fontSize: 16,
-                            color: Color.fromARGB(255, 125, 128, 122),
+                            color: const Color.fromARGB(255, 125, 128, 122),
                           ),
                         ),
                         Form(
@@ -331,7 +327,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: GoogleFonts.montserrat(
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
-                              color: Color.fromRGBO(142, 153, 183, 0.5),
+                              color: const Color.fromRGBO(142, 153, 183, 0.5),
                             ),
                           ),
                         ),

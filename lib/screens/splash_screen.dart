@@ -8,7 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:shapeup/screens/login_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
-import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
+import 'package:shapeup/screens/user/dashboard/dashboardscreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
           print(userType);
         }
       }).then((value) => Timer(
-                const Duration(seconds: 3),
+                const Duration(seconds: 2),
                 () => Navigator.pushReplacement(
                   context,
                   PageTransition(
@@ -48,7 +48,9 @@ class _SplashScreenState extends State<SplashScreen> {
                       duration: const Duration(milliseconds: 300),
                       child: (userType == 'trainer'
                           ? const TrainerPage()
-                          : const DashBoardScreen())),
+                          : const DashBoardScreen(
+                              selectedIndex: 0,
+                            ))),
                 ),
               ));
     } else {

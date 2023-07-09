@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shapeup/models/custom_exercise_model.dart';
-import 'package:shapeup/models/exercise_model.dart';
+import 'package:shapeup/models/exercise/custom_exercise_model.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
-import 'package:shapeup/screens/user/exercise/exercisedaylist.dart';
 
 import '../screens/trainer/trainerplans/customDayList.dart';
 
@@ -39,12 +36,12 @@ class CustomPlanCard extends StatelessWidget {
                   child: Text(
                     customPlanmodel.planName,
                     style: GoogleFonts.montserrat(
-                        color: Color.fromARGB(255, 226, 226, 226),
+                        color: const Color.fromARGB(255, 226, 226, 226),
                         fontSize: 16,
                         fontWeight: FontWeight.w600),
                   ),
                 ),
-                IconButton(onPressed: onPressed, icon: Icon(Icons.edit))
+                IconButton(onPressed: onPressed, icon: const Icon(Icons.edit))
               ],
             ),
           ),

@@ -4,7 +4,7 @@ import 'package:shapeup/screens/user/diet/dietscreen.dart';
 
 import 'package:shapeup/screens/user/exercise/exercisescreen.dart';
 
-import 'package:shapeup/screens/user/userDashboard/homescreen.dart';
+import 'package:shapeup/screens/user/dashboard/homescreen.dart';
 import 'package:shapeup/screens/user/notification/notificationscreen.dart';
 import 'package:shapeup/screens/user/premium/premiumscreen.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -13,7 +13,8 @@ import '../exerciseFromTrainer/exerciseFromTrainerScreen.dart';
 
 class DashBoardScreen extends StatefulWidget {
   final int? selectedIndex;
-  const DashBoardScreen({Key? key, this.selectedIndex}) : super(key: key);
+  const DashBoardScreen({Key? key, required this.selectedIndex})
+      : super(key: key);
 
   @override
   State<DashBoardScreen> createState() => _DashBoardScreenState();

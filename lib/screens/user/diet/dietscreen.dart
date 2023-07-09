@@ -6,8 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import '../../../components/diet_card.dart';
-import '../../../models/diet_model.dart';
-import '../../../services/dietService.dart';
+import '../../../models/diet/diet_model.dart';
+import '../../../services/diet/diet_service.dart';
 
 class DietScreen extends StatefulWidget {
   const DietScreen({Key? key}) : super(key: key);

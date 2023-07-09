@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/chat_model.dart';
-import '../models/chat_room_model.dart';
+import '../../models/chat/chat_model.dart';
+import '../../models/chat/chat_room_model.dart';
 
 class ChatService {
   final CollectionReference chatscollection =

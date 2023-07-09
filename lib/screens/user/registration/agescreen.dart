@@ -5,9 +5,9 @@ import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:shapeup/models/profile.dart';
-import 'package:shapeup/screens/user/userRegister/genderscreen.dart';
-import 'package:shapeup/screens/user/userRegister/heightscreen.dart';
+import 'package:shapeup/models/profile/profile.dart';
+import 'package:shapeup/screens/user/registration/genderscreen.dart';
+import 'package:shapeup/screens/user/registration/heightscreen.dart';
 
 class AgeScreen extends StatefulWidget {
   const AgeScreen({Key? key}) : super(key: key);

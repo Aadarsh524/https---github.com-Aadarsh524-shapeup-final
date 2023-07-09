@@ -5,7 +5,7 @@ import 'package:shapeup/screens/user/diet/daily_diet_plan_page.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../../models/diet_model.dart';
+import '../../../models/diet/diet_model.dart';
 
 class DietDetailPage extends StatelessWidget {
   final DietModel dietModel;

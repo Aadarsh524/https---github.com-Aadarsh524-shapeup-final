@@ -5,8 +5,8 @@ import 'package:shapeup/screens/user/exercise/exerciserunscreen.dart';
 
 import 'package:styled_widget/styled_widget.dart';
 
-import '../../../models/exercise_detail_model.dart';
-import '../../../services/exerciseService.dart';
+import '../../../models/exercise/exercise_detail_model.dart';
+import '../../../services/exercise/exercise_service.dart';
 import 'package:wakelock/wakelock.dart';
 
 class Trainerexercisedaydetail extends StatefulWidget {
@@ -39,23 +39,20 @@ class _TrainerexercisedaydetailState extends State<Trainerexercisedaydetail> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(widget.dayindex);
-    print(widget.docId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 28, 28, 30),
+      backgroundColor: const Color.fromARGB(255, 28, 28, 30),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         shape: const Border(
             bottom:
                 BorderSide(color: Color.fromARGB(255, 190, 227, 57), width: 1)),
         toolbarHeight: 60,
-        backgroundColor: Color.fromARGB(255, 28, 28, 30),
+        backgroundColor: const Color.fromARGB(255, 28, 28, 30),
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Padding(

@@ -8,12 +8,12 @@ import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/traineesprofile.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainerprofile.dart';
-import 'package:shapeup/services/traineeprofileservice.dart';
+import 'package:shapeup/services/profile/trainee_profile_service.dart';
 
-import '../../../models/trainee_profile_model.dart';
-import '../../../models/trainer_profile_model.dart';
-import '../../../services/notification_services.dart';
-import '../../../services/trainerprofileservice.dart';
+import '../../../models/profile/trainee_profile_model.dart';
+import '../../../models/profile/trainer_profile_model.dart';
+import '../../../services/notification/notification_services.dart';
+import '../../../services/profile/trainer_profile_service.dart';
 
 class HomePageT extends StatefulWidget {
   const HomePageT({Key? key}) : super(key: key);
