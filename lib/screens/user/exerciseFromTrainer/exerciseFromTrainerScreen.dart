@@ -2,17 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:shapeup/components/exercise_card.dart';
-import 'package:shapeup/models/exercise_model.dart';
-import 'package:shapeup/screens/user/exercise/customexercisedaydetail.dart';
 import 'package:shapeup/screens/user/exerciseFromTrainer/trainerexercisedaydetail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../components/customExerciseCard.dart';
-import '../../../components/customPlanCard.dart';
-import '../../../models/custom_exercise_model.dart';
-import '../../../services/exerciseService.dart';
+import '../../../services/exercise/exercise_service.dart';
 
 class ExerciseFromTrainerScreen extends StatefulWidget {
   const ExerciseFromTrainerScreen({Key? key}) : super(key: key);

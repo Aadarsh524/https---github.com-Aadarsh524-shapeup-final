@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shapeup/models/daily_diet_model.dart';
-import 'package:shapeup/models/diet_model.dart';
+import 'package:shapeup/models/diet/daily_diet_model.dart';
+import 'package:shapeup/models/diet/diet_model.dart';
 
 class DietService {
   final String? docID;

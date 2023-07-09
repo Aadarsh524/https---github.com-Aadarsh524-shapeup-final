@@ -3,12 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shapeup/screens/user/notification/notificationscreen.dart';
 
-import '../models/trainee_profile_model.dart';
+import '../../models/profile/trainee_profile_model.dart';
 
 class TraineeProfileService {
   User? users = FirebaseAuth.instance.currentUser;
   final userId = FirebaseAuth.instance.currentUser?.uid;
-  
+
   TraineeProfileService();
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
@@ -37,6 +37,7 @@ class TraineeProfileService {
           height: doc.get("height") ?? '',
           weight: doc.get("weight") ?? '',
           bmi: doc.get("bmi") ?? '',
+          purchasedPlans: doc.get("purchasedPlans"),
         );
         traineeProfiles.add(traineeProfile);
       }
@@ -65,6 +66,7 @@ class TraineeProfileService {
         height: snapshot.get("height") ?? '',
         weight: snapshot.get("weight") ?? '',
         bmi: snapshot.get("bmi") ?? '',
+        purchasedPlans: snapshot.get("purchasedPlans"),
       );
       return traineeProfile;
     }

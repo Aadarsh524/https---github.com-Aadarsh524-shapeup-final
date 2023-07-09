@@ -1,17 +1,18 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 
-import '../../../models/trainer_profile_model.dart';
-import '../../../services/trainerprofileservice.dart';
-import 'package:dio/dio.dart';
+import '../../../models/profile/trainer_profile_model.dart';
+
+import '../../../services/profile/trainer_profile_service.dart';
+import '../dashboard/dashboardscreen.dart';
 
 class TrainerProfile extends StatefulWidget {
   final String docId;
@@ -158,7 +159,9 @@ class _TrainerProfileState extends State<TrainerProfile> {
                                       type: PageTransitionType.fade,
                                       duration:
                                           const Duration(milliseconds: 250),
-                                      child: const DashBoardScreen())))
+                                      child: const DashBoardScreen(
+                                        selectedIndex: 0,
+                                      ))))
                         });
               },
             ),

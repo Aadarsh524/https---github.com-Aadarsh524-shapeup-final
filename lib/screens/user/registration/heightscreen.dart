@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:shapeup/screens/user/userRegister/weightscreen.dart';
+import 'package:shapeup/screens/user/registration/weightscreen.dart';
 
 class HeightScreen extends StatefulWidget {
   const HeightScreen({Key? key}) : super(key: key);

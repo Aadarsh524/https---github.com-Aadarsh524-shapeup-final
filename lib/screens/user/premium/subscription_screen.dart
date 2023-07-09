@@ -7,7 +7,7 @@ import 'package:shapeup/models/subscription_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
+import 'package:shapeup/screens/user/dashboard/dashboardscreen.dart';
 
 class SubscriptionPage extends StatefulWidget {
   const SubscriptionPage({Key? key}) : super(key: key);
@@ -270,7 +270,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                           PageTransition(
                               type: PageTransitionType.fade,
                               duration: const Duration(milliseconds: 300),
-                              child: const DashBoardScreen())))
+                              child: const DashBoardScreen(
+                                selectedIndex: 0,
+                              ))))
                       .then((value) => Future(() {
                             SnackBar successsnackBar = SnackBar(
                               padding: const EdgeInsets.all(20),

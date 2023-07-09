@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shapeup/screens/user/exercise/customexercisedaydetail.dart';
-import '../../../models/exercise/custom_exercise_model.dart';
-import '../../../services/exercise/exercise_service.dart';
 
-class CustomDayList extends StatelessWidget {
-  final CustomExerciseModel exercisemodel;
-  const CustomDayList({Key? key, required this.exercisemodel})
+import '../../../services/exercise/exercise_service.dart';
+import 'customexercisedaydetail.dart';
+import 'exercisedaydetail.dart';
+
+class PurchasedExerciseDayList extends StatelessWidget {
+  final String docId;
+  const PurchasedExerciseDayList({Key? key, required this.docId})
       : super(key: key);
 
   @override
@@ -54,11 +55,11 @@ class CustomDayList extends StatelessWidget {
         ),
         body: SafeArea(
           child: FutureBuilder<DocumentSnapshot<Object?>>(
-            future: ExerciseService(docID: exercisemodel.id).list,
+            future: ExerciseService(docID: docId).list,
             builder: ((context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
-                    //shrinkWrap: true,
+                    shrinkWrap: true,
                     itemCount: 7,
                     itemBuilder: (context, listindex) {
                       return GestureDetector(
@@ -68,7 +69,7 @@ class CustomDayList extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (_) => Customexercisedaydetail(
                                         dayindex: listindex + 1,
-                                        docId: exercisemodel.id,
+                                        docId: docId,
                                       ))),
                         },
                         child: Card(
@@ -78,23 +79,20 @@ class CustomDayList extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           elevation: 10.0,
-                          child: Expanded(
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text(
-                                    "Day ${listindex + 1}",
-                                    textAlign: TextAlign.left,
-                                    style: GoogleFonts.montserrat(
-                                        color:
-                                            Color.fromARGB(255, 226, 226, 226),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                )
-                              ],
-                            ),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Text(
+                                  "Day ${listindex + 1} ",
+                                  textAlign: TextAlign.left,
+                                  style: GoogleFonts.montserrat(
+                                      color: Color.fromARGB(255, 226, 226, 226),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       );

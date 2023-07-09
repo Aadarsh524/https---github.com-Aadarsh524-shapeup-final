@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shapeup/screens/user/userRegister/genderscreen.dart';
-import 'package:shapeup/screens/user/userRegister/heightscreen.dart';
+import 'package:shapeup/screens/user/registration/genderscreen.dart';
+import 'package:shapeup/screens/user/registration/heightscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:shapeup/screens/user/userRegister/imagepickerscreen.dart';
-import 'package:shapeup/screens/user/userRegister/settingScreen.dart';
+import 'package:shapeup/screens/user/registration/imagepickerscreen.dart';
+import 'package:shapeup/screens/user/registration/settingScreen.dart';
 
 class WeightScreen extends StatefulWidget {
   const WeightScreen({Key? key}) : super(key: key);

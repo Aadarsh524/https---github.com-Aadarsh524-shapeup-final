@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shapeup/models/exercise_model.dart';
+import 'package:shapeup/models/exercise/exercise_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shapeup/screens/user/exercise/exercisedaylist.dart';
 
@@ -31,7 +31,7 @@ class ExerciseCard extends StatelessWidget {
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10)),
                   child: Image.network(
-                    height: 180,
+                    height: 150,
                     width: double.infinity,
                     colorBlendMode: BlendMode.colorBurn,
                     exercisemodel.image,

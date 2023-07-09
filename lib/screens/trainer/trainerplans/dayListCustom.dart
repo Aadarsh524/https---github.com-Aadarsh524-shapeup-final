@@ -5,7 +5,7 @@ import 'package:shapeup/screens/trainer/trainerscreen/trainerscreen.dart';
 
 import 'package:shapeup/screens/trainer/trainerscreen/workoutplan.dart';
 
-import '../../../models/day_model.dart';
+import '../../../models/diet/day_model.dart';
 
 class DayListCustom extends StatefulWidget {
   final String planUid;

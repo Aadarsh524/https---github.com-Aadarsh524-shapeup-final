@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/diet_model.dart';
+import '../models/diet/diet_model.dart';
 
 class DietDetailPage extends StatelessWidget {
   final DietModel dietModel;

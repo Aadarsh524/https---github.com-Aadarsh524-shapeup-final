@@ -1,11 +1,7 @@
-import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shapeup/models/diet_model.dart';
+import 'package:shapeup/models/diet/diet_model.dart';
 import 'package:shapeup/screens/user/diet/diet_detail_page.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 class DietCard extends StatefulWidget {
   final DietModel dietModel;

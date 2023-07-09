@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shapeup/screens/user/userDashboard/dashboardscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../services/notification_services.dart';
+import '../../../services/notification/notification_services.dart';
+import '../dashboard/dashboardscreen.dart';
 
 class SettingUpScreen extends StatefulWidget {
   const SettingUpScreen({Key? key}) : super(key: key);
@@ -116,7 +116,9 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
                       PageTransition(
                           type: PageTransitionType.fade,
                           duration: const Duration(milliseconds: 250),
-                          child: const DashBoardScreen()))
+                          child: const DashBoardScreen(
+                            selectedIndex: 0,
+                          )))
                 })
             .catchError((error) => print("Failed to add user: $error"));
       });

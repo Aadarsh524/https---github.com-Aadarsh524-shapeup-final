@@ -5,7 +5,7 @@ class DayCard extends StatelessWidget {
   final List<String> days;
   final Function(String) onTap;
 
-  const DayCard({required this.days, required this.onTap});
+  const DayCard({super.key, required this.days, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class DayCard extends StatelessWidget {
                 'Select Day',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.montserrat(
-                  color: Color.fromARGB(255, 190, 227, 57),
+                  color: const Color.fromARGB(255, 190, 227, 57),
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
@@ -26,13 +26,13 @@ class DayCard extends StatelessWidget {
             ),
             ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: days.length,
               itemBuilder: (context, index) {
                 final day = days[index];
                 return Card(
                   elevation: 15,
-                  color: Color.fromARGB(255, 114, 97, 89),
+                  color: const Color.fromARGB(255, 114, 97, 89),
                   shadowColor: Colors.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
