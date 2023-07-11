@@ -5,11 +5,11 @@ import 'package:firebase_messaging_platform_interface/src/remote_message.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:shapeup/screens/user/premium/subscription_screen.dart';
-import 'package:shapeup/screens/user/userDashboard/profilescreen.dart';
+import 'package:shapeup/screens/user/dashboard/profilescreen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shapeup/services/notification_services.dart';
-import '../../../services/local_notification_service.dart';
+import 'package:shapeup/services/notification/notification_services.dart';
+import '../../../services/notification/local_notification_service.dart';
 import '../../../services/stepstracker.dart';
 import 'package:intl/intl.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool premium;
   late String sleepTime;
   late String exerciseTime;
+  late String userImage;
 
   DateTime date = DateTime.now();
   String? week;
@@ -58,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
         value: newSleepTime,
         onChange: onTimeChanged,
         minuteInterval: TimePickerInterval.FIVE,
-        // Optional onChange to receive value as DateTime
         onChangeDateTime: (DateTime dateTime) async {
           {
             String formattedSleepTime = DateFormat('h:mm a').format(dateTime);
@@ -155,6 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
     premium = dataBox.get('premium');
     sleepTime = dataBox.get("sleepTime").toString();
     exerciseTime = dataBox.get("exerciseTime").toString();
+    userImage = dataBox.get("userImage");
   }
 
   @override
@@ -174,30 +175,61 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                      width: 40,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.fade,
+                          duration: const Duration(milliseconds: 300),
+                          child: const ProfileScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
                       height: 40,
+                      width: 40,
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: Color.fromARGB(255, 190, 227, 57),
-                              width: 2),
+                              width: 3,
+                              color: const Color.fromARGB(255, 190, 227, 57)),
                           borderRadius: BorderRadius.circular(50)),
-                      child: IconButton(
-                        color: Colors.white,
-                        iconSize: 24,
-                        padding: const EdgeInsets.all(0),
-                        icon: const Icon(Icons.person_outlined),
-                        onPressed: () async {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.fade,
-                              duration: const Duration(milliseconds: 300),
-                              child: const ProfileScreen(),
-                            ),
-                          );
-                        },
-                      )),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
+                          child: Image.network(
+                            fit: BoxFit.fill,
+                            userImage,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Container(
+                  //     width: 40,
+                  //     height: 40,
+                  //     decoration: BoxDecoration(
+                  //         border: Border.all(
+                  //             color: Color.fromARGB(255, 190, 227, 57),
+                  //             width: 2),
+                  //         borderRadius: BorderRadius.circular(50)),
+                  //     child: IconButton(
+                  //       color: Colors.white,
+                  //       iconSize: 24,
+                  //       padding: const EdgeInsets.all(0),
+                  //       icon: const Icon(Icons.person_outlined),
+                  //       onPressed: () async {
+                  //         Navigator.push(
+                  //           context,
+                  //           PageTransition(
+                  //             type: PageTransitionType.fade,
+                  //             duration: const Duration(milliseconds: 300),
+                  //             child: const ProfileScreen(),
+                  //           ),
+                  //         );
+                  //       },
+                  //     )),
                   const SizedBox(
                     width: 25,
                   ),
@@ -237,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     textAlign: TextAlign.left,
                     style: GoogleFonts.montserrat(
                         letterSpacing: .5,
-                        color: Color.fromARGB(255, 166, 181, 106),
+                        color: const Color.fromARGB(255, 166, 181, 106),
                         fontSize: 15,
                         fontWeight: FontWeight.w500),
                   ),
@@ -263,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)),
                             ),
-                            color: Color.fromARGB(255, 190, 227, 57),
+                            color: const Color.fromARGB(255, 190, 227, 57),
                             child: Padding(
                               padding: const EdgeInsets.all(15.0),
                               child: Column(

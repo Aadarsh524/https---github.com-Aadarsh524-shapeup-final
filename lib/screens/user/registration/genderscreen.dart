@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shapeup/components/gendercard.dart';
-import 'package:shapeup/screens/user/userRegister/heightscreen.dart';
+import 'package:shapeup/screens/user/registration/heightscreen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

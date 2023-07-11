@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/user/exercise/exercisecompletedscreen.dart';
 import 'package:shapeup/screens/user/exercise/restscreen.dart';
-import '../../../models/exercise_detail_model.dart';
+import '../../../models/exercise/exercise_detail_model.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:wakelock/wakelock.dart';
 

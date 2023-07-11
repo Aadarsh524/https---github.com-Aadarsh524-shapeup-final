@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shapeup/models/daily_diet_model.dart';
-import 'package:shapeup/services/dietService.dart';
+import 'package:shapeup/models/diet/daily_diet_model.dart';
+import 'package:shapeup/services/diet/diet_service.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class DailyDietPlanPage extends StatefulWidget {

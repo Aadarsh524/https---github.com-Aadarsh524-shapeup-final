@@ -3,11 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
-import 'package:shapeup/models/exercise_detail_model.dart';
+import 'package:shapeup/models/exercise/exercise_detail_model.dart';
 import 'package:shapeup/screens/trainer/trainerplans/exercises.dart';
-import 'package:shapeup/screens/trainer/trainerplans/planName.dart';
-import 'package:shapeup/services/exerciseService.dart';
+
+import '../../../services/exercise/exercise_service.dart';
 
 class UpdateWork extends StatefulWidget {
   final String dayIndex;

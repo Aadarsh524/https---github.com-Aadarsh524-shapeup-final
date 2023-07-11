@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/user/exercise/exerciserunscreen.dart';
-
 import 'package:styled_widget/styled_widget.dart';
-
-import '../../../models/exercise_detail_model.dart';
-import '../../../services/exerciseService.dart';
+import '../../../models/exercise/exercise_detail_model.dart';
 import 'package:wakelock/wakelock.dart';
+
+import '../../../services/exercise/exercise_service.dart';
 
 class ExerciseDayDetail extends StatefulWidget {
   final String docId;
@@ -38,7 +37,6 @@ class _ExerciseDayDetailState extends State<ExerciseDayDetail> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     print(widget.dayindex);
     print(widget.docId);

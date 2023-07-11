@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shapeup/models/exercise_model.dart';
+import 'package:shapeup/models/exercise/exercise_model.dart';
 import 'package:shapeup/screens/user/exercise/exercisedaydetail.dart';
 
-import '../../../services/exerciseService.dart';
+import '../../../services/exercise/exercise_service.dart';
 
 class ExerciseDayList extends StatelessWidget {
   final ExerciseModel exercisemodel;

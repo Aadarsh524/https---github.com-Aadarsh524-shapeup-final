@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shapeup/models/trainer_profile_model.dart';
+import 'package:shapeup/models/profile/trainer_profile_model.dart';
 import 'package:shapeup/screens/user/premium/trainerProfile.dart';
-import 'package:shapeup/services/trainerprofileservice.dart';
+import 'package:shapeup/services/profile/trainer_profile_service.dart';
 
 class TrainerListScreen extends StatefulWidget {
   const TrainerListScreen({

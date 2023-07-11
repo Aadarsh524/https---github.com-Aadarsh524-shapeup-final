@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/trainer_profile_model.dart';
+import '../../models/profile/trainer_profile_model.dart';
 
 class TrainerProfileService {
   TrainerProfileService();
@@ -40,6 +40,7 @@ class TrainerProfileService {
   }
 
   Future<TrainerProfileModel> trainerProfile(String docID) async {
+    print(docID);
     final docRef = usersCollection.doc(docID);
     final snapshot = await docRef.get();
     return _trainerProfileFromSnapshot(snapshot);
