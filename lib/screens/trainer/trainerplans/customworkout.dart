@@ -146,7 +146,7 @@ class _UpdateWorkState extends State<UpdateWork> {
                             },
                           );
                         } else {
-                          return Text('Something went wrong');
+                          return CircularProgressIndicator();
                         }
                       },
                     ),

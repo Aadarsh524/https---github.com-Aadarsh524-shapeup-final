@@ -23,6 +23,7 @@ class _PlanNameState extends State<PlanName> {
   final _planNameController = TextEditingController();
   final _newDescController = TextEditingController();
   final _timeController = TextEditingController();
+  final _moneyController = TextEditingController();
   User? user = FirebaseAuth.instance.currentUser;
 
   CollectionReference exercise =
@@ -215,6 +216,42 @@ class _PlanNameState extends State<PlanName> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 12, left: 5, right: 5),
+                  child: TextField(
+                    cursorColor: Colors.white,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                    controller: _moneyController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 39, 48, 81),
+                        ),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      hintText: "Plan price",
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 39, 48, 81),
+                        ),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.monetization_on,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -227,15 +264,15 @@ class _PlanNameState extends State<PlanName> {
                 if (_planNameController.text != '' &&
                     _newDescController.text != '' &&
                     _timeController.text != '' &&
-                    _selectedLevel != null) {
+                    _selectedLevel != null &&
+                    _moneyController.text != '') {
                   // await dataBox.put('planName', _planNameController.text);
                   // await dataBox.put('planUid', exercise.doc().id);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => DayListCustom(
-                            planUid: _planNameController.text,
-                                
+                                planUid: _planNameController.text,
                               )));
                   FirebaseFirestore.instance
                       .collection('exercises')
@@ -247,6 +284,7 @@ class _PlanNameState extends State<PlanName> {
                     "exerciseDuration": _timeController.text,
                     "createBy": user!.uid,
                     "planUid": exercise.doc().id,
+                    "planPrice": _moneyController.text,
                   });
                 } else {
                   SnackBar snackBar = SnackBar(
