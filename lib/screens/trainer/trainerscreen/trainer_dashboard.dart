@@ -6,10 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shapeup/components/trainerPlanCard.dart';
+import 'package:shapeup/models/exercise/custom_exercise_model.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/traineesprofile.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainerprofile.dart';
+import 'package:shapeup/services/exercise/exercise_service.dart';
 import 'package:shapeup/services/profile/trainee_profile_service.dart';
 
+import '../../../components/customPlanCard.dart';
 import '../../../models/profile/trainee_profile_model.dart';
 import '../../../models/profile/trainer_profile_model.dart';
 import '../../../services/notification/notification_services.dart';
@@ -132,7 +136,7 @@ class _HomePageTState extends State<HomePageT> {
                   ),
                 ),
                 SingleChildScrollView(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: SizedBox(
                     child: FutureBuilder<TrainerProfileModel?>(
                       future: TrainerProfileService()
@@ -272,6 +276,42 @@ class _HomePageTState extends State<HomePageT> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                //trainer Plans List
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(35, 10, 30, 10),
+                  child: Text(
+                    'Your Plans',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.montserrat(
+                      color: Color.fromARGB(255, 190, 227, 57),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                //trainer Plans List
+                FutureBuilder<List<CustomExerciseModel>>(
+                    future: ExerciseService().trainerPlanList,
+                    builder: ((context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return TrainerPlanCard(
+                                customPlanmodel: snapshot.data![index],
+                              );
+                            });
+                      } else {
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ));
+                      }
+                    })),
               ],
             ),
           ),
