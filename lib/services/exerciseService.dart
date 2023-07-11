@@ -16,9 +16,8 @@ class ExerciseService {
       FirebaseFirestore.instance.collection('allexercises');
   final CollectionReference customcollection =
       FirebaseFirestore.instance.collection('exercises');
-       final CollectionReference usercollection =
+  final CollectionReference usercollection =
       FirebaseFirestore.instance.collection('userSpecific');
-  
 
   final CollectionReference customcollectionfromTrainer =
       FirebaseFirestore.instance.collection('userSpecific');
@@ -136,6 +135,7 @@ class ExerciseService {
         description: doc.get('description') ?? '',
         duration: doc.get('duration').toString(),
         gif: doc.get('gif') ?? '',
+        id: doc.id,
       );
     }).toList();
   }
@@ -217,7 +217,7 @@ class ExerciseService {
     print(querySnapshot);
     return _customExericsePlan(querySnapshot);
   }
-  
+
   List<ExerciseDetailModel> _userSpecificPlan(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return ExerciseDetailModel(
