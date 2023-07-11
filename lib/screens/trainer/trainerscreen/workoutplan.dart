@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:shapeup/models/exercise/custom_exercise_model.dart';
 import 'package:shapeup/screens/trainer/trainerplans/planName.dart';
 import 'package:shapeup/screens/trainer/trainerplans/dayListCustom.dart';
@@ -20,12 +21,15 @@ class WorkoutPlan extends StatefulWidget {
 }
 
 class _WorkoutPlanState extends State<WorkoutPlan> {
+  //late final Box dataBox;
   bool isTrainerVerified = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // dataBox = Hive.box('storage');
+    // isTrainerVerified = dataBox.get('verifiedStatus');
 
     checkTrainerVerification();
   }

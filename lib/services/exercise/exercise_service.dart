@@ -8,6 +8,7 @@ import '../../models/exercise/custom_exercise_model.dart';
 class ExerciseService {
   final String? docID;
   final int? dayindex;
+  
 
   ExerciseService({this.docID, this.dayindex});
 
@@ -118,6 +119,32 @@ class ExerciseService {
     return customExerciseModel;
   }
 
+  Future<List<CustomExerciseModel>> get trainerPlanList async {
+    final snapshot = await customcollection.get();
+    
+    return _trainerPlanFromSnapshot(snapshot);
+  }
+
+  List<CustomExerciseModel> _trainerPlanFromSnapshot(QuerySnapshot snapshot) {
+    User? users = FirebaseAuth.instance.currentUser;
+    List<CustomExerciseModel> customExerciseModel = [];
+
+    for (var doc in snapshot.docs) {
+      if (doc['createBy'] == users!.uid) {
+        CustomExerciseModel customModel = CustomExerciseModel(
+          id: doc.id,
+          planName: doc['planName'] ?? '',
+          description: doc['description'] ?? '',
+          level: doc['level'] ?? '',
+          exerciseDuration: doc['exerciseDuration'] ?? '',
+          createBy: doc['createBy'] ?? '',
+        );
+        customExerciseModel.add(customModel);
+      }
+    }
+    return customExerciseModel;
+  }
+
   Future<List<ExerciseModel>> get exerciseInfo async {
     final snapshot = await exercisecollection.get();
     return _exerciseTypeFromSnapshot(snapshot);
@@ -171,7 +198,6 @@ class ExerciseService {
         description: doc.get('description') ?? '',
         duration: doc.get('duration').toString(),
         gif: doc.get('gif') ?? '',
-        
       );
     }).toList();
   }
