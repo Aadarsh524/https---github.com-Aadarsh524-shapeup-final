@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shapeup/screens/user/exercise/purchasedExerciseDayList.dart';
+import 'package:shapeup/screens/user/exercise/purchasedPlanDetailScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../models/exercise/exercise_model.dart';
@@ -45,7 +46,6 @@ class _PurchasedPlanScreenState extends State<PurchasedPlanScreen> {
                   const SizedBox(
                     height: 15,
                   ),
-
                   FutureBuilder<TraineeProfileModel?>(
                     future: TraineeProfileService().traineeProfile(user!.uid),
                     builder: (BuildContext context, snapshot) {
@@ -63,9 +63,9 @@ class _PurchasedPlanScreenState extends State<PurchasedPlanScreen> {
                         final traineeProfile = snapshot.data!;
 
                         final plans = traineeProfile.purchasedPlans;
+
                         List<String> plan = List<String>.from(plans);
 
-                        String planName = plan.join(', ');
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -74,18 +74,22 @@ class _PurchasedPlanScreenState extends State<PurchasedPlanScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
+                                children: List.generate(
+                                  plan.length,
+                                  (index) => Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10.0),
                                     child: InkWell(
                                       onTap: () {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) =>
-                                                    PurchasedExerciseDayList(
-                                                        docId: planName)));
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                PurchasedPlanDetailScreen(
+                                              id: plan[index],
+                                            ),
+                                          ),
+                                        );
                                       },
                                       child: Card(
                                         elevation: 1,
@@ -115,7 +119,7 @@ class _PurchasedPlanScreenState extends State<PurchasedPlanScreen> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  planName,
+                                                  plan[index],
                                                   textAlign: TextAlign.left,
                                                   style: GoogleFonts.montserrat(
                                                     letterSpacing: .5,
@@ -131,9 +135,9 @@ class _PurchasedPlanScreenState extends State<PurchasedPlanScreen> {
                                       ),
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
-                            )
+                            ),
                           ],
                         );
                       } else {
@@ -142,62 +146,6 @@ class _PurchasedPlanScreenState extends State<PurchasedPlanScreen> {
                       }
                     },
                   )
-                  // FutureBuilder<TraineeProfileModel?>(
-                  //     future: TraineeProfileService().traineeProfile(user!.uid),
-                  //     builder: (BuildContext context, snapshot) {
-                  //       if (snapshot.hasError) {
-                  //         return const Center(
-                  //             child: Text("Something went wrong"));
-                  //       }
-
-                  //       if (!snapshot.hasData) {
-                  //         return const Center(
-                  //             child: CircularProgressIndicator());
-                  //       }
-                  //       if (snapshot.connectionState == ConnectionState.done &&
-                  //           snapshot.hasData &&
-                  //           snapshot.data != null) {
-                  //         final traineeProfile = snapshot.data!;
-
-                  //         return ListView.builder(
-                  //           itemCount: 2,
-                  //           itemBuilder: (context, index) {
-                  //             return CustomExerciseCard(
-                  //               customPlanmodel:
-                  //                   traineeProfile.purchasedPlans[index],
-                  //             );
-                  //           },
-                  //         );
-
-                  //         // FutureBuilder<List<CustomExerciseModel>>(
-                  //         //   future: ExerciseService().getPurchasedPlanIDs(
-                  //         //       traineeProfile.purchasedPlans as String),
-                  //         //   builder: (context, snapshot) {
-                  //         //     if (snapshot.hasData) {
-                  //         //       print(snapshot);
-                  //         //       return ListView.builder(
-                  //         //         physics:
-                  //         //             NeverScrollableScrollPhysics(), // Disable inner list scrolling
-                  //         //         shrinkWrap: true,
-                  //         //         itemCount: snapshot.data!.length,
-                  //         //         itemBuilder: (context, index) {
-                  //         //           return CustomExerciseCard(
-                  //         //             customPlanmodel: snapshot.data![index],
-                  //         //           );
-                  //         //         },
-                  //         //       );
-                  //         //     } else {
-                  //         //       return const Center(
-                  //         //         child: CircularProgressIndicator(
-                  //         //           color: Colors.white,
-                  //         //         ),
-                  //         //       );
-                  //         //     }
-                  //         //   },
-                  //         // );
-                  //       }
-                  //       return Text("No data");
-                  //     })
                 ],
               ),
             ),

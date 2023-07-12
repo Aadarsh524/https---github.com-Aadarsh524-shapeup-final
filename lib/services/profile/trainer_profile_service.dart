@@ -40,7 +40,6 @@ class TrainerProfileService {
   }
 
   Future<TrainerProfileModel> trainerProfile(String docID) async {
-    print(docID);
     final docRef = usersCollection.doc(docID);
     final snapshot = await docRef.get();
     return _trainerProfileFromSnapshot(snapshot);
