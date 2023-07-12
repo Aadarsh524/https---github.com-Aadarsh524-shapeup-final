@@ -8,7 +8,6 @@ import '../../models/exercise/custom_exercise_model.dart';
 class ExerciseService {
   final String? docID;
   final int? dayindex;
-  
 
   ExerciseService({this.docID, this.dayindex});
 
@@ -42,6 +41,7 @@ class ExerciseService {
         level: snapshot.get('level') ?? '',
         exerciseDuration: snapshot.get('exerciseDuration') ?? '',
         createBy: snapshot.get('createBy') ?? '',
+        planCost: snapshot.get('planPrice') ?? '',
       );
       return customExerciseModel;
     }
@@ -60,6 +60,7 @@ class ExerciseService {
         level: doc['level'] ?? '',
         exerciseDuration: doc['exerciseDuration'] ?? '',
         createBy: doc['createBy'] ?? '',
+        planCost: doc['planPrice'] ?? '',
       );
       customExerciseModel.add(customModel);
     }
@@ -88,6 +89,7 @@ class ExerciseService {
         level: doc['level'] ?? '',
         exerciseDuration: doc['exerciseDuration'] ?? '',
         createBy: doc['createBy'] ?? '',
+        planCost: doc['planPrice'] ?? '',
       );
       customExerciseModel.add(customModel);
     }
@@ -112,6 +114,7 @@ class ExerciseService {
           level: doc['level'] ?? '',
           exerciseDuration: doc['exerciseDuration'] ?? '',
           createBy: doc['createBy'] ?? '',
+          planCost: doc['planPrice'] ?? '',
         );
         customExerciseModel.add(customModel);
       }
@@ -119,18 +122,20 @@ class ExerciseService {
     return customExerciseModel;
   }
 
-  Future<List<CustomExerciseModel>> get trainerPlanList async {
+  Future<List<CustomExerciseModel>> trainerPlanList(String trainerId) async {
     final snapshot = await customcollection.get();
-    
-    return _trainerPlanFromSnapshot(snapshot);
+
+    return _trainerPlanFromSnapshot(snapshot, trainerId);
   }
 
-  List<CustomExerciseModel> _trainerPlanFromSnapshot(QuerySnapshot snapshot) {
+  List<CustomExerciseModel> _trainerPlanFromSnapshot(
+      QuerySnapshot snapshot, String trainerId) {
     User? users = FirebaseAuth.instance.currentUser;
     List<CustomExerciseModel> customExerciseModel = [];
+    print(trainerId);
 
     for (var doc in snapshot.docs) {
-      if (doc['createBy'] == users!.uid) {
+      if (doc['createBy'] == trainerId) {
         CustomExerciseModel customModel = CustomExerciseModel(
           id: doc.id,
           planName: doc['planName'] ?? '',
@@ -138,6 +143,7 @@ class ExerciseService {
           level: doc['level'] ?? '',
           exerciseDuration: doc['exerciseDuration'] ?? '',
           createBy: doc['createBy'] ?? '',
+          planCost: doc['planPrice'] ?? '',
         );
         customExerciseModel.add(customModel);
       }
