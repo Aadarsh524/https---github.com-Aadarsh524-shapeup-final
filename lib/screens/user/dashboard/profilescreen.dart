@@ -524,45 +524,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                               ),
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.only(
-                                      bottom: 15, top: 15),
-                                  decoration: const BoxDecoration(
-                                      border: Border(
-                                    bottom: BorderSide(
-                                      //                   <--- right side
-                                      color: Color.fromRGBO(142, 153, 183, 0.5),
-                                      width: 1.0,
-                                    ),
-                                  )),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Settings",
-                                        textAlign: TextAlign.left,
-                                        style: GoogleFonts.montserrat(
-                                            color: const Color.fromRGBO(
-                                                142, 153, 183, 0.5),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      const Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 16,
-                                        color:
-                                            Color.fromRGBO(142, 153, 183, 0.5),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              // InkWell(
+                              //   onTap: () {},
+                              //   child: Container(
+                              //     width: double.infinity,
+                              //     padding: const EdgeInsets.only(
+                              //         bottom: 15, top: 15),
+                              //     decoration: const BoxDecoration(
+                              //         border: Border(
+                              //       bottom: BorderSide(
+                              //         //                   <--- right side
+                              //         color: Color.fromRGBO(142, 153, 183, 0.5),
+                              //         width: 1.0,
+                              //       ),
+                              //     )),
+                              //     child: Row(
+                              //       crossAxisAlignment:
+                              //           CrossAxisAlignment.center,
+                              //       mainAxisAlignment:
+                              //           MainAxisAlignment.spaceBetween,
+                              //       children: [
+                              //         Text(
+                              //           "Settings",
+                              //           textAlign: TextAlign.left,
+                              //           style: GoogleFonts.montserrat(
+                              //               color: const Color.fromRGBO(
+                              //                   142, 153, 183, 0.5),
+                              //               fontSize: 14,
+                              //               fontWeight: FontWeight.w600),
+                              //         ),
+                              //         const Icon(
+                              //           Icons.arrow_forward_ios,
+                              //           size: 16,
+                              //           color:
+                              //               Color.fromRGBO(142, 153, 183, 0.5),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                               const SizedBox(
                                 height: 30,
                               ),

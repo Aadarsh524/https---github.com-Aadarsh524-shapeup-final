@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shapeup/screens/user/exercise/premiumPlansDetail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../models/exercise/custom_exercise_model.dart';
+import '../../../models/profile/trainee_profile_model.dart';
 import '../../../services/exercise/exercise_service.dart';
+import '../../../services/profile/trainee_profile_service.dart';
 
 class PremiumPlanScreen extends StatefulWidget {
   const PremiumPlanScreen({Key? key}) : super(key: key);
@@ -47,28 +49,70 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
                   ),
                   FutureBuilder<List<CustomExerciseModel>>(
                     future: ExerciseService().customExerciseList,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          physics:
-                              const NeverScrollableScrollPhysics(), // Disable inner list scrolling
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            return PremiumCardDetailExerciseCard(
-                              customPlanmodel: snapshot.data![index],
+                    builder: (context, exerciseSnapshot) {
+                      if (exerciseSnapshot.hasData) {
+                        return FutureBuilder<TraineeProfileModel?>(
+                          future:
+                              TraineeProfileService().traineeProfile(user!.uid),
+                          builder: (BuildContext context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Center(
+                                child: Text("Something went wrong"),
+                              );
+                            }
+
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+
+                            if (!snapshot.hasData) {
+                              return const Center(
+                                child: Text("No trainee profile found."),
+                              );
+                            }
+
+                            final traineeProfile = snapshot.data!;
+                            final purchasedPlans =
+                                traineeProfile.purchasedPlans;
+
+                            final filteredExercises = exerciseSnapshot.data!
+                                .where((exercise) =>
+                                    !purchasedPlans.contains(exercise.planName))
+                                .toList();
+
+                            if (filteredExercises.isEmpty) {
+                              return const Center(
+                                child: Text("No available exercises."),
+                              );
+                            }
+
+                            return ListView.builder(
+                              physics:
+                                  const NeverScrollableScrollPhysics(), // Disable inner list scrolling
+                              shrinkWrap: true,
+                              itemCount: filteredExercises.length,
+                              itemBuilder: (context, index) {
+                                return PremiumCardDetailExerciseCard(
+                                  customPlanmodel: filteredExercises[index],
+                                );
+                              },
                             );
                           },
                         );
+                      } else if (exerciseSnapshot.hasError) {
+                        return const Center(
+                          child: Text("Failed to fetch exercises."),
+                        );
                       } else {
                         return const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
+                          child: CircularProgressIndicator(),
                         );
                       }
                     },
-                  ),
+                  )
                 ],
               ),
             ),
