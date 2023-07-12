@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shapeup/screens/user/exercise/purchasedExerciseDayList.dart';
 import 'package:shapeup/screens/user/premium/trainerprofile.dart';
 import 'package:shapeup/screens/user/dashboard/dashboardscreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,57 +12,23 @@ import '../../../models/profile/trainer_profile_model.dart';
 import '../../../services/exercise/exercise_service.dart';
 import '../../../services/profile/trainer_profile_service.dart';
 
-class PremiumPlanDetailScreen extends StatefulWidget {
-  final CustomExerciseModel exercisemodel;
-  const PremiumPlanDetailScreen({Key? key, required this.exercisemodel})
+class PurchasedPlanDetailScreen extends StatefulWidget {
+  final String id;
+  const PurchasedPlanDetailScreen({Key? key, required this.id})
       : super(key: key);
 
   @override
-  State<PremiumPlanDetailScreen> createState() =>
-      _PremiumPlanDetailScreenState();
+  State<PurchasedPlanDetailScreen> createState() =>
+      _PurchasedPlanDetailScreenState();
 }
 
-class _PremiumPlanDetailScreenState extends State<PremiumPlanDetailScreen> {
+class _PurchasedPlanDetailScreenState extends State<PurchasedPlanDetailScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   final userId = FirebaseAuth.instance.currentUser?.uid;
 
   @override
   void initState() {
     super.initState();
-  }
-
-  void sendPushNotification(String trainerDeviceToken) async {
-    const String serverKey =
-        'AAAATDAzS6c:APA91bFZhr4WPrr1tqt9iZ-s4MS0gODumBAJwl5TAL6czX0BtYrN_qj7-gaedAlILR87vaflnG1Ok7IhfPSHP1aTmbA-woxuMg_tUEaouLtiugUV6ZLEqFD_RipGY52DF2r87elf4eJM';
-
-    Map<String, dynamic> notification = {
-      'notification': {
-        'title': 'Hey Trainer',
-        'body': 'Someone Bought your plan',
-      },
-      'to': trainerDeviceToken,
-      'data': {'type': 'message', 'id': '123'}
-    };
-
-    try {
-      final dio = Dio();
-      dio.options.headers['Content-Type'] = 'application/json';
-      dio.options.headers['Authorization'] = 'key=$serverKey';
-
-      final response = await dio.post(
-        'https://fcm.googleapis.com/fcm/send',
-        data: notification,
-      );
-
-      if (response.statusCode == 200) {
-        print('Push notification sent successfully.');
-      } else {
-        print(
-            'Failed to send push notification. Error: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error sending push notification: $e');
-    }
   }
 
   @override
@@ -98,7 +64,7 @@ class _PremiumPlanDetailScreenState extends State<PremiumPlanDetailScreen> {
                 bottom: 10,
               ),
               child: FutureBuilder<CustomExerciseModel?>(
-                future: ExerciseService().premiumPlans(widget.exercisemodel.id),
+                future: ExerciseService().premiumPlans(widget.id),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.hasError) {
                     return const Center(child: Text("Something went wrong"));
@@ -451,171 +417,18 @@ class _PremiumPlanDetailScreenState extends State<PremiumPlanDetailScreen> {
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              Card(
-                                elevation: 1,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                                color: const Color.fromARGB(255, 114, 97, 89),
-                                child: SizedBox(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Plan Cost:",
-                                          textAlign: TextAlign.left,
-                                          style: GoogleFonts.montserrat(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Text(
-                                          exerciseModel.planCost,
-                                          textAlign: TextAlign.left,
-                                          style: GoogleFonts.montserrat(
-                                            letterSpacing: .5,
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8),
                               Center(
                                 child: SizedBox(
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      int? amount =
-                                          int.tryParse(exerciseModel.planCost);
-                                      KhaltiScope.of(context).pay(
-                                        config: PaymentConfig(
-                                          amount: amount! * 100,
-                                          productIdentity:
-                                              'dells-sssssg5-g5510-2021',
-                                          productName: 'Product Name',
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              PurchasedExerciseDayList(
+                                            docId: exerciseModel.id,
+                                          ),
                                         ),
-                                        preferences: [
-                                          PaymentPreference.khalti,
-                                        ],
-                                        onSuccess: (su) async => {
-                                          FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(user?.uid)
-                                              .update({
-                                                'purchasedPlans':
-                                                    FieldValue.arrayUnion(
-                                                        [exerciseModel.id])
-                                              })
-                                              .then((value) => Navigator.push(
-                                                  context,
-                                                  PageTransition(
-                                                      type: PageTransitionType
-                                                          .fade,
-                                                      duration: const Duration(
-                                                          milliseconds: 300),
-                                                      child:
-                                                          const DashBoardScreen(
-                                                        selectedIndex: 0,
-                                                      ))))
-                                              .then((value) => Future(() {
-                                                    SnackBar successsnackBar =
-                                                        SnackBar(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              20),
-                                                      backgroundColor:
-                                                          Colors.white,
-                                                      duration: const Duration(
-                                                          seconds: 2),
-                                                      content: Text(
-                                                        "Payment Success",
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          height: .5,
-                                                          letterSpacing: 0.5,
-                                                          fontSize: 12,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    );
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                            successsnackBar);
-                                                  }))
-                                              .then((value) => {
-                                                    FirebaseFirestore.instance
-                                                        .collection('users')
-                                                        .doc(exerciseModel
-                                                            .createBy)
-                                                        .get()
-                                                        .then((value) => {
-                                                              sendPushNotification(
-                                                                  value.get(
-                                                                      'deviceToken'))
-                                                            })
-                                                        .then((value) => {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (_) =>
-                                                                        const DashBoardScreen(
-                                                                            selectedIndex:
-                                                                                0)),
-                                                              )
-                                                            })
-                                                  })
-                                        },
-                                        onFailure: (fa) {
-                                          SnackBar failedSnackBar = SnackBar(
-                                            padding: const EdgeInsets.all(20),
-                                            backgroundColor: Colors.white,
-                                            duration:
-                                                const Duration(seconds: 2),
-                                            content: Text(
-                                              "Payment Failed",
-                                              style: GoogleFonts.montserrat(
-                                                height: .5,
-                                                letterSpacing: 0.5,
-                                                fontSize: 12,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(failedSnackBar);
-                                        },
-                                        onCancel: () {
-                                          SnackBar cancelledSnackBar = SnackBar(
-                                            padding: const EdgeInsets.all(20),
-                                            backgroundColor: Colors.white,
-                                            duration:
-                                                const Duration(seconds: 2),
-                                            content: Text(
-                                              "Payment Failed",
-                                              style: GoogleFonts.montserrat(
-                                                height: .5,
-                                                letterSpacing: 0.5,
-                                                fontSize: 12,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(cancelledSnackBar);
-                                        },
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -637,7 +450,7 @@ class _PremiumPlanDetailScreenState extends State<PremiumPlanDetailScreen> {
                                         bottom: 1,
                                       ),
                                       child: Text(
-                                        "Buy Plan",
+                                        "See Exercises",
                                         style: GoogleFonts.notoSansMono(
                                           color: Colors.black,
                                           fontSize: 14,

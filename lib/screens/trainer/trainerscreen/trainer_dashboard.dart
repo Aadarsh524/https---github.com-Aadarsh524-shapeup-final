@@ -294,7 +294,7 @@ class _HomePageTState extends State<HomePageT> {
                 ),
                 //trainer Plans List
                 FutureBuilder<List<CustomExerciseModel>>(
-                    future: ExerciseService().trainerPlanList,
+                    future: ExerciseService().trainerPlanList(trainerId!.uid),
                     builder: ((context, snapshot) {
                       if (snapshot.hasData) {
                         return ListView.builder(

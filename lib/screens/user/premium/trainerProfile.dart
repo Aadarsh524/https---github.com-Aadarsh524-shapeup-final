@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shapeup/screens/user/premium/trainersPlanList.dart';
 
 import '../../../models/profile/trainer_profile_model.dart';
 
@@ -141,7 +142,6 @@ class _TrainerProfileState extends State<TrainerProfile> {
                                   }),
                         })
                     .then((value) => {
-                          print("chatroom created"),
                           FirebaseFirestore.instance
                               .collection('chatrooms')
                               .doc(chatRoomID)
@@ -229,385 +229,449 @@ class _TrainerProfileState extends State<TrainerProfile> {
           child: SizedBox(
               height: double.infinity,
               width: double.infinity,
-              child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 20, left: 20, right: 20, bottom: 10),
-                  child: FutureBuilder<TrainerProfileModel>(
-                    future:
-                        TrainerProfileService().trainerProfile(widget.docId),
-                    builder: (BuildContext context, snapshot) {
-                      if (snapshot.hasError) {
-                        return const Center(
-                            child: Text("Something went wrong"));
-                      }
+              child: SingleChildScrollView(
+                child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 20, left: 20, right: 20, bottom: 10),
+                    child: FutureBuilder<TrainerProfileModel>(
+                      future:
+                          TrainerProfileService().trainerProfile(widget.docId),
+                      builder: (BuildContext context, snapshot) {
+                        if (snapshot.hasError) {
+                          return const Center(
+                              child: Text("Something went wrong"));
+                        }
 
-                      if (!snapshot.hasData) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      if (snapshot.connectionState == ConnectionState.done &&
-                          snapshot.hasData &&
-                          snapshot.data != null) {
-                        final trainerProfile = snapshot.data!;
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.hasData &&
+                            snapshot.data != null) {
+                          final trainerProfile = snapshot.data!;
+                          print(trainerProfile.id);
+                          print(myTrainer);
+                          print(trainerProfile.id == myTrainer);
 
-                        final trainerClients = trainerProfile.clients;
+                          final trainerClients = trainerProfile.clients;
 
-                        List<String> clients =
-                            new List<String>.from(trainerClients);
+                          List<String> clients =
+                              List<String>.from(trainerClients);
 
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SingleChildScrollView(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-                                    height: 100,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 3,
-                                        color: const Color.fromARGB(
-                                            255, 190, 227, 57),
-                                      ),
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100.0),
-                                        child: Image.network(
-                                          trainerProfile.userImage,
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.account_circle_sharp,
-                                        size: 20,
-                                        color:
-                                            Color.fromARGB(255, 166, 181, 106),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        "${trainerProfile.firstName}${trainerProfile.lastName}",
-                                        style: GoogleFonts.montserrat(
-                                          letterSpacing: .5,
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Container(
+                                      height: 100,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 3,
                                           color: const Color.fromARGB(
-                                              255, 166, 181, 106),
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.email_outlined,
-                                        size: 20,
-                                        color:
-                                            Color.fromRGBO(142, 153, 183, 0.5),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        trainerProfile.email,
-                                        style: GoogleFonts.montserrat(
-                                          letterSpacing: 0,
-                                          color: const Color.fromRGBO(
-                                              142, 153, 183, 0.5),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.phone,
-                                        size: 20,
-                                        color:
-                                            Color.fromRGBO(142, 153, 183, 0.5),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        trainerProfile.phone,
-                                        style: GoogleFonts.montserrat(
-                                          letterSpacing: 0,
-                                          color: const Color.fromRGBO(
-                                              142, 153, 183, 0.5),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      trainerProfile.gender == "male"
-                                          ? const Icon(
-                                              MdiIcons.genderMale,
-                                              size: 20,
-                                              color: Color.fromRGBO(
-                                                  142, 153, 183, 0.5),
-                                            )
-                                          : const Icon(
-                                              MdiIcons.genderFemale,
-                                              size: 20,
-                                              color: Color.fromRGBO(
-                                                  142, 153, 183, 0.5),
-                                            ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        trainerProfile.gender,
-                                        style: GoogleFonts.montserrat(
-                                          letterSpacing: 0,
-                                          color: const Color.fromRGBO(
-                                              142, 153, 183, 0.5),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Center(
-                                    child: Text(
-                                      trainerProfile.descrp,
-                                      style: GoogleFonts.montserrat(
-                                        letterSpacing: 0,
-                                        color: const Color.fromARGB(
-                                            255, 114, 97, 89),
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  Card(
-                                    elevation: 1,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    color:
-                                        const Color.fromARGB(255, 114, 97, 89),
-                                    child: SizedBox(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(15),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Age:",
-                                              textAlign: TextAlign.left,
-                                              style: GoogleFonts.montserrat(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Text(
-                                              trainerProfile.age,
-                                              textAlign: TextAlign.left,
-                                              style: GoogleFonts.montserrat(
-                                                letterSpacing: .5,
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Card(
-                                    elevation: 1,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    color:
-                                        const Color.fromARGB(255, 114, 97, 89),
-                                    child: SizedBox(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(15),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Experience:",
-                                              textAlign: TextAlign.left,
-                                              style: GoogleFonts.montserrat(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Text(
-                                              trainerProfile.expage,
-                                              textAlign: TextAlign.left,
-                                              style: GoogleFonts.montserrat(
-                                                letterSpacing: .5,
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Card(
-                                    elevation: 1,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    color:
-                                        const Color.fromARGB(255, 114, 97, 89),
-                                    child: SizedBox(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(15),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Clients:",
-                                              textAlign: TextAlign.left,
-                                              style: GoogleFonts.montserrat(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Text(
-                                              "${clients.length}",
-                                              textAlign: TextAlign.left,
-                                              style: GoogleFonts.montserrat(
-                                                letterSpacing: .5,
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 30),
-                                  Center(
-                                    child: SizedBox(
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          String name =
-                                              trainerProfile.firstName;
-                                          String tID = trainerProfile.id;
-                                          String trainerDeviceToken =
-                                              trainerProfile.deviceToken;
-                                          print(trainerDeviceToken);
-
-                                          _showAlertDialog(
-                                              name, tID, trainerDeviceToken);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          elevation: 0,
-                                          backgroundColor: const Color.fromARGB(
                                               255, 190, 227, 57),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 14),
-                                          textStyle: const TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold,
-                                          ),
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
-                                            top: 1,
-                                            bottom: 1,
-                                          ),
-                                          child: Text(
-                                            "Appoint",
-                                            style: GoogleFonts.notoSansMono(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100.0),
+                                          child: Image.network(
+                                            trainerProfile.userImage,
+                                            fit: BoxFit.fill,
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Note:",
-                                    style: GoogleFonts.montserrat(
-                                      height: 1.4,
-                                      letterSpacing: .4,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                      color: const Color.fromARGB(
-                                          255, 125, 128, 122),
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.account_circle_sharp,
+                                          size: 20,
+                                          color: Color.fromARGB(
+                                              255, 166, 181, 106),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          "${trainerProfile.firstName}${trainerProfile.lastName}",
+                                          style: GoogleFonts.montserrat(
+                                            letterSpacing: .5,
+                                            color: const Color.fromARGB(
+                                                255, 166, 181, 106),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  Text(
-                                    "You can choose only one trainer and cannot be changed untill your premium subscription is expired, so please choose wisely.",
-                                    style: GoogleFonts.montserrat(
-                                      letterSpacing: .4,
-                                      fontSize: 10,
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.email_outlined,
+                                          size: 20,
+                                          color: Color.fromRGBO(
+                                              142, 153, 183, 0.5),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          trainerProfile.email,
+                                          style: GoogleFonts.montserrat(
+                                            letterSpacing: 0,
+                                            color: const Color.fromRGBO(
+                                                142, 153, 183, 0.5),
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.phone,
+                                          size: 20,
+                                          color: Color.fromRGBO(
+                                              142, 153, 183, 0.5),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          trainerProfile.phone,
+                                          style: GoogleFonts.montserrat(
+                                            letterSpacing: 0,
+                                            color: const Color.fromRGBO(
+                                                142, 153, 183, 0.5),
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        trainerProfile.gender == "male"
+                                            ? const Icon(
+                                                MdiIcons.genderMale,
+                                                size: 20,
+                                                color: Color.fromRGBO(
+                                                    142, 153, 183, 0.5),
+                                              )
+                                            : const Icon(
+                                                MdiIcons.genderFemale,
+                                                size: 20,
+                                                color: Color.fromRGBO(
+                                                    142, 153, 183, 0.5),
+                                              ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          trainerProfile.gender,
+                                          style: GoogleFonts.montserrat(
+                                            letterSpacing: 0,
+                                            color: const Color.fromRGBO(
+                                                142, 153, 183, 0.5),
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Center(
+                                      child: Text(
+                                        trainerProfile.descrp,
+                                        style: GoogleFonts.montserrat(
+                                          letterSpacing: 0,
+                                          color: const Color.fromARGB(
+                                              255, 114, 97, 89),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    Card(
+                                      elevation: 1,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
                                       color: const Color.fromARGB(
                                           255, 114, 97, 89),
+                                      child: SizedBox(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Age:",
+                                                textAlign: TextAlign.left,
+                                                style: GoogleFonts.montserrat(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Text(
+                                                trainerProfile.age,
+                                                textAlign: TextAlign.left,
+                                                style: GoogleFonts.montserrat(
+                                                  letterSpacing: .5,
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(height: 8),
+                                    Card(
+                                      elevation: 1,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      color: const Color.fromARGB(
+                                          255, 114, 97, 89),
+                                      child: SizedBox(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Experience:",
+                                                textAlign: TextAlign.left,
+                                                style: GoogleFonts.montserrat(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Text(
+                                                trainerProfile.expage,
+                                                textAlign: TextAlign.left,
+                                                style: GoogleFonts.montserrat(
+                                                  letterSpacing: .5,
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Card(
+                                      elevation: 1,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      color: const Color.fromARGB(
+                                          255, 114, 97, 89),
+                                      child: SizedBox(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Clients:",
+                                                textAlign: TextAlign.left,
+                                                style: GoogleFonts.montserrat(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Text(
+                                                "${clients.length}",
+                                                textAlign: TextAlign.left,
+                                                style: GoogleFonts.montserrat(
+                                                  letterSpacing: .5,
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    Center(
+                                      child: SizedBox(
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type:
+                                                        PageTransitionType.fade,
+                                                    duration: const Duration(
+                                                        milliseconds: 250),
+                                                    child: TrainersPlansList(
+                                                      trainerId:
+                                                          trainerProfile.id,
+                                                    )));
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            elevation: 0,
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 190, 227, 57),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 14),
+                                            textStyle: const TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 20,
+                                              right: 20,
+                                              top: 1,
+                                              bottom: 1,
+                                            ),
+                                            child: Text(
+                                              "View Plan",
+                                              style: GoogleFonts.notoSansMono(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 30),
+                                    myTrainer != trainerProfile.id
+                                        ? Center(
+                                            child: SizedBox(
+                                              child: ElevatedButton(
+                                                onPressed: () async {
+                                                  String name =
+                                                      trainerProfile.firstName;
+                                                  String tID =
+                                                      trainerProfile.id;
+                                                  String trainerDeviceToken =
+                                                      trainerProfile
+                                                          .deviceToken;
+                                                  print(trainerDeviceToken);
+
+                                                  _showAlertDialog(name, tID,
+                                                      trainerDeviceToken);
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  elevation: 0,
+                                                  backgroundColor:
+                                                      const Color.fromARGB(
+                                                          255, 190, 227, 57),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 14),
+                                                  textStyle: const TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 20,
+                                                    right: 20,
+                                                    top: 1,
+                                                    bottom: 1,
+                                                  ),
+                                                  child: Text(
+                                                    "Appoint",
+                                                    style: GoogleFonts
+                                                        .notoSansMono(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox()
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        // If no data is available, show a message
-                        return const Center(child: Text("Loading"));
-                      }
-                    },
-                  ))),
+                              myTrainer != trainerProfile.id
+                                  ? Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Note:",
+                                            style: GoogleFonts.montserrat(
+                                              height: 1.4,
+                                              letterSpacing: .4,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              color: const Color.fromARGB(
+                                                  255, 125, 128, 122),
+                                            ),
+                                          ),
+                                          Text(
+                                            "You can choose only one trainer and cannot be changed untill your premium subscription is expired, so please choose wisely.",
+                                            style: GoogleFonts.montserrat(
+                                              letterSpacing: .4,
+                                              fontSize: 10,
+                                              color: const Color.fromARGB(
+                                                  255, 114, 97, 89),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Container()
+                            ],
+                          );
+                        } else {
+                          // If no data is available, show a message
+                          return const Center(child: Text("Loading"));
+                        }
+                      },
+                    )),
+              )),
         ));
   }
 }
