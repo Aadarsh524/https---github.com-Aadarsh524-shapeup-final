@@ -14,7 +14,6 @@ class TrainerPage extends StatefulWidget {
 class _TrainerPageState extends State<TrainerPage> {
   final List<Widget> screens = [
     const HomePageT(),
-    const TrainerNotify(),
     const ChatRoomScreen(),
     const WorkoutPlan(),
   ];
@@ -41,11 +40,6 @@ class _TrainerPageState extends State<TrainerPage> {
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.home),
             icon: Icon(Icons.home_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            activeIcon: Icon(Icons.notifications),
-            icon: Icon(Icons.notifications_outlined),
             label: '',
           ),
           BottomNavigationBarItem(

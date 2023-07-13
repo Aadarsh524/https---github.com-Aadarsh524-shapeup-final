@@ -76,7 +76,7 @@ class _WorkoutPlanState extends State<WorkoutPlan> {
           ),
         ),
         body: SafeArea(
-          child: Center(
+          child: SizedBox(
               child: isTrainerVerified
                   ? Column(
                       children: [
@@ -140,9 +140,24 @@ class _WorkoutPlanState extends State<WorkoutPlan> {
                       ],
                     )
                   : Container(
-                      padding: EdgeInsets.all(20),
-                      child: Text(
-                          'Sorry You need to be verified to create plan'))),
+                      child: FutureBuilder<bool?>(
+                        future: Future.delayed(
+                            Duration(seconds: 15)), // Delay for 2 seconds
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            // Delay in progress, show a loading indicator or any other widget
+                            return CircularProgressIndicator();
+                          } else {
+                            // Delay completed, show the text
+                            return Text(
+                              'You need to be verified to create a new plan',
+                              style: TextStyle(fontSize: 12),
+                            );
+                          }
+                        },
+                      ),
+                    )),
         ));
   }
 }

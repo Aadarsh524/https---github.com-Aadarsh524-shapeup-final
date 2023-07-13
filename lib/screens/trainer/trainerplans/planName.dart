@@ -261,11 +261,14 @@ class _PlanNameState extends State<PlanName> {
           padding: const EdgeInsets.only(bottom: 20),
           child: FloatingActionButton.extended(
               onPressed: () async {
+                int x = int.parse(_moneyController.text);
+                print(x);
                 if (_planNameController.text != '' &&
                     _newDescController.text != '' &&
                     _timeController.text != '' &&
                     _selectedLevel != null &&
-                    _moneyController.text != '') {
+                    _moneyController.text != '' &&
+                    x <= 200) {
                   // await dataBox.put('planName', _planNameController.text);
                   // await dataBox.put('planUid', exercise.doc().id);
                   Navigator.push(
