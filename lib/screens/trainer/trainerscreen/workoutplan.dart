@@ -142,7 +142,7 @@ class _WorkoutPlanState extends State<WorkoutPlan> {
                   : Container(
                       child: FutureBuilder<bool?>(
                         future: Future.delayed(
-                            Duration(seconds: 15)), // Delay for 2 seconds
+                            Duration(seconds: 3)), // Delay for 2 seconds
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
