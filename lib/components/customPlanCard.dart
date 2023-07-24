@@ -7,9 +7,13 @@ import '../screens/trainer/trainerplans/customDayList.dart';
 class CustomPlanCard extends StatelessWidget {
   final CustomExerciseModel customPlanmodel;
   final VoidCallback onPressed;
+  final VoidCallback onTap;
 
   const CustomPlanCard(
-      {Key? key, required this.customPlanmodel, required this.onPressed})
+      {Key? key,
+      required this.customPlanmodel,
+      required this.onPressed,
+      required this.onTap})
       : super(key: key);
 
   @override
@@ -41,7 +45,13 @@ class CustomPlanCard extends StatelessWidget {
                         fontWeight: FontWeight.w600),
                   ),
                 ),
-                IconButton(onPressed: onPressed, icon: const Icon(Icons.edit))
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: onPressed, icon: const Icon(Icons.edit)),
+                    IconButton(onPressed: onTap, icon: const Icon(Icons.delete))
+                  ],
+                ),
               ],
             ),
           ),
