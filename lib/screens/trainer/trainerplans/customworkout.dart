@@ -299,7 +299,7 @@ class _UpdateWorkState extends State<UpdateWork> {
                               )),
                             ),
                           ])
-                        : Container(),
+                        : CircularProgressIndicator(),
 
                     //this is for drop down menu of widgets
 
