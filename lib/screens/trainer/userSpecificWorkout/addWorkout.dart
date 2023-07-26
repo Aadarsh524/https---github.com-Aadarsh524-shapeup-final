@@ -295,7 +295,7 @@ class _AddWorkoutState extends State<AddWorkout> {
                           )),
                         ),
                       ])
-                    : Container(),
+                    : CircularProgressIndicator(),
 
                 //this is for drop down menu of widgets
 
