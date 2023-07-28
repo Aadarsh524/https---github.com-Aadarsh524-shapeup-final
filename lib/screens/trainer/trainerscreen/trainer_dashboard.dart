@@ -149,6 +149,58 @@ class _HomePageTState extends State<HomePageT> {
                       final trainerClients = trainerProfile.clients;
                       List<String> clients = List<String>.from(trainerClients);
 
+<<<<<<< HEAD
+                          List<String> clients =
+                              List<String>.from(trainerClients);
+                          print(clients);
+                          return Expanded(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: clients.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final traineeId = clients[index];
+                                print(traineeId);
+
+                                return FutureBuilder<TraineeProfileModel?>(
+                                  future: TraineeProfileService()
+                                      .traineeProfile(traineeId),
+                                  builder: (BuildContext context, snapshot) {
+                                    print(snapshot);
+                                    if (snapshot.hasData) {
+                                      final traineeData = snapshot.data!;
+                                      final traineeName = traineeData.firstName;
+                                      final userImage = traineeData.userImage;
+                                      final lastName = traineeData.lastName;
+                                      print(traineeName);
+                                      print(userImage);
+                                      print(lastName);
+
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  type: PageTransitionType.fade,
+                                                  duration: const Duration(
+                                                      milliseconds: 250),
+                                                  child: TraineeProfile(
+                                                    docId: traineeData.id,
+                                                  )));
+                                        },
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 85,
+                                          margin:
+                                              const EdgeInsets.only(bottom: 8),
+                                          child: Card(
+                                            elevation: 5,
+                                            color: const Color.fromARGB(
+                                                255, 114, 97, 89),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+=======
                       return ListView.separated(
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 8),
@@ -215,6 +267,7 @@ class _HomePageTState extends State<HomePageT> {
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
+>>>>>>> ca959460b2b71a9d5cdcb6f7c79025c9733477cf
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceAround,

@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
-import 'package:shapeup/screens/user/notification/notificationscreen.dart';
 
 import '../../models/profile/trainee_profile_model.dart';
 
@@ -46,6 +44,7 @@ class TraineeProfileService {
   }
 
   Future<TraineeProfileModel?> traineeProfile(String docID) async {
+    print(docID);
     final docRef = usersCollection.doc(docID);
     final snapshot = await docRef.get();
     return _traineeProfileFromSnapshot(snapshot);
@@ -53,6 +52,7 @@ class TraineeProfileService {
 
   TraineeProfileModel? _traineeProfileFromSnapshot(DocumentSnapshot snapshot) {
     if (snapshot.exists) {
+      print(snapshot.get("email"));
       TraineeProfileModel traineeProfile = TraineeProfileModel(
         email: snapshot.get("email") ?? '',
         firstName: snapshot.get('firstName') ?? '',
