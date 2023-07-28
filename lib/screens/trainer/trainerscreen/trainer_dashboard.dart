@@ -159,23 +159,29 @@ class _HomePageTState extends State<HomePageT> {
                           final trainerClients = trainerProfile.clients;
 
                           List<String> clients =
-                              new List<String>.from(trainerClients);
+                              List<String>.from(trainerClients);
+                          print(clients);
                           return Expanded(
                             child: ListView.builder(
                               shrinkWrap: true,
                               itemCount: clients.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final traineeId = clients[index];
+                                print(traineeId);
 
                                 return FutureBuilder<TraineeProfileModel?>(
                                   future: TraineeProfileService()
                                       .traineeProfile(traineeId),
                                   builder: (BuildContext context, snapshot) {
+                                    print(snapshot);
                                     if (snapshot.hasData) {
                                       final traineeData = snapshot.data!;
                                       final traineeName = traineeData.firstName;
                                       final userImage = traineeData.userImage;
                                       final lastName = traineeData.lastName;
+                                      print(traineeName);
+                                      print(userImage);
+                                      print(lastName);
 
                                       return InkWell(
                                         onTap: () {
