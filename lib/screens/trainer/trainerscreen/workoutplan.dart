@@ -34,6 +34,21 @@ class _WorkoutPlanState extends State<WorkoutPlan> {
     checkTrainerVerification();
   }
 
+  SnackBar snackBar = SnackBar(
+    padding: const EdgeInsets.all(20),
+    backgroundColor: Colors.white,
+    duration: const Duration(seconds: 2),
+    content: Text(
+      "Plan deleted successfully",
+      style: GoogleFonts.montserrat(
+        height: .5,
+        letterSpacing: 0.5,
+        fontSize: 12,
+        color: Colors.red,
+      ),
+    ),
+  );
+
   void checkTrainerVerification() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -99,6 +114,89 @@ class _WorkoutPlanState extends State<WorkoutPlan> {
                                                         planUid: snapshot
                                                             .data![index].id,
                                                       )));
+                                        },
+                                        onTap: () {
+                                          // Show the AlertDialog here
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              content: Text(
+                                                "Are you sure you want to delete this plan?",
+                                                style: GoogleFonts.montserrat(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    FirebaseFirestore.instance
+                                                        .collection('exercises')
+                                                        .doc(snapshot
+                                                            .data![index].id)
+                                                        .delete()
+                                                        .then((value) {
+                                                      print(
+                                                          'Document deleted successfully.');
+                                                    }).catchError((error) {
+                                                      print(
+                                                          'Error deleting document: $error');
+                                                    }).then((value) {
+                                                      Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              WorkoutPlan(),
+                                                        ),
+                                                      );
+                                                    }).then((value) =>
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    snackBar));
+                                                  },
+                                                  child: Text(
+                                                    'Yes',
+                                                    style: GoogleFonts
+                                                        .montserrat(
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                226,
+                                                                226,
+                                                                226),
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    'No',
+                                                    style: GoogleFonts
+                                                        .montserrat(
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                226,
+                                                                226,
+                                                                226),
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
                                         },
                                       );
                                     });

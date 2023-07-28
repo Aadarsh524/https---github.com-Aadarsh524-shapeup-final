@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/chatRoomScreen.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainer_dashboard.dart';
 import 'package:shapeup/screens/trainer/trainerscreen/trainernotfication.dart';
@@ -25,11 +26,27 @@ class _TrainerPageState extends State<TrainerPage> {
     });
   }
 
+  Route createPageRoute(Widget page) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Color.fromARGB(255, 28, 28, 30),
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 800),
+        child: screens[_selectedIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
@@ -56,10 +73,11 @@ class _TrainerPageState extends State<TrainerPage> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white,
-        onTap: _onItemTapped,
-      ),
-      body: SafeArea(
-        child: screens[_selectedIndex],
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }

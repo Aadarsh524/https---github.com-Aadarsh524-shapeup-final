@@ -11,50 +11,52 @@ class DayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(
-                'Select Day',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.montserrat(
-                  color: const Color.fromARGB(255, 190, 227, 57),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(
+                  'Select Day',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.montserrat(
+                    color: const Color.fromARGB(255, 190, 227, 57),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: days.length,
-              itemBuilder: (context, index) {
-                final day = days[index];
-                return Card(
-                  elevation: 15,
-                  color: const Color.fromARGB(255, 114, 97, 89),
-                  shadowColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                  child: ListTile(
-                    title: Text(
-                      'Day $day',
-                      style: GoogleFonts.montserrat(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textAlign: TextAlign.center,
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: days.length,
+                itemBuilder: (context, index) {
+                  final day = days[index];
+                  return Card(
+                    elevation: 15,
+                    color: const Color.fromARGB(255, 114, 97, 89),
+                    shadowColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    onTap: () => onTap(day),
-                  ),
-                );
-              },
-            ),
-          ],
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                    child: ListTile(
+                      title: Text(
+                        'Day $day',
+                        style: GoogleFonts.montserrat(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      onTap: () => onTap(day),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
