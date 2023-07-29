@@ -89,7 +89,8 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
               "myTrainer": '',
               "sleepTime": '',
               "exerciseTime": '',
-              "deviceToken": deviceToken
+              "deviceToken": deviceToken,
+              "purchasedPlans": []
             })
             .then((value) async => {
                   print("Data added suceccfully"),
