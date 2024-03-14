@@ -45,6 +45,7 @@ class _HomePageTState extends State<HomePageT> {
     firstName = dataBox.get("firstName");
     NotificationServices().requestNotificationPermission();
     NotificationServices().firebaseNotificationInit(context);
+    NotificationServices().setUpInteractMessage(context);
   }
 
   @override
